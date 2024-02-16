@@ -1,6 +1,7 @@
 export class CreateMoratorioDto {
+  id:number
   dias: number;
   interes: number;
-  idcreacion: number;
   fhcreacion: Date;
+  usuarioId: number;
 }

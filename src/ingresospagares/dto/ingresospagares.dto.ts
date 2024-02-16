@@ -1,7 +1,9 @@
 export class CreateIngresosPagaresDto {
-  idingreso: number;
-  idpagare: number;
+  id: number
+
   monto: number;
   interes: number;
   total: number;
+  ingresoId: number;
+  pagareId: number;
 }

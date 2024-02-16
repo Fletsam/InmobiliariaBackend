@@ -4,12 +4,15 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 @Entity()
 export class IngresosObservaciones {
   @PrimaryGeneratedColumn()
-  idingreso: number;
+  id: number;
+
+
+
 
   @Column({ type: 'longtext', nullable: true })
   observaciones: string;
 
-@ManyToOne(()=>  Ingresos ,(ingresos) => ingresos.IngresosObservaciones)
-  IngresosObservaciones  : IngresosObservaciones
+  @ManyToOne(()=>  Ingresos ,(ingresos) => ingresos.IngresosObservaciones)
+  ingresos  : IngresosObservaciones
 
 }

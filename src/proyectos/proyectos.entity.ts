@@ -8,7 +8,7 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn, Column, OneToMany } from 'ty
 @Entity()
 export class Proyectos {
   @PrimaryGeneratedColumn()
-  idproyecto: number;
+  id: number;
 
   @Column()
   proyecto: string;
@@ -38,21 +38,23 @@ export class Proyectos {
   fhmodificacion: Date;
 
 
-  @OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.idproyecto) 
+  @OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.proyecto) 
   proyectosproyectos : proyectosproyectos[]
 
-  @OneToMany(() => EgresosSubConceptosProyecto, (egresossubconceptosproyecto) => egresossubconceptosproyecto.idproyecto) 
+  @OneToMany(() => EgresosSubConceptosProyecto, (egresossubconceptosproyecto) => egresossubconceptosproyecto.proyecto) 
    EgresosSubConceptosProyecto : EgresosSubConceptosProyecto[]
 
-  @OneToMany(() => IngresosProyecto, (ingresosproyecto) => ingresosproyecto.idproyecto) 
+  @OneToMany(() => IngresosProyecto, (ingresosproyecto) => ingresosproyecto.proyecto) 
   IngresosProyecto : IngresosProyecto[]
 
-@OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.idproyecto) 
+@OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.proyecto) 
   ParcelasProyectos : ParcelasProyectos[]
 
 
    @ManyToOne(() => Usuarios, (usuario) => usuario.Proyectos) 
-  idcreacion : Proyectos
+    usuario : Proyectos
 
+    @Column()
+  	usuarioId: string;
 
 }

@@ -9,11 +9,10 @@ import { EgresosSubConceptosProyecto } from 'src/egresossubconceptosproyecto/egr
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 
-Entity();
-
+@Entity()
 export class Egresos {
   @PrimaryGeneratedColumn()
-  idegreso: number;
+  id: number;
 
   /* @Column()
   idconcepto: number; */
@@ -39,40 +38,46 @@ export class Egresos {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
-  /* @Column()
-  idmodificacion: number; */
+  @Column()
+  idmodificacion: number;
 
   @Column()
   fhmodificacion: Date;
 
-  @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.idrfc) 
+  @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.egreso) 
   EgresosSubConceptosProveedor : EgresosSubConceptosProveedor[]
 
-  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.idegreso)
+  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.egreso)
   EgresosInversiones:EgresosInversiones[]
   
-  @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.idegreso)
+  @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.egreso)
   EgresosParcelas:EgresosParcelas[]
 
-  @OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.idegreso)
+  @OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.egreso)
   EgresosSubConceptosParcelas:EgresosSubConceptosParcelas[]
   
-  @OneToMany(() => EgresosSubConceptos, (egresossubconceptos) => egresossubconceptos.idegreso)
+  @OneToMany(() => EgresosSubConceptos, (egresossubconceptos) => egresossubconceptos.egreso)
   EgresosSubConceptos:EgresosSubConceptos[]
 
-  @OneToMany(() => EgresosSubConceptos, (egresossubconceptos) => egresossubconceptos.idegreso)
+  @OneToMany(() => EgresosSubConceptos, (egresossubconceptos) => egresossubconceptos.egreso)
   EgresosSubConceptosGastos:EgresosSubConceptosGastos[]
 
-  @OneToMany(() => EgresosSubConceptosProyecto, (egresossubconceptosproyecto) => egresossubconceptosproyecto.idegreso)
+  @OneToMany(() => EgresosSubConceptosProyecto, (egresossubconceptosproyecto) => egresossubconceptosproyecto.egreso)
   EgresosSubConceptosProyecto :EgresosSubConceptosProyecto[]
 
   @ManyToOne(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.Egresos)
-  idconcepto: ConceptosEgresos
+  concepto: ConceptosEgresos
+
+   @Column()
+  conceptoId: string;
   
   @ManyToOne(() => Usuarios, (usuario) => usuario.Egresos)
-  idcreacion: Usuarios
+  usuario: Usuarios
 
-  @ManyToOne(() => Usuarios, (usuario) => usuario.Egresos)
-  idmodificacion: Usuarios
+   @Column()
+  usuarioId: string;
+
+  /* @ManyToOne(() => Usuarios, (usuario) => usuario.Egresos)
+  idmodificacion: Usuarios */
 
 }

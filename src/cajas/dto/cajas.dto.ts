@@ -1,10 +1,10 @@
 export class CreateCajasDto {
-  idcaja: number;
+  idcaja?: number;
   caja: number;
   cjenc: string;
   impresorac: string;
   impresorat: string;
-  idcreacion: number;
+  usuarioId: number;
   fhcreacion: Date;
   idmodificacion: number;
   fhmodificacion: Date;

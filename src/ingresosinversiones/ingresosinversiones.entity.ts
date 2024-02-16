@@ -5,9 +5,13 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'ty
 
 @Entity()
 export class IngresosInversiones {
- /*  @PrimaryGeneratedColumn()
-  idingreso: number;
- */
+  @PrimaryGeneratedColumn()
+
+  id:number
+
+    @ManyToOne(() => Ingresos, (ingresos) => ingresos.IngresosInversiones)
+  ingreso:Ingresos
+ 
   /* @Column()
   idinversionista: number; */
 
@@ -26,13 +30,12 @@ export class IngresosInversiones {
   @Column()
   tipo: number;
 
-  @ManyToOne(() => Ingresos, (ingresos) => ingresos.IngresosInversiones)
-  idingreso:Ingresos
+
   
   @ManyToOne(() => Inversionistas, (inversionistas) => inversionistas.IngresosInversiones)
-  idinversionista:Ingresos
+  inversionista:Ingresos
   
-  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.idingreso) 
+  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.egreso) 
   EgresosInversiones : EgresosInversiones[]
 
 }

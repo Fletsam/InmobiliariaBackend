@@ -1,8 +1,8 @@
 export class CreateInversionistasDto {
-  idinversionista: number;
+  id: number;
   nombre: string;
   estatuts: number;
-  idcreacion: number;
+  usuarioId: number;
   fhcreacion: Date;
   idmodificacion: number;
   fhmodficacion: Date;

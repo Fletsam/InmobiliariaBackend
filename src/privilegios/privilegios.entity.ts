@@ -4,11 +4,11 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 @Entity()
 export class Privilegios {
   @PrimaryGeneratedColumn()
-  idusuario: number;
+  id: number;
 
   @Column()
   opcion: number;
 
-   @OneToMany(() => Usuarios, (usuario) => usuario.idusuario)
+   @OneToMany(() => Usuarios, (usuario) => usuario.privilegios)
   Usuarios: Usuarios[];
 }

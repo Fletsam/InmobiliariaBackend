@@ -4,16 +4,22 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class EgresosParcelas {
- /*  @PrimaryGeneratedColumn()
-  idegreso: number;
- */
+ @PrimaryGeneratedColumn()
+  id:number
 
-@ManyToOne(() => Egresos, (egresos) => egresos.EgresosParcelas)
-  idegreso: Egresos
+ @ManyToOne(() => Egresos, (egresos) => egresos.EgresosParcelas)
+  egreso: Egresos
+
+   @Column()
+  egresoId: string;
+
+
 
 @ManyToOne(() => Parcelas, (parcelas) => parcelas.EgresosParcelas)
-  idparcela: Parcelas
+  parcela: Parcelas
 
+   @Column()
+  parcelaId: string;
   /* @Column()
   idparcela: number;
  */

@@ -1,4 +1,5 @@
 export class CreateIngresosObservacionesDto {
-  idingreso: number;
+  id:number
+  ingresosId: number;
   observaciones: string;
 }

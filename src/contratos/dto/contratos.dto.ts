@@ -1,6 +1,6 @@
 export class CreateContratoDto {
-  idcontrato: number;
-  idcliente: number;
+  id?: number;
+  
   idproyecto: number;
   calle: string;
   numeroext: string;
@@ -29,8 +29,8 @@ export class CreateContratoDto {
   testigo2: string;
   pagado: number;
   estatus: number;
-  idcreacion: number;
   fhcreacion: Date;
-  idmodficacion: number;
   fhmodficacion: Date;
+  usuarioId: number;
+  clienteId: number;
 }

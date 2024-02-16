@@ -1,11 +1,12 @@
 import { ClienteNoInteres } from 'src/clientesnointeres/clientesnointeres.entity';
+import { Contratos } from 'src/contratos/contratos.entity';
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Clientes {
   @PrimaryGeneratedColumn()
-  idcliente: number;
+  id: number;
 
   @Column()
   clave: string;
@@ -31,19 +32,25 @@ export class Clientes {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
-  /* @Column()
-  idmodificacion: number; */
+  @Column()
+  idmodificacion: number;
 
   @Column()
   fhmodificacion: Date;
 
 @ManyToOne(() => Usuarios, (usuario) => usuario.Clientes) 
-  idcreacion : Usuarios
+  usuario : Usuarios
 
-  @ManyToOne(() => Usuarios, (usuario) => usuario.Clientes) 
-  idmodificacion : Usuarios
+  @Column()
+  	usuarioId: string;
 
-  @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.idcliente)
+  /* @ManyToOne(() => Usuarios, (usuario) => usuario.Clientes) 
+  idmodificacion : Usuarios */
+
+  @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.cliente)
   ClienteNoInteres : ClienteNoInteres[];
+
+  @OneToMany(() => Contratos, (contrato) => contrato.clientes)
+  Contratos : Contratos[];
 
 }

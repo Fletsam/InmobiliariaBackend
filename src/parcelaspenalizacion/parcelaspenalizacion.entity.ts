@@ -5,7 +5,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 @Entity()
 export class ParcelasPenalizacion {
   @PrimaryGeneratedColumn()
-  idpenalizacion: number;
+  id: number;
 
  /*  @Column()
   idparcela: number; */
@@ -26,10 +26,15 @@ export class ParcelasPenalizacion {
   fhcreacion: Date;
 
   @ManyToOne(() => Parcelas, (parcela) => parcela.ParcelasPenalizacion) 
-  idparcela : Parcelas
+  parcela : Parcelas
+
+   @Column()
+  parcelaId: string;
 
 @ManyToOne(() => Usuarios, (usuario) => usuario.ParcelasPenalizacion) 
-  idcreacion : Usuarios
-  
+  usuario : Usuarios
+
+   @Column()
+  usuarioId: string;
 
 }

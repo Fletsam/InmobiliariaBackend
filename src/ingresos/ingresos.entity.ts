@@ -1,4 +1,5 @@
 import { ConceptosIngresos } from 'src/conceptosingresos/conceptosingresos.entity';
+import { FlujoMensualDeFraccionamientos } from 'src/flujomensualdefraccionamientos/flujomensualdefraccionamientos.entity';
 import { IngresosEnganches } from 'src/ingresosenganches/ingresosenganches.entity';
 import { IngresosInversiones } from 'src/ingresosinversiones/ingresosinversiones.entity';
 import { IngresosObservaciones } from 'src/ingresosobservaciones/ingresosobservaciones.entity';
@@ -11,7 +12,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 @Entity()
 export class Ingresos {
   @PrimaryGeneratedColumn()
-  idingreso: number;
+  id: number;
 
   /* @Column()
   idconcepto: number; */
@@ -42,28 +43,38 @@ export class Ingresos {
 
 
 
-  @OneToMany(()=>  IngresosProyecto ,(IngresosProyecto) => IngresosProyecto.idingreso )
+  @OneToMany(()=>  IngresosProyecto ,(IngresosProyecto) => IngresosProyecto.ingreso )
   IngresosProyecto : IngresosProyecto[]
 
-  @OneToMany(()=>  IngresosEnganches ,(ingresosenganches) => ingresosenganches.idingreso )
+  @OneToMany(()=>  IngresosEnganches ,(ingresosenganches) => ingresosenganches.ingreso )
   IngresosEnganches : IngresosEnganches[]
 
-  @OneToMany(()=>  IngresosInversiones ,(ingresosinversiones) => ingresosinversiones.idingreso )
+  @OneToMany(()=>  IngresosInversiones ,(ingresosinversiones) => ingresosinversiones.ingreso )
    IngresosInversiones : IngresosInversiones[]
 
-  @OneToMany(()=>  IngresosObservaciones ,(ingresosobservaciones) => ingresosobservaciones.idingreso )
+  @OneToMany(()=>  IngresosObservaciones ,(ingresosobservaciones) => ingresosobservaciones.ingresos )
   IngresosObservaciones  : IngresosObservaciones[]
   
-  @OneToMany(()=>  IngresosPagares ,(ingresospagares) => ingresospagares.idingreso )
+  @OneToMany(()=>  IngresosPagares ,(ingresospagares) => ingresospagares.ingreso )
   IngresosPagares  : IngresosPagares[]
   
-  @OneToMany(()=>  IngresosOtros ,(ingresosotros) => ingresosotros.idingreso )
+  @OneToMany(()=>  IngresosOtros ,(ingresosotros) => ingresosotros.ingreso )
   IngresosOtros  : IngresosOtros[]
     
+   @OneToMany(()=>  FlujoMensualDeFraccionamientos ,(flujomensualdefraccionamientos) => flujomensualdefraccionamientos.ingreso )
+  FlujoMensualDeFraccionamientos : FlujoMensualDeFraccionamientos[]
+
+
   @ManyToOne(()=>  ConceptosIngresos ,(conceptosingresos) => conceptosingresos.Ingresos )
-  idconcepto  : ConceptosIngresos
+  concepto  : ConceptosIngresos
+
+   @Column()
+  conceptoId: string;
 
   @ManyToOne(()=>  Usuarios ,(usuario) => usuario.Ingresos)
-  idcreacion  : Usuarios
+  usuario  : Usuarios
+
+   @Column()
+  usuarioId: string;
 
 }

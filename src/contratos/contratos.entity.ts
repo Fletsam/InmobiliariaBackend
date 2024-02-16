@@ -1,3 +1,4 @@
+import { Clientes } from 'src/clientes/clientes.entity';
 import { ContratoAnualidad } from 'src/contratosanualidad/contratoanualidad.entity';
 import { ContratosMoratorio } from 'src/contratosmoratorio/contratosmoratorio.entity';
 import { IngresosEnganches } from 'src/ingresosenganches/ingresosenganches.entity';
@@ -8,10 +9,10 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 @Entity()
 export class Contratos {
   @PrimaryGeneratedColumn()
-  idcontrato: number;
+  id: number;
 
-  @Column()
-  idcliente: number;
+  /* @Column()
+  idcliente: number; */
 
   @Column()
   idproyecto: number;
@@ -109,22 +110,34 @@ export class Contratos {
   @Column()
   fhmodificacion: Date;
 
-   @OneToMany(() => IngresosEnganches, (ingresosenganches) => ingresosenganches.idcontrato) 
+   @OneToMany(() => IngresosEnganches, (ingresosenganches) => ingresosenganches.contrato) 
   IngresosEnganches : IngresosEnganches[]
 
-@OneToMany(() => Pagares, (pagares) => pagares.idcontrato) 
+  
+
+
+@OneToMany(() => Pagares, (pagares) => pagares.contrato) 
   Pagares : Pagares[]
 
-  @OneToMany(() => ContratoAnualidad, (contratoanualidad) => contratoanualidad.idcontrato) 
+  @OneToMany(() => ContratoAnualidad, (contratoanualidad) => contratoanualidad.contrato) 
   ContratoAnualidad : ContratoAnualidad[]
 
-@OneToMany(() => ContratosMoratorio, (contratosmoratorio) => contratosmoratorio.idcontrato) 
+@OneToMany(() => ContratosMoratorio, (contratosmoratorio) => contratosmoratorio.contrato) 
   ContratosMoratorio : ContratosMoratorio[]
 
 @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
-  idcreacion : Usuarios
+  usuario : Usuarios
+
+  @Column()
+  	usuarioId: string;
+
+  @ManyToOne(() => Clientes, (cliente) => cliente.Contratos) 
+  clientes : Clientes
   
-  @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
-  idmodificacion : Usuarios
+  @Column()
+  	clientesId: string;
+  
+  /* @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
+  idmodificacion : Usuarios */
 
 }

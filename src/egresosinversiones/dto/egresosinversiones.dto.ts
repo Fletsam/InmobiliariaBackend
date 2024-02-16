@@ -1,5 +1,5 @@
 export class CreateEgresosInversionesDto {
-  idegreso: number;
-  idingreso: number;
+  id?: number;
   tipo: string;
+  egresoId:number
 }

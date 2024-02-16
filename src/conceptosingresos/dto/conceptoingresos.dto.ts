@@ -1,11 +1,11 @@
-export class CreateConceptoIngresosDto {
-  idconcepto: number;
+export class CreateConceptosIngresosDto {
+  id: number;
   clave: string;
   concepto: string;
   enganche: number;
   inversion: number;
-  idcreacion: number;
   fhcreacion: Date;
   idmodificacion: number;
   fhmodificacion: Date;
+  usuarioId: number;
 }

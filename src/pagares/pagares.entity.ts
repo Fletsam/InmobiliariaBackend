@@ -4,11 +4,13 @@ import { PagaresCancelados } from 'src/pagarescancelados/pagarescancelados.entit
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 
-Entity();
 
+
+
+@Entity()
 export class Pagares {
   @PrimaryGeneratedColumn()
-  idpagare: number;
+  id: number;
 
   /* @Column()
   idcontrato: number; */
@@ -38,16 +40,21 @@ export class Pagares {
   fhmodificacion: Date;
 
   @ManyToOne(()=>  Usuarios ,(usuario) => usuario.Pagares)
-  idcreacion  : IngresosPagares
+  usuario  : IngresosPagares
+
+   @Column()
+  usuarioId: string;
 
   @ManyToOne(()=>  Contratos ,(contratos) => contratos.Pagares)
-  idcontrato  : Contratos
+  contrato  : Contratos
+ 
+  @Column()
+  contratoId: string;
 
-
-  @OneToMany(()=>  IngresosPagares ,(ingresospagares) => ingresospagares.idpagare)
+  @OneToMany(()=>  IngresosPagares ,(ingresospagares) => ingresospagares.pagare)
   IngresosPagares  : IngresosPagares[]
 
-  @OneToMany(()=>  PagaresCancelados ,(pagarescancelados) => pagarescancelados.idpagare)
+  @OneToMany(()=>  PagaresCancelados ,(pagarescancelados) => pagarescancelados.pagare)
   PagaresCancelados  : PagaresCancelados[]
 
 

@@ -3,8 +3,10 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class ContratosMoratorio {
-  /* @PrimaryGeneratedColumn()
-  idcontrato: number; */
+  @PrimaryGeneratedColumn()
+  id:number
+  @ManyToOne(() => Contratos, (contratos) => contratos.ContratosMoratorio) 
+  contrato : ContratosMoratorio
 
   @Column()
   dias: number;
@@ -12,6 +14,5 @@ export class ContratosMoratorio {
   @Column()
   interes: number;
 
-  @ManyToOne(() => Contratos, (contratos) => contratos.ContratosMoratorio) 
-  idcontrato : ContratosMoratorio
+  
 }

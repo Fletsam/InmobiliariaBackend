@@ -1,7 +1,7 @@
 export class CreateTicketDto {
   superios: string;
   inferior: string;
-  imagen: any;
+  imagen: string;
   copias: number;
   impresora: string;
 }

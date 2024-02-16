@@ -4,7 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 @Entity()
 export class Cajas {
   @PrimaryGeneratedColumn()
-  idcaja: number;
+  id: number;
 
   @Column()
   caja: number;
@@ -24,16 +24,19 @@ export class Cajas {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
- /*  @Column()
-  idmodificacion: number; */
+  @Column()
+  idmodificacion: number;
 
   @Column()
   fhmodificacion: Date;
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Cajas) 
-  idcreacion : Usuarios
+  usuario : Usuarios
 
-  @ManyToOne(() => Usuarios, (usuario) => usuario.Cajas) 
-  idmodificacion : Usuarios
+  @Column()
+  usuarioId: string;
+
+  /* @ManyToOne(() => Usuarios, (usuario) => usuario.Cajas) 
+  idmodificacion : Usuarios */
 
 }

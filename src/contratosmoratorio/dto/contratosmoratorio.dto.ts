@@ -1,5 +1,7 @@
 export class CreateContratosMoratorioDto {
-  idcontrato: number;
+  id?:number
+  
   dias: number;
   interes: number;
+  contratoId: number;
 }

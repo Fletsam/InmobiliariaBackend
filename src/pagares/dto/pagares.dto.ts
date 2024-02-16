@@ -1,6 +1,5 @@
 export class CreatePagaresDto {
-  idpagare: number;
-  idcontrato: number;
+  id: number;
   numero: number;
   fechadepago: Date;
   monto: number;
@@ -9,4 +8,6 @@ export class CreatePagaresDto {
   anualidad: number;
   idmodificacion: number;
   fhmodificacion: Date;
+  contratoId:number
+  usuarioId:number
 }

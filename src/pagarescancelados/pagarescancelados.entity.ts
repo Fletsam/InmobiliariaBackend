@@ -1,12 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Pagares } from 'src/pagares/pagares.entity';
+import { Usuarios } from 'src/usuarios/usuarios.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class PagaresCancelados {
-  @PrimaryGeneratedColumn()
-  idpagare: number;
 
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  /* @Column()
+  idcancelacion: number; */
+
+  @ManyToOne(()=>  Usuarios ,(usuario) => usuario.PagaresCancelados)
+  usuario  : Usuarios
+
+ @Column()
+  usuarioId: string;
+
+  @ManyToOne(()=>  Pagares ,(pagares) => pagares.PagaresCancelados)
+  pagare  : Pagares
+ 
   @Column()
-  idcancelacion: number;
+  pagareId: string;
+
 
   @Column()
   fhcancelacion: number;

@@ -1,6 +1,8 @@
 export class CreateParcelasProyectosDto {
-  idparcela: number;
-  idproyecto: number;
-  idcreacion: number;
+  id:number
+  
   fhcreacion: number;
+  parcelaId: number;
+  proyectoId: number;
+  usuarioId: number;
 }

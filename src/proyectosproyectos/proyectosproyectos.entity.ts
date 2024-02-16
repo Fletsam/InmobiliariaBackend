@@ -1,10 +1,11 @@
 import { Proyectos } from 'src/proyectos/proyectos.entity';
+import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class proyectosproyectos {
   @PrimaryGeneratedColumn()
-  idproyectoc: number;
+  id: number;
 
   /* @Column()
   idproyecto: number; */
@@ -16,7 +17,14 @@ export class proyectosproyectos {
   fhcreacion: Date;
 
   @ManyToOne(() => Proyectos, (proyecto) => proyecto.proyectosproyectos) 
-  idproyecto : Proyectos
+  proyecto : Proyectos
 
+  @Column()
+  proyectoId: string;
 
+   @ManyToOne(() => Usuarios, (usuario) => usuario.proyectosproyectos) 
+  usuario : Usuarios
+
+  @Column()
+  usuarioId: string;
 }

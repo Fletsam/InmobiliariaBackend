@@ -1,4 +1,5 @@
 export class CreateEgresosSubConceptosProyectoDto {
-  idegreso: number;
-  idproyecto: number;
+  id?:number
+  egresoId: number;
+  proyectoId: number;
 }

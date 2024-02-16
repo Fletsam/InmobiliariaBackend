@@ -1,12 +1,13 @@
 export class CreateIngresosDto {
-  idingreso: number;
-  idconcepto: number;
+  id:number
+  
   folio: string;
   fecha: Date;
   monto: number;
   estatus: number;
-  idcreacion: number;
   fhcreacion: Date;
   idmodificacion: number;
   fhmodificacion: Date;
+  conceptoId: number;
+  usuarioId: number;
 }

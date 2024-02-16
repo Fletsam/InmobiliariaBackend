@@ -1,3 +1,4 @@
 export class CreateIngresosOtrosDto {
-  idingreso: number;
+  id:number
+  ingresoId: number;
 }

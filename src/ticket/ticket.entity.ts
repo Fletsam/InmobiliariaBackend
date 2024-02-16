@@ -9,7 +9,7 @@ export class Ticket {
   inferior: string;
 
   @Column()
-  imagen: any;
+  imagen: string;
 
   @Column()
   copias: number;

@@ -1,4 +1,6 @@
 export class CreateIngresosEnganchesDto {
-  idingreso: number;
-  idcontrato: number;
+  id:number
+  
+  ingresoId: number;
+  contratoId: number;
 }

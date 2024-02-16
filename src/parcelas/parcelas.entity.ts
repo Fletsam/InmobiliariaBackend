@@ -8,7 +8,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 @Entity()
 export class Parcelas {
   @PrimaryGeneratedColumn()
-  idparcela: number;
+  id: number;
 
   @Column()
   parcela: string;
@@ -42,18 +42,21 @@ export class Parcelas {
 
 
 @ManyToOne(() => Usuarios, (usuario) => usuario.Parcelas) 
-  idcreacion : Usuarios
+  usuario : Usuarios
 
-  @OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.idparcela) 
+@Column()
+  	usuarioId: string;
+
+  @OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.parcela) 
   ParcelasProyectos : ParcelasProyectos[]
 
-  @OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.idparcela) 
+  @OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.parcela) 
   ParcelasPenalizacion : ParcelasPenalizacion[]
 
- @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.idparcela) 
+ @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.parcela) 
   EgresosParcelas : EgresosParcelas[]
 
-@OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.idparcela) 
+@OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.egreso) 
   EgresosSubConceptosParcelas : EgresosSubConceptosParcelas[]
 
 

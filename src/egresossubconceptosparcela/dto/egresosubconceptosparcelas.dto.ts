@@ -1,4 +1,5 @@
 export class CreateEgresosSubConceptoParcelas {
-  idegreso: number;
-  idparcela: number;
+  id?: number
+  egresoId: number;
+  parcelaId: number;
 }

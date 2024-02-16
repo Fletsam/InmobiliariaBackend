@@ -1,19 +1,15 @@
 import { Egresos } from 'src/egresos/egresos.entity';
 import { Entity, ManyToOne ,PrimaryGeneratedColumn, Column } from 'typeorm';
 
-Entity();
-
+@Entity()
 export class EgresosSubConceptos {
-  /* @PrimaryGeneratedColumn()
-  idegreso: number; */
- 
+   @PrimaryGeneratedColumn()
+  id:number
+
+
   @ManyToOne(() => Egresos, (egresos) => egresos.EgresosSubConceptos)
-  idegreso: Egresos
+  egreso: Egresos
 
-
-
-  @Column()
-  idsubconcepto: number;
 
   @Column({ type: 'longtext', nullable: true })
   observaciones: string;

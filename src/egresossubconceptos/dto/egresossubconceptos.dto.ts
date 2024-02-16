@@ -1,5 +1,5 @@
 export class CreateEgresosSubConceptosDto {
-  idegreso: number;
-  idsubconcepto: number;
+   id?: number;
+  egresoId: number;
   observaciones: string;
 }

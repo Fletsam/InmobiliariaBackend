@@ -1,4 +1,5 @@
 export class CreateEgresosSubConceptoProveedor {
-  idegreso: number;
-  idrfc: number;
+  id?:number
+  egresoId: number;
+  rfcId: number;
 }

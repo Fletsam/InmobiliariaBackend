@@ -1,5 +1,7 @@
 export class CreateEgresosParcelasDto {
-  idegreso: number;
-  idparcela: number;
+  id?:number
+
   interes: number;
+  egresoId: number;
+  parcelaId: number;
 }

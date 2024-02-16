@@ -5,8 +5,14 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class ParcelasProyectos {
-  /* @PrimaryGeneratedColumn()
-  idparcela: number; */
+   @PrimaryGeneratedColumn()
+   id:number
+
+   @ManyToOne(() => Parcelas, (parcela) => parcela.ParcelasProyectos) 
+  parcela : Parcelas
+
+ @Column()
+  parcelaId: string;
 
   /* @Column()
   idproyecto: number; */
@@ -18,13 +24,17 @@ export class ParcelasProyectos {
   fhcreacion: Date;
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.ParcelasProyectos) 
-  idcreacion : Usuarios
+  usuario : Usuarios
+
+  @Column()
+  usuarioId: string;
 
   @ManyToOne(() => Proyectos, (proyecto) => proyecto.ParcelasProyectos) 
-  idproyecto : Proyectos
+  proyecto : Proyectos
 
-  @ManyToOne(() => Parcelas, (parcela) => parcela.ParcelasProyectos) 
-  idparcela : Parcelas
+   @Column()
+  proyectoId: string;
+ 
  
 
 }

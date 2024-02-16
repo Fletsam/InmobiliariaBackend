@@ -1,4 +1,5 @@
 export class CreateIngresosProyectoDto {
-  idingreso: number;
-  idproyecto: number;
+  id:number
+  ingresoId: number;
+  proyectoId: number;
 }

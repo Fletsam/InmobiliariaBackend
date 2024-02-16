@@ -1,5 +1,5 @@
 export class CreateRfcsDto {
-  idrfc: number;
+  id: number;
   rfc: string;
   razon: string;
   email: string;
@@ -7,7 +7,8 @@ export class CreateRfcsDto {
   direccion: string;
   codpos: string;
   estatus: string;
-  fechahora: Date;
-  idmodificacion: number;
+  fhcreacion: Date;
+  usuarioId?: number;
   fhmodificacion: Date;
+  
 }

@@ -1,33 +1,47 @@
 import { Rfcs } from 'src/rfcs/rfcs.entity';
 import { Usuarios } from 'src/usuarios/usuarios.entity';
-import { Entity, PrimaryGeneratedColumn, Column,ManyToOne, OneToOne } from 'typeorm';
+import { Entity, CreateDateColumn, PrimaryGeneratedColumn, Column,ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
 export class Abono {
   @PrimaryGeneratedColumn()
-  idabono: number;
+  id: number;
 
   /* @Column()
-  idrfc: number;
- */
+  idrfc: number; */
+
   @Column()
   monto: number;
 
   @Column()
   fecha: Date;
 
-  /* @Column()
+ /*  @Column()
   idcreacion: number; */
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  
+
+
+
+  @CreateDateColumn({
+    name: 'fechadecreacion',
+    type: 'datetime',
+    default: () => { 'CURRENT_TIMESTAMP'},
+  })
   fhcreacion: Date;
 
   @ManyToOne(() => Rfcs, (rfcs) => rfcs.Abonos)
-  idrfc: Rfcs
+  rfc: Rfcs
+
+  @Column()
+  rfcId:number
+
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Abonos)
-  idcreacion: Usuarios
+  usuario: Usuarios
 
+    @Column()
+  usuarioId:number
 
   
   

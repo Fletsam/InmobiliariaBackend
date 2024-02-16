@@ -1,3 +1,4 @@
 export class CreateEgresosSubConceptosGastos {
-  idegreso: number;
+  id?:number
+  egresoId: number;
 }

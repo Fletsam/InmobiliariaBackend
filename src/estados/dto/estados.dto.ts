@@ -1,4 +1,4 @@
 export class CreateEstadosDto {
-  idestados: number;
+  idestados?: number;
   estado: string;
 }

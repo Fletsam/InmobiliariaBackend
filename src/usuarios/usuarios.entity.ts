@@ -1,4 +1,4 @@
-import { Abono } from 'src/abonos/abono.endity';
+import { Abono } from 'src/abonos/abono.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
 import { Clientes } from 'src/clientes/clientes.entity';
 import { ClienteNoInteres } from 'src/clientesnointeres/clientesnointeres.entity';
@@ -6,8 +6,10 @@ import { ConceptosEgresos } from 'src/conceptosegresos/conceptosegresos.entity';
 import { ConceptosIngresos } from 'src/conceptosingresos/conceptosingresos.entity';
 import { Contratos } from 'src/contratos/contratos.entity';
 import { Egresos } from 'src/egresos/egresos.entity';
+import { FlujoMensualDeFraccionamientos } from 'src/flujomensualdefraccionamientos/flujomensualdefraccionamientos.entity';
 import { Ingresos } from 'src/ingresos/ingresos.entity';
 import { Inversionistas } from 'src/inversionistas/inversionistas.entity';
+import { Lotes } from 'src/lotes/lotes.entity';
 import { Moratorio } from 'src/moratorio/moratorio.entity';
 import { Pagares } from 'src/pagares/pagares.entity';
 import { PagaresCancelados } from 'src/pagarescancelados/pagarescancelados.entity';
@@ -18,15 +20,18 @@ import { Privilegios } from 'src/privilegios/privilegios.entity';
 import { Proyectos } from 'src/proyectos/proyectos.entity';
 import { proyectosproyectos } from 'src/proyectosproyectos/proyectosproyectos.entity';
 import { Rfcs } from 'src/rfcs/rfcs.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Usuarios {
-  /* @PrimaryGeneratedColumn()
-  idusuario: number; */
+  @PrimaryGeneratedColumn()
+  id:number
 
-@ManyToOne(()=>  Privilegios ,(privilegios) => privilegios.Usuarios)
-  idusuario  : Privilegios
+ @ManyToOne(()=>  Privilegios ,(privilegios) => privilegios.Usuarios)
+  privilegios  : Privilegios
+
+  @Column()
+  privilegiosId: string;
 
   @Column()
   nombre: string;
@@ -40,78 +45,90 @@ export class Usuarios {
   @Column()
   estatus: number;
 
-  @Column()
-  idcreacion:number
+  /* @Column()
+  idcreacion:number */
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    name: 'fechadecreacion',
+    type: 'datetime',
+    default: () => { 'CURRENT_TIMESTAMP'},
+  })
   fhcreacion: Date;
 
-  @Column()
+/*   @Column()
   idmodificacion: number;
-
-  @Column()
-  fhmodificacion: Date;
+ */
+ /*  @Column()
+  fhmodificacion: Date; */
 
 
   
 
 
-  @OneToMany(() => Abono, (abono) => abono.idcreacion)
+  @OneToMany(() => Abono, (abono) => abono.usuario)
   Abonos: Abono[];
 
-  @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.idcreacion )
+  @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
 
-  @OneToMany(() => Cajas, (cajas) => cajas.idcreacion)
+  @OneToMany(() => Cajas, (cajas) => cajas.usuario)
   Cajas: Cajas[];
 
   
-  @OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.idcreacion)
+  @OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.usuario)
   ConceptosEgresos: ConceptosEgresos[];
 
-  @OneToMany(() => Egresos , (egresos) => egresos.idcreacion)
+  @OneToMany(() => Egresos , (egresos) => egresos.usuario)
   Egresos: Egresos[];
 
-   
-@OneToMany(() => ConceptosIngresos, (conceptosingresos) => conceptosingresos.idcreacion)
+  @OneToMany(() => FlujoMensualDeFraccionamientos , (flujomensualdefraccionamientos) => flujomensualdefraccionamientos.usuario)
+  FlujoMensualDeFraccionamientos: FlujoMensualDeFraccionamientos[]; 
+
+
+@OneToMany(() => ConceptosIngresos, (conceptosingresos) => conceptosingresos.usuario)
   ConceptoIngresos: ConceptosIngresos[];
 
-@OneToMany(() => Moratorio, (moratorio) => moratorio.idcreacion)
+@OneToMany(() => Moratorio, (moratorio) => moratorio.usuario)
   Moratorio: Moratorio[];
 
-@OneToMany(() => Proyectos, (proyectos) => proyectos.idcreacion)
+@OneToMany(() => Proyectos, (proyectos) => proyectos.usuario)
   Proyectos: Proyectos[];
 
-@OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.idcreacion)
+@OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.usuario)
   proyectosproyectos : proyectosproyectos[];
 
-@OneToMany(() => Parcelas, (parcelas) => parcelas.idcreacion)
+@OneToMany(() => Parcelas, (parcelas) => parcelas.usuario)
   Parcelas : Parcelas[];
 
-@OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.idcreacion)
+@OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.usuario)
   ParcelasProyectos : ParcelasProyectos[];
   
-@OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.idcreacion)
+@OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.usuario)
   ParcelasPenalizacion : ParcelasPenalizacion[];
   
-@OneToMany(() => Rfcs, (rfcs) => rfcs.idcreacion)
+@OneToMany(() => Rfcs, (rfcs) => rfcs.usuario)
   Rfcs : Rfcs[];
   
-
+@OneToMany(() => Lotes, (lotes) => lotes.usuario)
+  Lotes : Lotes[];
   
-  @OneToMany(() => Ingresos, (ingresos) => ingresos.idcreacion)
+  @OneToMany(() => Ingresos, (ingresos) => ingresos.usuario)
   Ingresos : Ingresos[];
 
-@OneToMany(() => Pagares, (pagares) => pagares.idcreacion)
+@OneToMany(() => Pagares, (pagares) => pagares.usuario)
  Pagares  : Pagares[];
  
- @OneToMany(() => Contratos, (contratos) => contratos.idcreacion)
+
+ @OneToMany(() => PagaresCancelados, (pagarescancelados) => pagarescancelados.usuario)
+ PagaresCancelados  : PagaresCancelados[];
+
+ @OneToMany(() => Contratos, (contratos) => contratos.usuario)
  Contratos  : Contratos[];
  
- @OneToMany(() => Clientes, (clientes) => clientes.idcreacion)
+ @OneToMany(() => Clientes, (clientes) => clientes.usuario)
   Clientes : Clientes[];
 
-  @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.idcreacion)
+  @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.cliente)
   ClienteNoInteres : ClienteNoInteres[];
 
 }

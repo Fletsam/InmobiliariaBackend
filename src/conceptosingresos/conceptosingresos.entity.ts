@@ -5,7 +5,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 @Entity()
 export class ConceptosIngresos {
   @PrimaryGeneratedColumn()
-  idconcepto: number;
+  id: number;
 
   @Column()
   clave: string;
@@ -31,11 +31,13 @@ export class ConceptosIngresos {
   @Column()
   fhmodificacion: Date;
 
-  @OneToMany(()=>  Ingresos ,(ingresos) => ingresos.idconcepto )
+  @OneToMany(()=>  Ingresos ,(ingresos) => ingresos.concepto )
   Ingresos  : Ingresos[]
 
   @ManyToOne(()=>  Usuarios ,(usuario) => usuario.ConceptoIngresos )
-  idcreacion  : Usuarios
+  usuario  : Usuarios
 
+  @Column()
+  	usuarioId: string;
   
 }

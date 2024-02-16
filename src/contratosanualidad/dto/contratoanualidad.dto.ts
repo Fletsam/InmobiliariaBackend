@@ -1,5 +1,7 @@
 export class CreateContratoAnualidadDto {
-  idcontrato: number;
+  id?:number
+  
   anualidad: number;
   mes: number;
+  contratoId: number;
 }

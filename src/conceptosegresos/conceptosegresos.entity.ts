@@ -5,7 +5,7 @@ import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Column } from 'ty
 @Entity()
 export class ConceptosEgresos {
   @PrimaryGeneratedColumn()
-  idconcepto: number;
+  id: number;
 
   @Column()
   clave: string;
@@ -25,18 +25,21 @@ export class ConceptosEgresos {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
- /*  @Column()
-  idmodificacion: number; */
+  @Column()
+  idmodificacion: number;
 
   @Column()
   fhmodificacion: Date;
 
-  @OneToMany(() => Egresos, (egresos) => egresos.idconcepto)
+  @OneToMany(() => Egresos, (egresos) => egresos.concepto)
   Egresos:Egresos[]
 
   @ManyToOne(() => Usuarios, (usuarios) => usuarios.ConceptosEgresos)
-  idcreacion:Usuarios
+  usuario:Usuarios
 
+  @Column()
+  	usuarioId: string;
+/* 
   @ManyToOne(() => Usuarios, (usuarios) => usuarios.ConceptosEgresos)
-  idmodificacion:Usuarios
+  idmodificacion:Usuarios */
 }
