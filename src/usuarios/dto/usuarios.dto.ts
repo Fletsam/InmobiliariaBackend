@@ -6,6 +6,6 @@ export class CreateUsuariosDto {
   estatus: number;
   fhcreacion: Date;
   fhmodficacicon: Date;
-  privilegiosId:string
+  privilegiosId:number
   
 }

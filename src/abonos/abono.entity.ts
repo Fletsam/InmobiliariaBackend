@@ -1,27 +1,28 @@
 import { Rfcs } from 'src/rfcs/rfcs.entity';
 import { Usuarios } from 'src/usuarios/usuarios.entity';
-import { Entity, CreateDateColumn, PrimaryGeneratedColumn, Column,ManyToOne, OneToOne } from 'typeorm';
+import { Entity, CreateDateColumn, PrimaryGeneratedColumn, Column,ManyToOne, OneToOne, AfterInsert, OneToMany } from 'typeorm';
+import { AbonoService } from './abonos.service';
+import { Contratos } from 'src/Contrato/contratos/contratos.entity'; 
 
 @Entity()
 export class Abono {
+  
   @PrimaryGeneratedColumn()
   id: number;
 
-  /* @Column()
-  idrfc: number; */
 
   @Column()
   monto: number;
 
-  @Column()
-  fecha: Date;
+/*   @Column()
+  @OneToMany(() => Rfcs, (rfc) => rfc.total)
+  monto:number */
 
  /*  @Column()
-  idcreacion: number; */
+  fecha: Date; */
 
-  
-
-
+  @Column()
+  idcreacion:number
 
   @CreateDateColumn({
     name: 'fechadecreacion',
@@ -36,11 +37,16 @@ export class Abono {
   @Column()
   rfcId:number
 
+  @ManyToOne(() => Contratos, (contrato) => contrato.Abonos)
+  contrato: Contratos
+
+  @Column()
+  contratoId: number
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Abonos)
   usuario: Usuarios
 
-    @Column()
+  @Column()
   usuarioId:number
 
   

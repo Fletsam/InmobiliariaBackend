@@ -1,4 +1,4 @@
 export class CreatePrivilegiosDto {
-  idusuario: number;
+  id: number;
   opcion: number;
 }

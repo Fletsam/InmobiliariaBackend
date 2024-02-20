@@ -10,5 +10,5 @@ export class CreateRfcsDto {
   fhcreacion: Date;
   usuarioId?: number;
   fhmodificacion: Date;
-  
+  total:number
 }

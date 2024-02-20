@@ -1,5 +1,6 @@
+import { EgresosSubConceptosProveedor } from 'src/Egresoss/egresossubconceptosproveedor/egresossubconceptosproveedor';
 import { Abono } from 'src/abonos/abono.entity';
-import { EgresosSubConceptosProveedor } from 'src/egresossubconceptosproveedor/egresossubconceptosproveedor';
+
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, CreateDateColumn } from 'typeorm';
 
@@ -35,12 +36,18 @@ export class Rfcs {
   })
   fhcreacion: Date;
 
-/*   @Column()
-  idcreacion: number; */
+  @Column()
+  idcreacion: number;
 
   @Column()
   usuarioId:number
 
+@Column()
+  total:number
+
+ /*  @ManyToOne(() => Abono, (abono) => abono.monto)
+  total:number */
+  
 
   @Column()
   fhmodificacion: Date;
@@ -48,7 +55,7 @@ export class Rfcs {
   @OneToMany(() => Abono, (abono) => abono.rfc) 
   Abonos : Abono[]
 
-   @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.rfc) 
+  @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.rfc) 
   EgresosSubConceptosProveedor : EgresosSubConceptosProveedor[]
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Rfcs) 

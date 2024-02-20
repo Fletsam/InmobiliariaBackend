@@ -1,24 +1,25 @@
+import { Clientes } from 'src/Cliente/clientes/clientes.entity';
+import { ClienteNoInteres } from 'src/Cliente/clientesnointeres/clientesnointeres.entity';
+import { Contratos } from 'src/Contrato/contratos/contratos.entity';
+import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos.entity';
+import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
+import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
+import { Lotes } from 'src/Fraccionamiento/lotes/lotes.entity';
+import { ConceptosIngresos } from 'src/Ingresoss/conceptosingresos/conceptosingresos.entity';
+import { Ingresos } from 'src/Ingresoss/ingresos/ingresos.entity';
+import { Inversionistas } from 'src/Inversionistass/inversionistas/inversionistas.entity';
+import { Pagares } from 'src/Pagare/pagares/pagares.entity';
+import { PagaresCancelados } from 'src/Pagare/pagarescancelados/pagarescancelados.entity';
+import { Parcelas } from 'src/Parcela/parcelas/parcelas.entity';
+import { ParcelasPenalizacion } from 'src/Parcela/parcelaspenalizacion/parcelaspenalizacion.entity';
+import { ParcelasProyectos } from 'src/Parcela/parcelasproyectos/parcelasproyectos.entity';
+import { Proyectos } from 'src/Proyecto/proyectos/proyectos.entity';
+import { proyectosproyectos } from 'src/Proyecto/proyectosproyectos/proyectosproyectos.entity';
 import { Abono } from 'src/abonos/abono.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
-import { Clientes } from 'src/clientes/clientes.entity';
-import { ClienteNoInteres } from 'src/clientesnointeres/clientesnointeres.entity';
-import { ConceptosEgresos } from 'src/conceptosegresos/conceptosegresos.entity';
-import { ConceptosIngresos } from 'src/conceptosingresos/conceptosingresos.entity';
-import { Contratos } from 'src/contratos/contratos.entity';
-import { Egresos } from 'src/egresos/egresos.entity';
-import { FlujoMensualDeFraccionamientos } from 'src/flujomensualdefraccionamientos/flujomensualdefraccionamientos.entity';
-import { Ingresos } from 'src/ingresos/ingresos.entity';
-import { Inversionistas } from 'src/inversionistas/inversionistas.entity';
-import { Lotes } from 'src/lotes/lotes.entity';
 import { Moratorio } from 'src/moratorio/moratorio.entity';
-import { Pagares } from 'src/pagares/pagares.entity';
-import { PagaresCancelados } from 'src/pagarescancelados/pagarescancelados.entity';
-import { Parcelas } from 'src/parcelas/parcelas.entity';
-import { ParcelasPenalizacion } from 'src/parcelaspenalizacion/parcelaspenalizacion.entity';
-import { ParcelasProyectos } from 'src/parcelasproyectos/parcelasproyectos.entity';
 import { Privilegios } from 'src/privilegios/privilegios.entity';
-import { Proyectos } from 'src/proyectos/proyectos.entity';
-import { proyectosproyectos } from 'src/proyectosproyectos/proyectosproyectos.entity';
+
 import { Rfcs } from 'src/rfcs/rfcs.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, CreateDateColumn } from 'typeorm';
 
@@ -31,7 +32,7 @@ export class Usuarios {
   privilegios  : Privilegios
 
   @Column()
-  privilegiosId: string;
+  privilegiosId: number;
 
   @Column()
   nombre: string;
@@ -61,10 +62,6 @@ export class Usuarios {
  /*  @Column()
   fhmodificacion: Date; */
 
-
-  
-
-
   @OneToMany(() => Abono, (abono) => abono.usuario)
   Abonos: Abono[];
 
@@ -81,8 +78,8 @@ export class Usuarios {
   @OneToMany(() => Egresos , (egresos) => egresos.usuario)
   Egresos: Egresos[];
 
-  @OneToMany(() => FlujoMensualDeFraccionamientos , (flujomensualdefraccionamientos) => flujomensualdefraccionamientos.usuario)
-  FlujoMensualDeFraccionamientos: FlujoMensualDeFraccionamientos[]; 
+  @OneToMany(() => FlujoDiarioFraccionamiento , (flujodiariofraccionamiento) => flujodiariofraccionamiento.usuario)
+  FlujoDiarioFraccionamiento: FlujoDiarioFraccionamiento[]; 
 
 
 @OneToMany(() => ConceptosIngresos, (conceptosingresos) => conceptosingresos.usuario)

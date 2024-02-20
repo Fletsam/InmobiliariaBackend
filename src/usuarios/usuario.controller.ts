@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { UsuariosService } from "./usuarios.service";
 import { CreateUsuariosDto } from "./dto/usuarios.dto";
 
@@ -9,12 +9,26 @@ export class UsuarioController {
 
 	@Get('')
 	getUsers() {
-		return this.usuarioService.getUsuarios
+		return this.usuarioService.getUsuarios()
+	}
+
+	@Get(':id')
+	findOne(@Param('id', ParseIntPipe) id:number) {
+		return this.usuarioService.findById(id)
 	}
 
 	@Post()
-	createAbono(@Body() usuario: CreateUsuariosDto){
+	createUsuario(@Body() usuario: CreateUsuariosDto){
+		
 		return this.usuarioService.createUsuario(usuario)
+	}
+
+	@Patch(':id')
+	updateUser(
+		@Param('id', ParseIntPipe) id:number,
+		@Body() usuario:CreateUsuariosDto,
+	) {
+		return this.usuarioService.editUsuario(id, usuario)
 	}
 
 }
