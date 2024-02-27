@@ -1,13 +1,16 @@
 import { BadRequestException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Manzanas } from "./manzanas.entity";
+import {  Manzanas } from "./manzanas.entity";
 import { Repository } from "typeorm";
-import { CreateManzanaDto } from "./dto/manzana.dto";
+import {  CreateManzanaDto } from "./dto/manzanas.dto";
+
+
+
 
 @Injectable()
-export class ManzanaService {
+export class ManzanasService {
 	constructor(
-	@InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas> ) {}
+	@InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>,	) {}
 	
 	
 	
@@ -19,7 +22,7 @@ export class ManzanaService {
  
 	async getManzanaById(id: number) {
     const Found = await this.manzanasRepository.findOne({
-      where: { id }
+      where: { id }, relations : ['Lotes']
     });
     if (!Found) {
       throw new BadRequestException({
@@ -37,8 +40,11 @@ export class ManzanaService {
 	const newItem = await this.manzanasRepository.create({...newFlag})
 	const Saved = await this.manzanasRepository.save({...newItem})
 
+	/* await this.getTotalMontoFracc(Saved.fraccionamientoId) */
 	return{ data:Saved, status : HttpStatus.OK}
   }
+
+
 
 
 

@@ -1,0 +1,37 @@
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { ClientesService } from "./clientes.service";
+import { CreateClientesDto } from "./dto/clientes.dto";
+
+
+
+@Controller('clientes')
+export class ClientesController {
+
+
+	constructor(private ClientesService : ClientesService) {}
+
+	@Get('')
+	getClientes(){
+		return this.ClientesService.getClientes()
+
+	}
+
+	@Get(':id')
+	getCliente(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.ClientesService.getClienteById(id)	
+	}
+
+	@Post('')
+	createCliente(
+		@Body() cliente:CreateClientesDto
+	) {
+		{
+			return this.ClientesService.createCliente(cliente)
+		}
+	} 
+
+
+}

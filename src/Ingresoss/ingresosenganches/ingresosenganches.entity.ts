@@ -17,8 +17,8 @@ export class IngresosEnganches {
 
  
 
-@ManyToOne(() => Contratos, (contratos) => contratos.IngresosEnganches) 
-contrato : Ingresos
+/* @ManyToOne(() => Contratos, (contratos) => contratos.IngresosEnganches) 
+contrato : Ingresos */
 
 
 

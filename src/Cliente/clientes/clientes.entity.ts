@@ -18,7 +18,7 @@ export class Clientes {
   nombre: string;
 
   @Column()
-  genero: "Masculino"|"Femenino";
+  genero: string;
 
   @Column()
   calle: string
@@ -65,8 +65,8 @@ export class Clientes {
   @Column()
   telefonodereferencia:string
 
-  @Column()
-  idcreacion: number;
+  /* @Column()
+  idcreacion: number; */
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
@@ -81,7 +81,7 @@ export class Clientes {
   usuario : Usuarios
 
   @Column()
-  usuarioId: string;
+  usuarioId: number;
 
   /* @ManyToOne(() => Usuarios, (usuario) => usuario.Clientes) 
   idmodificacion : Usuarios */

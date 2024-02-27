@@ -5,6 +5,7 @@ import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos
 import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
 import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
 import { Lotes } from 'src/Fraccionamiento/lotes/lotes.entity';
+import { Manzanas } from 'src/Fraccionamiento/manzana/manzanas.entity';
 import { ConceptosIngresos } from 'src/Ingresoss/conceptosingresos/conceptosingresos.entity';
 import { Ingresos } from 'src/Ingresoss/ingresos/ingresos.entity';
 import { Inversionistas } from 'src/Inversionistass/inversionistas/inversionistas.entity';
@@ -106,8 +107,8 @@ export class Usuarios {
 @OneToMany(() => Rfcs, (rfcs) => rfcs.usuario)
   Rfcs : Rfcs[];
   
-@OneToMany(() => Lotes, (lotes) => lotes.usuario)
-  Lotes : Lotes[];
+@OneToMany(() => Manzanas, (manzana) => manzana.usuario)
+  Manzanas : Manzanas[];
   
   @OneToMany(() => Ingresos, (ingresos) => ingresos.usuario)
   Ingresos : Ingresos[];

@@ -1,8 +1,7 @@
 import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fraccionamientos.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Manzanas } from "../manzana/manzanas.entity";
 
-import { Usuarios } from "src/usuarios/usuarios.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Manzanas } from "../manzanas/manzanas.entity";
 
 @Entity()
 
@@ -12,20 +11,24 @@ export class Lotes {
 	id:number
 
 	@Column()
-	costototal:number
+	clave:string
 
-	@OneToMany(() => Manzanas, (manzana) => manzana.lote) 
-  	manzana : Manzanas[]
+	@Column()
+	m2:number
 
-	@ManyToOne(() => Fraccionamientos, (fraccionamiento) => fraccionamiento.lote) 
+	@Column()
+	costo:number
+
+	@ManyToOne(() => Manzanas, (manzana) => manzana.Lotes) 
+  	manzana : Manzanas
+
+	@Column()
+  	manzanaId: number;
+
+	@ManyToOne(() => Fraccionamientos, (fraccionamiento) => fraccionamiento.Manzanas) 
   	fraccionamiento : Fraccionamientos
 
 	@Column()
-  	fraccionamientoId: string;
+  	fraccionamientoId: number;
 
-	@ManyToOne(() => Usuarios, (usuario) => usuario.Lotes) 
-  	usuario : Usuarios
-
-	@Column()
-  	usuarioId: string;
 }

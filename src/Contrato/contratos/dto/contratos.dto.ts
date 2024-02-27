@@ -1,36 +1,26 @@
 export class CreateContratoDto {
-  id?: number;
-  
-  idproyecto: number;
-  calle: string;
-  numeroext: string;
-  numeroint: string;
-  colonia: string;
-  cp: string;
-  ciudad: string;
-  idestados: number;
-  ocupacion: string;
-  estadocivil: string;
-  lote: string;
-  manzana: string;
+   id?: number;
+
+  loteId: number;
+  testigo1: string;
+  testigo2: string;
   metros2: number;
   preciom2: number;
   costo: number;
   descuento: number;
   enganche: number;
   resto: number;
-  pagos: number;
+  pagosafinanciar: number;
   interesanual: number;
-  monto: number;
-  abono: number;
+  pagomensual:number
+  montototal: number;
   inicio: Date;
   fecha: Date;
-  testigo1: string;
-  testigo2: string;
   pagado: number;
   estatus: number;
   fhcreacion: Date;
-  fhmodficacion: Date;
+  fhmodificacion?: Date;
   usuarioId: number;
-  clienteId: number;
+  clientesId: number;
+ 
 }

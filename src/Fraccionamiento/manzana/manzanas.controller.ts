@@ -1,12 +1,11 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
-import { ManzanaService } from "./manzana.service";
-import { CreateManzanaDto } from "./dto/manzana.dto";
-
+import {  ManzanasService } from "./manzanas.service";
+import {  CreateManzanaDto } from "./dto/manzanas.dto";
 
 @Controller('manzanas')
-export class  ManzanaController {
+export class ManzanaController {
 
-	constructor(private ManzanaService : ManzanaService) {}
+	constructor(private ManzanaService : ManzanasService) {}
 
 	@Get('')
 	getManzanas(){
@@ -14,7 +13,7 @@ export class  ManzanaController {
 
 	}
 
-	@Get('id')
+	@Get(':id')
 	getManzana(
 		@Param('id',ParseIntPipe) id:number,
 	)
@@ -30,8 +29,6 @@ export class  ManzanaController {
 			return this.ManzanaService.createManzana(manzana)
 		}
 	} 
-
-
 
 
 }

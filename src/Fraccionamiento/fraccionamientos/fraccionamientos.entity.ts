@@ -1,8 +1,11 @@
 
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Lotes } from "../lotes/lotes.entity";
-import { Manzanas } from "../manzanas/manzanas.entity";
+
 import { FlujoPorFraccionamiento } from "../flujoporfraccionamiento/flujoporfraccionamiento.entity";
+import { Lotes } from "../lotes/lotes.entity";
+import { Manzanas } from "../manzana/manzanas.entity";
+import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
+import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 
 @Entity()
 
@@ -15,6 +18,15 @@ export class Fraccionamientos {
 	nombre:string
 
 	@Column()
+	propietario:string
+
+	@Column()
+	telefono:string
+
+	@Column()
+	direccion:string
+
+	@Column()
 	totaldelotes:number
 
 	@Column()
@@ -24,10 +36,16 @@ export class Fraccionamientos {
 	costototal:number
 
 	@OneToMany(() => Lotes, (lotes) => lotes.fraccionamiento) 
-  	lote : Lotes[]
+  	Lotes : Lotes[]
 
 	@OneToMany(() => Manzanas, (manzana) => manzana.fraccionamiento) 
-  	manzana : Manzanas[]
+  	Manzanas : Manzanas[]
+
+
+
+	@OneToMany(() => EgresosFraccionamiento, (egresosfraccionamiento) => egresosfraccionamiento.fraccionamiento) 
+  	EgresosFraccionamiento : EgresosFraccionamiento[]
+
 
 	@OneToMany(()=>  FlujoPorFraccionamiento ,(flujoporfraccionamiento) => flujoporfraccionamiento.fraccionamientos )
   	FlujoPorFraccionamiento : FlujoPorFraccionamiento[]

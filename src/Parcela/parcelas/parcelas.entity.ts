@@ -42,11 +42,11 @@ export class Parcelas {
   fhmodificacion: Date;
 
 
-@ManyToOne(() => Usuarios, (usuario) => usuario.Parcelas) 
+  @ManyToOne(() => Usuarios, (usuario) => usuario.Parcelas) 
   usuario : Usuarios
 
-@Column()
-  	usuarioId: string;
+  @Column()
+  usuarioId: string;
 
   @OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.parcela) 
   ParcelasProyectos : ParcelasProyectos[]
@@ -54,10 +54,10 @@ export class Parcelas {
   @OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.parcela) 
   ParcelasPenalizacion : ParcelasPenalizacion[]
 
- @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.parcela) 
+  @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.parcela) 
   EgresosParcelas : EgresosParcelas[]
 
-@OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.egreso) 
+  @OneToMany(() => EgresosSubConceptosParcelas, (egresossubconceptosparcela) => egresossubconceptosparcela.egreso) 
   EgresosSubConceptosParcelas : EgresosSubConceptosParcelas[]
 
 

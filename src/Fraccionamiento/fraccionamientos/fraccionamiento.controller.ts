@@ -14,7 +14,7 @@ export class FraccionamientoCrontroller {
 
 	}
 
-	@Get('id')
+	@Get(':id')
 	getFraccionamiento(
 		@Param('id',ParseIntPipe) id:number,
 	)

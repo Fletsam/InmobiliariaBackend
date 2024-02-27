@@ -11,13 +11,11 @@ import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 export class AbonosController {
 	constructor(private abonoService : AbonoService) {}
 
-	@Get('/total/:id')
+	@Get('')
 	getAbonos(
-
-		@Param('id', ParseIntPipe) id: number
 	) {
 		
-		return this.abonoService.getTotalMonto(id)
+		return this.abonoService.getAbonos()
 	}
 	
 	@Get(':id')
@@ -28,14 +26,6 @@ export class AbonosController {
 		return this.abonoService.getAbonobyId(id)
 	}
 
-	@Get('/rfc/:rfcId')
-	getAbonosbyRfc(
-		@Param('rfcId', ParseIntPipe) id: number,
-	) {
-		
-		return this.abonoService.getAbonosByRfc(id)
-		
-	}
 
 	@Get('/usuario/:usuarioId')
 	GetbyUsuario(
@@ -45,20 +35,21 @@ export class AbonosController {
 	}
 
 
-	@Post('/usuario/:usuarioId')
-	createAbono(
-		@Param("usuarioId", ParseIntPipe) id:number,
+	@Post('/contrato/:id')
+	createAbonoContrato(
+		@Param("id", ParseIntPipe) id:number,
 		@Body() abono: CreatAbonoDto){
-		return this.abonoService.createAbono(abono ,id)
+		return this.abonoService.createAbonoContrato(abono ,id)
 	}
 
-	@Patch('/usuario/:usuarioId/:id')
+
+	@Patch('/contrato/:contratoid/:id')
 	updateAbono(
 		@Param('id',ParseIntPipe) id:number,
-		@Param('usuarioId',ParseIntPipe) usuarioId:number,
+		@Param('contratoid',ParseIntPipe) contratoId:number,
 		@Body() abono:UpdateAbonoDto,
 	) {
-		return this.abonoService.editAbono(id,usuarioId, abono)
+		return this.abonoService.editAbono(id, contratoId ,abono)
 	}
 
 }

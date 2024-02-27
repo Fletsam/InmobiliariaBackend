@@ -1,8 +1,10 @@
- 	
+  
 export class CreateLotesDto {
 	id: number;
-  	costototal: number;
- 	fraccionamientoId: string;
-  	usuarioId: string;
-}	
-	
+  	m2: number;
+  	costo: number;
+  	manzanaId: number;
+  	fraccionamientoId: number;
+
+}
+ 

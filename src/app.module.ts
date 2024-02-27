@@ -53,16 +53,28 @@ import { proyectosproyectos } from './Proyecto/proyectosproyectos/proyectosproye
 import { Proyectos } from './Proyecto/proyectos/proyectos.entity';
 import { subconceptoegresos } from './Egresoss/subconceptosegresos/subconceptoegresos.entity';
 import { Ticket } from './ticket/ticket.entity';
-import { Lotes } from './Fraccionamiento/lotes/lotes.entity';
 import { Fraccionamientos } from './Fraccionamiento/fraccionamientos/fraccionamientos.entity';
-import { Manzanas } from './Fraccionamiento/manzanas/manzanas.entity';
+
 import { CarteraClientes } from './Cliente/carteraclientes/carteraclientes.entity';
 import { FlujoDiarioFraccionamiento } from './Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
 import { FlujoPorFraccionamiento } from './Fraccionamiento/flujoporfraccionamiento/flujoporfraccionamiento.entity';
 import { Anualidad } from './Cliente/anualidad/anualidad.entity';
 import { FraccionamientoModule } from './Fraccionamiento/fraccionamientos/fraccionamiento.module';
+import { ClientesModule } from './Cliente/clientes/clientes.module';
+import { ContratoModule } from './Contrato/contratos/contratos.module';
+import { IngresosContratosModule } from './Ingresoss/ingresoscontratos/ingresoscontratos.module';
+import { IngresosContratos } from './Ingresoss/ingresoscontratos/ingresoscontratos.entity';
+import { EstadoCuentaContrato } from './EstadosCuenta/EstadoCuentaContrato/estadocuentacontrato.entity';
+import { EgresosContratos } from './Egresoss/egresoscontratos/egresoscontratos.entity';
+import { EstadoCuentaContratoModule } from './EstadosCuenta/EstadoCuentaContrato/estadocuentacontrato.module';
 import { LotesModule } from './Fraccionamiento/lotes/lotes.module';
-import { ManzanaModule } from './Fraccionamiento/manzanas/manzana.module';
+import { ManzanasModule } from './Fraccionamiento/manzana/manzanas.module';
+import { Manzanas } from './Fraccionamiento/manzana/manzanas.entity';
+import { Lotes } from './Fraccionamiento/lotes/lotes.entity';
+import { IngresosFraccionamientos } from './Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity';
+import { EgresosFraccionamiento } from './Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity';
+import { EstadoCuentaFraccionamiento } from './EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity';
+import { EstadoCuentaFraccionamientoModule } from './EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.module';
 
 @Module({
   imports: 
@@ -82,11 +94,11 @@ import { ManzanaModule } from './Fraccionamiento/manzanas/manzana.module';
     
     TypeOrmModule.forRoot({
        type: 'mysql',
-        username: 'root',
-        password: '1234',
-        host: 'localhost',
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
         port: 3306,
-        database: 'inmobiliariathi',
+        database: process.env.DB_NAME,
         autoLoadEntities: true,
       entities: [
         Abono, 
@@ -139,6 +151,12 @@ import { ManzanaModule } from './Fraccionamiento/manzanas/manzana.module';
         FlujoDiarioFraccionamiento,
         FlujoPorFraccionamiento,
         Anualidad,
+        IngresosContratos,
+        EstadoCuentaContrato,
+        EgresosContratos,
+        IngresosFraccionamientos,
+        EgresosFraccionamiento,
+        EstadoCuentaFraccionamiento,
       ],
       synchronize: true,
     }),
@@ -149,7 +167,12 @@ import { ManzanaModule } from './Fraccionamiento/manzanas/manzana.module';
     AuthModule,
     FraccionamientoModule,
     LotesModule,
-    ManzanaModule,
+    ManzanasModule,
+    ClientesModule,
+    ContratoModule,
+    IngresosContratosModule,
+    EstadoCuentaContratoModule,
+    EstadoCuentaFraccionamientoModule,
   ],
   controllers: [],
   providers: [],

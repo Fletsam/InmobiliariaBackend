@@ -8,10 +8,10 @@ export class EgresosParcelas {
  @PrimaryGeneratedColumn()
   id:number
 
- @ManyToOne(() => Egresos, (egresos) => egresos.EgresosParcelas)
+  @ManyToOne(() => Egresos, (egresos) => egresos.EgresosParcelas)
   egreso: Egresos
 
-   @Column()
+  @Column()
   egresoId: string;
 
 

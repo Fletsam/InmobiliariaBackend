@@ -2,33 +2,36 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common
 import { LotesService } from "./lotes.service";
 import { CreateLotesDto } from "./dto/lotes.dto";
 
-@Controller('lotes')
-export class LotesController {
 
-	constructor(private LotesService : LotesService) {}
+@Controller('lotes')
+export class  LotesController {
+
+	constructor(private lotesService : LotesService) {}
 
 	@Get('')
-	getLotes(){
-		return this.LotesService.getLotes()
+	getManzanas(){
+		return this.lotesService.getLotes()
 
 	}
 
-	@Get('id')
-	getLote(
+	@Get(':id')
+	getManzana(
 		@Param('id',ParseIntPipe) id:number,
 	)
 	{
-		return this.LotesService.getLotesById(id)	
+		return this.lotesService.getLoteById(id)	
 	}
 
 	@Post('')
-	createFraccionamiento(
+	createManzana(
 		@Body() lote:CreateLotesDto
 	) {
 		{
-			return this.LotesService.createLote(lote)
+			return this.lotesService.createLote(lote)
 		}
 	} 
+
+
 
 
 }

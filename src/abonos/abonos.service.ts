@@ -3,50 +3,42 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Abono } from "./abono.entity";
 import { Repository } from "typeorm";
 import { CreatAbonoDto } from "./dto/abono.dto";
-import { UsuariosService } from "src/usuarios/usuarios.service";
 import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 import { Usuarios } from "src/usuarios/usuarios.entity";
-import { RfcsService } from "src/rfcs/rfcs.service";
-import { Rfcs } from "src/rfcs/rfcs.entity";
+
+import { Contratos } from "src/Contrato/contratos/contratos.entity";
+import { IngresosContratos } from "src/Ingresoss/ingresoscontratos/ingresoscontratos.entity";
+import { CreateIngresosContratosDto } from "src/Ingresoss/ingresoscontratos/dto/ingresoscontratos.dto";
 
 @Injectable()
 
 export class AbonoService {
 
 	constructor(
-		@InjectRepository(Abono) private abonoRepository: Repository<Abono> , private usuarioService: UsuariosService, private rfcService : RfcsService, @InjectRepository(Rfcs) private rfcRepository: Repository<Rfcs>	) {}
+		@InjectRepository(Abono) private abonoRepository: Repository<Abono> , 
+    @InjectRepository(Contratos) private contratoRepository: Repository<Contratos>, 
+    @InjectRepository(Usuarios) private usuarioRepository: Repository<Usuarios>,
+    @InjectRepository(IngresosContratos) private ingresoContratosRepository: Repository<IngresosContratos>,
+    ) {}
     
 	async getAbonos() {
 	const abonos = await this.abonoRepository.find()
-  
-  
 	return {data : abonos, status: HttpStatus.OK }
 }
 
 
 async getAbonosByUsuario(id:number) {
- 
-  const foundUsuario = await this.usuarioService.findById(id) 
+
+  const foundUsuario = await this.usuarioRepository.findOne( {where: {id}} ) 
 	const abonos = await this.abonoRepository.find({ 
-    where: {usuarioId: foundUsuario.id}
+    where: { usuarioId : foundUsuario.id }
   })
   
   
 	return {data : abonos, status: HttpStatus.OK }
 }
 
-async getAbonosByRfc(id:number) {
- 
-  const foundRfc = await this.rfcService.getRfcById(id) 
-	const abonos = await this.abonoRepository.find({ 
-    where: {rfcId: foundRfc.id}
-  })
-  
-  
-	return {data : abonos, status: HttpStatus.OK }
-}
-
-	async getAbonobyId(id: number) {
+async getAbonobyId(id: number) {
     const AbonoFound = await this.abonoRepository.findOne({
       where: { id },
     });
@@ -60,53 +52,67 @@ async getAbonosByRfc(id:number) {
     return AbonoFound;
   }
 
-  async createAbono(abono: CreatAbonoDto , id:number){
+  
+
+  async createAbonoContrato(abono: CreatAbonoDto , id:number){
+      
+      const contrato = await this.contratoRepository.findOne({where : {id}})
+      
+
+      /* const foundingresocontrato = await this.ingresoContratosRepository.findOne({where :{ id:contrato.id}}) */
       
       const newAbonoFlag = { ...abono , fhcreacion: new Date()}
+      const newAbono = await this.abonoRepository.create({...newAbonoFlag , contratoId:contrato.id })
+      const AbonoSaved = await this.abonoRepository.save({...newAbono })
 
-      const newAbono = await this.abonoRepository.create({...newAbonoFlag , usuarioId:id})
-      
-
-      const AbonoSaved = await this.abonoRepository.save({...newAbono , idcreacion:id})
-
-      await this.getTotalMonto(AbonoSaved.rfcId)
+      await this.createIngresoAbono({...newAbono})
+      await this.getTotalMontoContrato(AbonoSaved.contratoId)
       return[{ data:AbonoSaved,  status : HttpStatus.OK}]
 
   }
 
-  async editAbono (id:number , usuarioId : number, abono: UpdateAbonoDto){
-   
-    const abonoFlag = {...abono, usuarioId:usuarioId }
-  
+
+
+  async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
+    const abonoFlag = {...abono, contratoId:contratoId }
     const updatedAbono = await this.abonoRepository.update(
       { id},
       {...abonoFlag},
     )
-    
     if (updatedAbono.affected=== 0) {
       throw new BadRequestException({
         data:null,
         message: "no se ha podido actualizar",
         status: HttpStatus.CONFLICT
       })
-      
     }
-    await this.getTotalMonto(abono.rfcid)
+    await this.getTotalMontoContrato(contratoId)
     return { data:abonoFlag , status: HttpStatus.OK}
   }
 
 
-   async getTotalMonto (id:number) {
+  async getTotalMontoContrato (id:number) {
    /*  const abonos = await this.abonoRepository.find() */
-     const foundRfc = await this.rfcService.getRfcById(id) 
+     const found = await this.contratoRepository.findOne({where :{id}})
       const abonos = await this.abonoRepository.find({ 
-    where: {rfcId: foundRfc.id}
+    where: {contratoId: found.id}
   })
     const totalMontos = abonos.reduce((total,monto) => total + monto.monto , 0 )
-      foundRfc.total = totalMontos 
+      found.pagado = totalMontos 
       
-   return this.rfcRepository.save(foundRfc) 
+   return this.contratoRepository.save(found) 
     
   }
+
+  
+	async createIngresoAbono(ingresoabono){
+
+		const newFlag:CreateIngresosContratosDto = {...ingresoabono , estadocuentacontratoId:ingresoabono.contratoId , contratoId:ingresoabono.contratoId , concepto:"Abono" , fhcreacion: new Date()
+		}
+		const newItem = await this.ingresoContratosRepository.create({...newFlag})
+		const Saved = await this.ingresoContratosRepository.save({...newItem})
+		return{ data:Saved, status : HttpStatus.OK}
+	}
+
 }
 

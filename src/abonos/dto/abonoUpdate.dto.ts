@@ -3,8 +3,9 @@ export class UpdateAbonoDto {
   rfcid?: number;
   monto?: number;
   idcreacion?:number
-  fecha?: Date;
+  /* fecha?: Date; */
   usuarioId?: number;
   fhcreacion?: Date;
+  contratoId:number
 
 }

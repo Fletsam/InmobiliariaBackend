@@ -3,22 +3,22 @@ import { IngresosEnganches } from 'src/Ingresoss/ingresosenganches/ingresosengan
 import { Abono } from 'src/abonos/abono.entity';
 
 import { Usuarios } from 'src/usuarios/usuarios.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { ContratoAnualidad } from '../contratosanualidad/contratoanualidad.entity';
 import { Pagares } from 'src/Pagare/pagares/pagares.entity';
 import { ContratosMoratorio } from '../contratosmoratorio/contratosmoratorio.entity';
+
+
+import { IngresosContratos } from 'src/Ingresoss/ingresoscontratos/ingresoscontratos.entity';
+import { EgresosContratos } from 'src/Egresoss/egresoscontratos/egresoscontratos.entity';
+import { Lotes } from 'src/Fraccionamiento/lotes/lotes.entity';
+import { IngresosFraccionamientos } from 'src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity';
 
 @Entity()
 export class Contratos {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  lote: string;
-
-  @Column()
-  manzana: string;
-
+ 
   @Column()
   testigo1: string;
 
@@ -44,10 +44,13 @@ export class Contratos {
   resto: number;
 
   @Column()
-  pagosafinanciar: string;
+  pagosafinanciar: number;
+
+  @Column( {type:'float'})
+  interesanual: number;
 
   @Column()
-  interesanual: number;
+  pagomensual: number
 
   @Column()
   montototal: number;
@@ -81,24 +84,37 @@ export class Contratos {
   usuario : Usuarios
 
   @Column()
-  	usuarioId: string;
+  usuarioId: number;
 
   @ManyToOne(() => Clientes, (cliente) => cliente.Contratos) 
   clientes : Clientes
   
   @Column()
-  	clientesId: string;
+  clientesId: number;
   
   /* @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
   idmodificacion : Usuarios */
 
+  @Column()
+  estadocuentaId : number
+
+  @OneToOne(() => Lotes)
+  @JoinColumn({name: "manzanaId"})
+  lote: Lotes
+  @Column()
+  loteId: number;
+
   @OneToMany(() => Abono, (abono) => abono.contrato) 
   Abonos : Abono[]
 
+  @OneToMany(() => IngresosFraccionamientos, (ingresosfraccionamientos) => ingresosfraccionamientos.contrato) 
+  IngresosFraccionamientos : IngresosFraccionamientos[]
 
-  @OneToMany(() => IngresosEnganches, (ingresosenganches) => ingresosenganches.contrato) 
-  IngresosEnganches : IngresosEnganches[]
+  @OneToMany(() => IngresosContratos, (ingresoscontratos) => ingresoscontratos.contrato) 
+  IngresosContratos : IngresosContratos[]
 
+  @OneToMany(() => EgresosContratos, (egresoscontratos) => egresoscontratos.contrato) 
+  EgresosContratos : EgresosContratos[]
 
   @OneToMany(() => Pagares, (pagares) => pagares.contrato) 
   Pagares : Pagares[]
@@ -108,6 +124,5 @@ export class Contratos {
 
   @OneToMany(() => ContratosMoratorio, (contratosmoratorio) => contratosmoratorio.contrato) 
   ContratosMoratorio : ContratosMoratorio[]
-
 
 }
