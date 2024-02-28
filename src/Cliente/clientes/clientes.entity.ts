@@ -71,8 +71,8 @@ export class Clientes {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
-  @Column()
-  idmodificacion: number;
+  /* @Column()
+  idmodificacion: number; */
 
   @Column()
   fhmodificacion: Date;

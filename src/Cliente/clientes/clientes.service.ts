@@ -3,6 +3,7 @@ import { Clientes } from "./clientes.entity";
 import { Repository } from "typeorm";
 import { BadRequestException, HttpStatus } from "@nestjs/common";
 import { CreateClientesDto } from "./dto/clientes.dto";
+import { UpdatedClientesDto } from "./dto/updatedCliente.dto";
 
 export class ClientesService {
 
@@ -38,6 +39,30 @@ export class ClientesService {
 	const Saved = await this.clientesRepository.save({...newItem})
 
 	return{ data:Saved, status : HttpStatus.OK}
+  }
+
+async deleteCliente(id: number ){
+	await this.clientesRepository.delete(id)
+
+	return{  status : HttpStatus.OK}
+  }
+
+
+
+  async editCliente(cliente: UpdatedClientesDto, id:number ){
+    await this.getClienteById(id)
+	const newFlag = { ...cliente, fhmodificacion: new Date()  }
+	const updatedItem = await this.clientesRepository.update({id} , {...newFlag})
+	
+  if (updatedItem.affected === 0) {
+      throw new BadRequestException({
+        data: null,
+        message: 'No se ha podido actualizar el usuario',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
+
+	return{ data:newFlag, status : HttpStatus.OK}
   }
 
 

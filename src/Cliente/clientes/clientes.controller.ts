@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { ClientesService } from "./clientes.service";
 import { CreateClientesDto } from "./dto/clientes.dto";
 
@@ -32,6 +32,23 @@ export class ClientesController {
 			return this.ClientesService.createCliente(cliente)
 		}
 	} 
+	@Patch(':id')
+	editCliente(
+		@Body() cliente:CreateClientesDto,
+		@Param('id',ParseIntPipe) id:number,
+	) {
+		{
+			return this.ClientesService.editCliente(cliente, id)
+		}
+	} 
+	@Delete(':id')
+	deleteCliente(
+		@Param('id',ParseIntPipe) id:number,
+	) {
+		{
+			return this.ClientesService.deleteCliente(id)
+		}
+	}
 
 
 }
