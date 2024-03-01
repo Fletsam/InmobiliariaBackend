@@ -3,6 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import {  Manzanas } from "./manzanas.entity";
 import { Repository } from "typeorm";
 import {  CreateManzanaDto } from "./dto/manzanas.dto";
+import { Fraccionamientos } from "../fraccionamientos/fraccionamientos.entity";
+import { Usuarios } from "src/usuarios/usuarios.entity";
+import { throwError } from "rxjs";
 
 
 
@@ -10,7 +13,9 @@ import {  CreateManzanaDto } from "./dto/manzanas.dto";
 @Injectable()
 export class ManzanasService {
 	constructor(
-	@InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>,	) {}
+	@InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>,
+  @InjectRepository(Fraccionamientos) private fraccionamientosRepository: Repository<Fraccionamientos>,
+  ) {}
 	
 	
 	
@@ -33,10 +38,35 @@ export class ManzanasService {
     }
     return Found;
   }
+async getManzanaByUsuario(id: number) {
+    const Found = await this.fraccionamientosRepository.findOne({where:{id}})
+    const manzana = await this.manzanasRepository.findOne({
+      where: { usuarioId: Found.id }
+    });
 
+    if (!manzana) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Fraccionamiento not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    
+  /*   Found.totaldelotes = totaldelotes */
+    return manzana;
+  }
   async createManzana(manzana: CreateManzanaDto ){
+   const fracc=  await this.fraccionamientosRepository.findOne({where:{id : manzana.fraccionamientoId}})
+    if (fracc.usuarioId !== manzana.usuarioId ) {
+       throw new BadRequestException({
+        data: null,
+        message: 'No tienes permiso',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
 
-	const newFlag = { ...manzana, fhcreacion: new Date()}
+
+	const newFlag = { ...manzana, fhcreacion: new Date(), clave:(`${fracc.clave}${manzana.numero}`)}
 	const newItem = await this.manzanasRepository.create({...newFlag})
 	const Saved = await this.manzanasRepository.save({...newItem})
 

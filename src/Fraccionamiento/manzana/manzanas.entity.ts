@@ -13,6 +13,12 @@ export class Manzanas {
 	id:number
 
 	@Column()
+	numero:string
+
+	@Column()
+	clave:string
+	
+	@Column()
 	costototal:number
 
 	@OneToMany(() => Lotes, (lote) => lote.manzana) 

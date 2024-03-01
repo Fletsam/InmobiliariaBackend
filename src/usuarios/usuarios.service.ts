@@ -37,10 +37,12 @@ export class UsuariosService {
     return usuarioFound;
   }
 async findByUsuario(usuario: string) {
-  
+    console.log(usuario);
+    
     const userFound = await this.usuarioRepository.findOne({
       where: { usuario },
     });
+    console.log(userFound);
     
     if (!userFound) {
       throw new BadRequestException({

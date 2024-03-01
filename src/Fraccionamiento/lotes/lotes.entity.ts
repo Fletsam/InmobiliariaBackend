@@ -11,6 +11,9 @@ export class Lotes {
 	id:number
 
 	@Column()
+	numero:string
+
+	@Column()
 	clave:string
 
 	@Column()

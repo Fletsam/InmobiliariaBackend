@@ -4,6 +4,7 @@ import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos.entity';
 import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
 import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
+import { Fraccionamientos } from 'src/Fraccionamiento/fraccionamientos/fraccionamientos.entity';
 import { Lotes } from 'src/Fraccionamiento/lotes/lotes.entity';
 import { Manzanas } from 'src/Fraccionamiento/manzana/manzanas.entity';
 import { ConceptosIngresos } from 'src/Ingresoss/conceptosingresos/conceptosingresos.entity';
@@ -97,6 +98,10 @@ export class Usuarios {
 
 @OneToMany(() => Parcelas, (parcelas) => parcelas.usuario)
   Parcelas : Parcelas[];
+
+@OneToMany(() => Fraccionamientos, (fraccionamiento) => fraccionamiento.usuario)
+  Fraccionamientos: Fraccionamientos[];
+
 
 @OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.usuario)
   ParcelasProyectos : ParcelasProyectos[];

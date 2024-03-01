@@ -22,6 +22,14 @@ export class FraccionamientoCrontroller {
 		return this.FraccionamientoService.getFraccionamientoById(id)	
 	}
 
+	@Get("/usuario/:id")
+	getFraccbyUsuario(
+		@Param("id",ParseIntPipe ) id:number
+	)
+	{
+		return this.FraccionamientoService.getFraccionamientoByUsuario(id)	
+	}
+
 	@Post('')
 	createFraccionamiento(
 		@Body() fraccionamiento:CreateFraccionamientoDto

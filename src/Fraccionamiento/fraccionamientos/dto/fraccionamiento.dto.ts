@@ -1,7 +1,7 @@
  
  export class CreateFraccionamientoDto {
 	
- 	id: number;
+ 	id?: number;
   	nombre: string;
 	propietario:string
 	telefono:string

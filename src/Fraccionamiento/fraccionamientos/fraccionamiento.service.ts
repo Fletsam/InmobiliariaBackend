@@ -8,6 +8,8 @@ import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFracc
 import { CreateEstadoCuentaFraccionamientoDto } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/dto/estadocuentafraccionamiento.dto";
 import {  CreateEgresosFraccionamientoDto } from "src/Egresoss/egresosfraccionamiento/dto/egresosfraccionamiento.dto";
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
+import { Usuarios } from "src/usuarios/usuarios.entity";
+import { Manzanas } from "../manzana/manzanas.entity";
 
 
 
@@ -16,7 +18,11 @@ export class FraccionamientoService {
 	constructor(
 	@InjectRepository(Fraccionamientos) private fraccionamientosRepository: Repository<Fraccionamientos>, 
 	@InjectRepository(EgresosFraccionamiento) private egresosFraccionamientosRepository: Repository<EgresosFraccionamiento>, 
-  @InjectRepository(EstadoCuentaFraccionamiento) private estadoCuentaFraccionamientoRepository : Repository<EstadoCuentaFraccionamiento>, 	) {}
+  @InjectRepository(EstadoCuentaFraccionamiento) private estadoCuentaFraccionamientoRepository : Repository<EstadoCuentaFraccionamiento>,
+    @InjectRepository(Usuarios) private usuariosRepository: Repository<Usuarios>,  
+  
+  ) {}
+   
 	
 	
 	
@@ -27,9 +33,12 @@ export class FraccionamientoService {
 	}
  
 	async getFraccionamientoById(id: number) {
+    
+
     const Found = await this.fraccionamientosRepository.findOne({
       where: { id }, relations: ["Manzanas", "Lotes"]
     });
+
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -49,6 +58,34 @@ export class FraccionamientoService {
   /*   Found.totaldelotes = totaldelotes */
     return Fraccionamiento;
   }
+
+  async getFraccionamientoByUsuario(id: number) {
+  
+    
+    const Found = await this.usuariosRepository.findOne({where:{id}})
+
+    const fracc = await this.fraccionamientosRepository.findOne({
+      where: { usuarioId: Found.id }, relations: ["Manzanas", "Lotes"]
+    });
+
+     if (Found.id !== fracc.usuarioId) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Fraccionamiento not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    const totaldemanzanas = fracc.Manzanas.length
+    const totaldelotes  = fracc.Lotes.length
+    const manzanas = fracc.Manzanas.filter(manzana => manzana.usuarioId === Found.id);
+    const Flag = {...fracc, totaldelotes , totaldemanzanas, Manzanas:manzanas, }
+    /* await this.fraccionamientosRepository.save(Flag)
+    */
+    
+  /*   Found.totaldelotes = totaldelotes */
+     return Flag;
+  }
+
 
   async createFraccionamiento(fraccionamiento: CreateFraccionamientoDto ){
 

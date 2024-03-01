@@ -4,6 +4,8 @@ export class CreateLotesDto {
   	m2: number;
   	costo: number;
   	manzanaId: number;
+	numero:string
+	clave:string
   	fraccionamientoId: number;
 
 }

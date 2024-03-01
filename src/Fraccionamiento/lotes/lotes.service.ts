@@ -41,7 +41,10 @@ export class LotesService {
   }
 
   async createLote(lote: CreateLotesDto ){
-	const newFlag = { ...lote, fhcreacion: new Date()}
+    const fracc=  await this.fraccionamientoRepository.findOne({where:{id : lote.fraccionamientoId}})
+    const manzana=  await this.manzanasRepository.findOne({where:{id : lote.manzanaId}})
+
+	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${fracc.clave}${manzana.numero}${lote.numero}`}
 	const newItem = await this.lotesRepository.create({...newFlag})
 	const Saved = await this.lotesRepository.save({...newItem})
 

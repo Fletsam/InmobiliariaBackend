@@ -21,6 +21,14 @@ export class ManzanaController {
 		return this.ManzanaService.getManzanaById(id)	
 	}
 
+	@Get(':id')
+	getManzanabyUsuario(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.ManzanaService.getManzanaById(id)	
+	}
+
 	@Post('')
 	createManzana(
 		@Body() manzana:CreateManzanaDto

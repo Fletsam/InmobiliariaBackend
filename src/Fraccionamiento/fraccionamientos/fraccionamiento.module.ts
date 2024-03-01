@@ -8,6 +8,7 @@ import { Manzanas } from "../manzana/manzanas.entity";
 import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity";
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
+import { Usuarios } from "src/usuarios/usuarios.entity";
 
 
 
@@ -20,7 +21,8 @@ import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos
 		Manzanas,
 		EstadoCuentaFraccionamiento, 
 		EgresosFraccionamiento,
-		IngresosFraccionamientos
+		IngresosFraccionamientos,
+		Usuarios,
 	]) ],
 	controllers: [ FraccionamientoCrontroller],
 	providers: [ FraccionamientoService],
