@@ -114,6 +114,9 @@ export class Usuarios {
   
 @OneToMany(() => Manzanas, (manzana) => manzana.usuario)
   Manzanas : Manzanas[];
+
+@OneToMany(() => Lotes, (lotes) => lotes.usuario)
+  Lotes : Lotes[];
   
   @OneToMany(() => Ingresos, (ingresos) => ingresos.usuario)
   Ingresos : Ingresos[];

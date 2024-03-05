@@ -12,7 +12,7 @@ export class EstadoCuentaFraccionamiento {
 	@JoinColumn()
 	fraccionamiento: Fraccionamientos
 	@Column()
-	fraccionamientoId: number;
+	nombre: string;
 
 	@Column()
 	montoingreso:number

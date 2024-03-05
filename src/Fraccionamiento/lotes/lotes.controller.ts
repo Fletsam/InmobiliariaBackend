@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { LotesService } from "./lotes.service";
 import { CreateLotesDto } from "./dto/lotes.dto";
 
@@ -9,21 +9,39 @@ export class  LotesController {
 	constructor(private lotesService : LotesService) {}
 
 	@Get('')
-	getManzanas(){
+	getLotes(){
 		return this.lotesService.getLotes()
 
 	}
 
 	@Get(':id')
-	getManzana(
+	getLote(
 		@Param('id',ParseIntPipe) id:number,
 	)
 	{
 		return this.lotesService.getLoteById(id)	
 	}
+	
+	@Get(':id')
+	getLotesbyUsuario(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.lotesService.getLoteById(id)	
+	}
+	
+	
+
+	@Delete(':id')
+	deleteLote(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.lotesService.deleteLote(id)	
+	}
 
 	@Post('')
-	createManzana(
+	createLote(
 		@Body() lote:CreateLotesDto
 	) {
 		{

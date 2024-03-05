@@ -7,6 +7,7 @@ export class CreateLotesDto {
 	numero:string
 	clave:string
   	fraccionamientoId: number;
+	usuarioId:number
 
 }
  

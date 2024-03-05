@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { FraccionamientoService } from "./fraccionamiento.service";
 import { CreateFraccionamientoDto } from "./dto/fraccionamiento.dto";
 
@@ -14,17 +14,26 @@ export class FraccionamientoCrontroller {
 
 	}
 
-	@Get(':id')
+	@Get(':id/usuario/:id2')
 	getFraccionamiento(
+		@Param('id',ParseIntPipe) id:number,
+		@Param('id2',ParseIntPipe) id2:number,
+	)
+	{
+		return this.FraccionamientoService.getFraccionamientoById(id,id2)	
+	}
+	
+	@Delete(':id')
+	deleteFracc(
 		@Param('id',ParseIntPipe) id:number,
 	)
 	{
-		return this.FraccionamientoService.getFraccionamientoById(id)	
+		return this.FraccionamientoService.deleteFracc(id)	
 	}
 
 	@Get("/usuario/:id")
 	getFraccbyUsuario(
-		@Param("id",ParseIntPipe ) id:number
+		@Param("id",ParseIntPipe ) id:number,
 	)
 	{
 		return this.FraccionamientoService.getFraccionamientoByUsuario(id)	

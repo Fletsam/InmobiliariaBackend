@@ -76,9 +76,9 @@ export class Contratos {
   /* @Column()
   idmodificacion: number;
  */
-
+/* 
   @Column()
-  fhmodificacion: Date;
+  fhmodificacion: Date; */
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
   usuario : Usuarios
@@ -98,11 +98,12 @@ export class Contratos {
   @Column()
   estadocuentaId : number
 
-  @OneToOne(() => Lotes)
-  @JoinColumn({name: "manzanaId"})
-  lote: Lotes
+  @OneToOne(() => Lotes , (lote) => lote.contratoId )
+  @JoinColumn()
+  Lote: Lotes
   @Column()
-  loteId: number;
+  loteId:number
+
 
   @OneToMany(() => Abono, (abono) => abono.contrato) 
   Abonos : Abono[]

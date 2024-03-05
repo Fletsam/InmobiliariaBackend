@@ -57,7 +57,7 @@ async getManzanaByUsuario(id: number) {
   }
   async createManzana(manzana: CreateManzanaDto ){
    const fracc=  await this.fraccionamientosRepository.findOne({where:{id : manzana.fraccionamientoId}})
-    if (fracc.usuarioId !== manzana.usuarioId ) {
+    if (fracc.usuarioId !== manzana.usuarioId && fracc.id !== manzana.fraccionamientoId ) {
        throw new BadRequestException({
         data: null,
         message: 'No tienes permiso',
@@ -73,6 +73,13 @@ async getManzanaByUsuario(id: number) {
 	/* await this.getTotalMontoFracc(Saved.fraccionamientoId) */
 	return{ data:Saved, status : HttpStatus.OK}
   }
+
+  
+ async deleteManzana(id: number ){
+	await this.manzanasRepository.delete(id)
+
+	return{  status : HttpStatus.OK}
+  }  
 
 
 

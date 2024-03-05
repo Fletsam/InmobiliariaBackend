@@ -4,11 +4,15 @@ import { Repository } from "typeorm";
 import { BadRequestException, HttpStatus } from "@nestjs/common";
 import { CreateClientesDto } from "./dto/clientes.dto";
 import { UpdatedClientesDto } from "./dto/updatedCliente.dto";
+import { Usuarios } from "src/usuarios/usuarios.entity";
 
 export class ClientesService {
 
 	constructor(
-	@InjectRepository(Clientes) private clientesRepository: Repository<Clientes>, 	) {}
+	@InjectRepository(Clientes) private clientesRepository: Repository<Clientes>,
+	@InjectRepository(Usuarios) private usuariosRepository: Repository<Usuarios>,
+  
+  ) {}
 	
 	
 	
@@ -17,12 +21,39 @@ export class ClientesService {
   
 	return {data : items, status: HttpStatus.OK }
 	}
+	
+
+  
+  async getClientesbyUsuario(id: number) {
+
+    const Found = await this.usuariosRepository.findOne({where:{id}})
+    const allclientes = await this.getClientes()
+    
+    const clientes =  allclientes.data.filter((clientes)=> clientes.usuarioId == Found.id)
+    
+     if (!clientes.length) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Clientes not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+     return clientes;
+  }
  
 	async getClienteById(id: number) {
+    
     const Found = await this.clientesRepository.findOne({
       where: { id },/*  relations: ["Lotes"] */
     });
-    if (!Found) {
+
+    const usuario = await this.usuariosRepository.findOne({where:{id:Found.usuarioId}})
+
+    console.log(usuario.id);
+    console.log(Found.usuarioId);
+    
+
+    if (usuario.id !== Found.usuarioId) {
       throw new BadRequestException({
         data: null,
         message: 'Cliente not found',

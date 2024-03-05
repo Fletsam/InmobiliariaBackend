@@ -24,11 +24,15 @@ export class EstadoCuentaFraccionamientoService {
 
 	async getEstadoCuentasbyContrato(id:number) {
 	const Found = await this.estadoCuentaFraccionamientoRepository.findOne( {where: {id},  relations:["IngresosFraccionamientos","EgresosFraccionamiento"] })
+	console.log(Found);
 	
-	const costototalFracc = await this.fraccionamientoRepository.findOne({where: {id:Found.fraccionamientoId}})
+	const fracc = await this.fraccionamientoRepository.findOne({where:{id}})
+	console.log(fracc);
+	
+	const costototalFracc = await this.fraccionamientoRepository.findOne({where: {nombre:Found.nombre}})
 	
 
-	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{fraccionamientoId:Found.fraccionamientoId}})
+	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{fraccionamientoId:fracc.id}})
 
 		montoinicialegreso.monto = costototalFracc.costototal
 

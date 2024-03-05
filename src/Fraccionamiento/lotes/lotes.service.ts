@@ -7,6 +7,7 @@ import { CreateLotesDto } from "./dto/lotes.dto";
 
 import { Fraccionamientos } from "../fraccionamientos/fraccionamientos.entity";
 import { Manzanas } from "../manzana/manzanas.entity";
+import { Contratos } from "src/Contrato/contratos/contratos.entity";
 
 
 
@@ -16,14 +17,18 @@ export class LotesService {
 	@InjectRepository(Lotes) private lotesRepository: Repository<Lotes>,
   @InjectRepository(Fraccionamientos) private fraccionamientoRepository: Repository<Fraccionamientos>,
    @InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>,
+   @InjectRepository(Contratos) private contratosRepository: Repository<Contratos>,
   ) {}
 	
 	
 	
 	async getLotes() {
-	const items = await this.lotesRepository.find()
-  
-	return {data : items, status: HttpStatus.OK }
+	const lotes = await this.lotesRepository.find()
+    const disponibles = lotes.filter((item)=> item.contratoId == 0)
+
+    console.log(disponibles);
+    
+	return {data : disponibles, status: HttpStatus.OK }
 	}
  
 	async getLoteById(id: number) {
@@ -44,9 +49,21 @@ export class LotesService {
     const fracc=  await this.fraccionamientoRepository.findOne({where:{id : lote.fraccionamientoId}})
     const manzana=  await this.manzanasRepository.findOne({where:{id : lote.manzanaId}})
 
+    if (fracc.usuarioId !== lote.usuarioId && !manzana) {
+       throw new BadRequestException({
+        data: null,
+        message: 'No tienes permiso',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+
+
+
 	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${fracc.clave}${manzana.numero}${lote.numero}`}
 	const newItem = await this.lotesRepository.create({...newFlag})
 	const Saved = await this.lotesRepository.save({...newItem})
+
+
 
 
 	await this.getTotalMonto(Saved.manzanaId)
@@ -81,5 +98,10 @@ async getTotalMontoFracc (id:number) {
    return this.fraccionamientoRepository.save(foundTotal)  
   }
 
+ async deleteLote(id: number ){
+	await this.lotesRepository.delete(id)
+
+	return{  status : HttpStatus.OK}
+  }  
 
 }

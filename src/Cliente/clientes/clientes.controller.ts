@@ -23,6 +23,13 @@ export class ClientesController {
 	{
 		return this.ClientesService.getClienteById(id)	
 	}
+	@Get('/usuario/:id')
+	getClientebyUsuario(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.ClientesService.getClientesbyUsuario(id)	
+	}
 
 	@Post('')
 	createCliente(

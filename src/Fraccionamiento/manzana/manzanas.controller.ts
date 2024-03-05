@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import {  ManzanasService } from "./manzanas.service";
 import {  CreateManzanaDto } from "./dto/manzanas.dto";
 
@@ -19,6 +19,14 @@ export class ManzanaController {
 	)
 	{
 		return this.ManzanaService.getManzanaById(id)	
+	}
+
+	@Delete(':id')
+	deleteManzana(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.ManzanaService.deleteManzana(id)	
 	}
 
 	@Get(':id')

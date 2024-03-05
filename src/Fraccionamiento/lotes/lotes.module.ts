@@ -7,11 +7,12 @@ import { Fraccionamientos } from "../fraccionamientos/fraccionamientos.entity";
 
 import { Lotes } from "./lotes.entity";
 import { Manzanas } from "../manzana/manzanas.entity";
+import { Contratos } from "src/Contrato/contratos/contratos.entity";
 
 
 @Module({
 
-	imports: [ TypeOrmModule.forFeature([Manzanas,Lotes, Fraccionamientos]) ],
+	imports: [ TypeOrmModule.forFeature([Manzanas,Lotes, Fraccionamientos, Contratos]) ],
 	controllers: [ LotesController],
 	providers: [ LotesService],
 	exports:[LotesService]

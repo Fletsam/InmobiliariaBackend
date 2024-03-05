@@ -27,19 +27,20 @@ export class FraccionamientoService {
 	
 	
 	async getFraccionamientos() {
-	const items = await this.fraccionamientosRepository.find()
+	const items = await this.fraccionamientosRepository.find({relations: ["Manzanas", "Lotes"]})
   
 	return {data : items, status: HttpStatus.OK }
 	}
  
-	async getFraccionamientoById(id: number) {
+	async getFraccionamientoById(id: number,id2: number) {
     
-
     const Found = await this.fraccionamientosRepository.findOne({
       where: { id }, relations: ["Manzanas", "Lotes"]
     });
 
-    if (!Found) {
+    const usuario = await this.usuariosRepository.findOne({where:{id:id2}})
+
+    if (Found.usuarioId !== usuario.id) {
       throw new BadRequestException({
         data: null,
         message: 'Fraccionamiento not found',
@@ -52,7 +53,7 @@ export class FraccionamientoService {
     const Flag =  {...Found, totaldelotes , totaldemanzanas}
     await this.fraccionamientosRepository.save(Flag)
     const Fraccionamiento = await this.fraccionamientosRepository.findOne({
-      where: { id }, relations: {Manzanas:{Lotes:true}}
+      where: { id }, relations: ["Manzanas", "Lotes"]
     });
     
   /*   Found.totaldelotes = totaldelotes */
@@ -60,30 +61,23 @@ export class FraccionamientoService {
   }
 
   async getFraccionamientoByUsuario(id: number) {
-  
-    
+
     const Found = await this.usuariosRepository.findOne({where:{id}})
+    const fraccs = await this.getFraccionamientos()
+   
+    
+    const fracc =  fraccs.data.filter((fracc)=> fracc.usuarioId == Found.id)
+    
+    
 
-    const fracc = await this.fraccionamientosRepository.findOne({
-      where: { usuarioId: Found.id }, relations: ["Manzanas", "Lotes"]
-    });
-
-     if (Found.id !== fracc.usuarioId) {
+     if (!fracc.length) {
       throw new BadRequestException({
         data: null,
-        message: 'Fraccionamiento not found',
+        message: 'Fraccionamientos not found',
         status: HttpStatus.NOT_FOUND,
       });
     }
-    const totaldemanzanas = fracc.Manzanas.length
-    const totaldelotes  = fracc.Lotes.length
-    const manzanas = fracc.Manzanas.filter(manzana => manzana.usuarioId === Found.id);
-    const Flag = {...fracc, totaldelotes , totaldemanzanas, Manzanas:manzanas, }
-    /* await this.fraccionamientosRepository.save(Flag)
-    */
-    
-  /*   Found.totaldelotes = totaldelotes */
-     return Flag;
+     return fracc;
   }
 
 
@@ -95,8 +89,8 @@ export class FraccionamientoService {
 	const Saved = await this.fraccionamientosRepository.save({...newItem})
 
       const estadocuenta:CreateEstadoCuentaFraccionamientoDto = {
-        id: fraccionamiento.id,
-        fraccionamientoId: fraccionamiento.id,
+        id: Saved.id,
+        nombre: fraccionamiento.nombre,
         montoingreso: 0,
         montoegreso: 0,
         cuentasaldo: 0,
@@ -109,8 +103,8 @@ export class FraccionamientoService {
 
 			  concepto:"Costo del Fraccionamiento",
 			  monto: fraccionamiento.costototal, 
-			  fraccionamientoId : fraccionamiento.id ,
-			  estadocuentafraccionamientoId : fraccionamiento.id,
+			  fraccionamientoId : Saved.id ,
+			  estadocuentafraccionamientoId : Saved.id,
         fhcreacion: new Date()
 		    }
 	    await this.createEgresoFraccionamiento({...newEgresosFracc})	
@@ -120,9 +114,15 @@ export class FraccionamientoService {
 
   }
 
+
+  async deleteFracc(id: number ){
+	await this.fraccionamientosRepository.delete(id)
+
+	return{  status : HttpStatus.OK}
+  }
+
 async createEgresoFraccionamiento(egresosfraccionamiento:CreateEgresosFraccionamientoDto) {
 
-	
 		const newItem = await this.egresosFraccionamientosRepository.create({...egresosfraccionamiento})
 		const Saved = await this.egresosFraccionamientosRepository.save({...newItem})
 		return{ data:Saved, status : HttpStatus.OK}
