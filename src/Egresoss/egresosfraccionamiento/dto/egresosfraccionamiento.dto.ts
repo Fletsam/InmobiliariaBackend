@@ -1,7 +1,7 @@
 export class CreateEgresosFraccionamientoDto {
 	id?:number
 	concepto:string
-	monto:number
+	montoegreso:number
 	fhcreacion:Date
 	estadocuentafraccionamientoId: number
 	fraccionamientoId: number

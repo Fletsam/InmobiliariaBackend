@@ -94,6 +94,7 @@ export class FraccionamientoService {
         montoingreso: 0,
         montoegreso: 0,
         cuentasaldo: 0,
+        fraccionamientoId: Saved.id
       }
       await this.estadoCuentaFraccionamientoRepository.create({...estadocuenta})
       await this.estadoCuentaFraccionamientoRepository.save({...estadocuenta})
@@ -102,7 +103,7 @@ export class FraccionamientoService {
       const newEgresosFracc:CreateEgresosFraccionamientoDto = { 
 
 			  concepto:"Costo del Fraccionamiento",
-			  monto: fraccionamiento.costototal, 
+			  montoegreso: fraccionamiento.costototal, 
 			  fraccionamientoId : Saved.id ,
 			  estadocuentafraccionamientoId : Saved.id,
         fhcreacion: new Date()

@@ -15,6 +15,9 @@ export class EstadoCuentaFraccionamiento {
 	nombre: string;
 
 	@Column()
+	fraccionamientoId:number
+
+	@Column()
 	montoingreso:number
 
 	@Column()

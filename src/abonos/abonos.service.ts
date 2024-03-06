@@ -97,7 +97,7 @@ async getAbonobyId(id: number) {
       const abonos = await this.abonoRepository.find({ 
     where: {contratoId: found.id}
   })
-    const totalMontos = abonos.reduce((total,monto) => total + monto.monto , 0 )
+    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
       found.pagado = totalMontos 
       
    return this.contratoRepository.save(found) 

@@ -5,4 +5,5 @@ export class CreateEstadoCuentaFraccionamientoDto {
   montoingreso: number;
   montoegreso: number;
   cuentasaldo: number;
+  fraccionamientoId:number
 }

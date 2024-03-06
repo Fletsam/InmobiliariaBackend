@@ -1,7 +1,7 @@
 export class CreateEgresosContratosDto {
  	id?: number;
   concepto: string;
-  monto: number;
+  montoegreso: number;
   estadocuentacontratoId: number;
   contratoId: number;
 

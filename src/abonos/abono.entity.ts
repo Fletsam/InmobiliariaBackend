@@ -12,7 +12,7 @@ export class Abono {
 
 
   @Column()
-  monto: number;
+  montoingreso: number;
 
 /*   @Column()
   @OneToMany(() => Rfcs, (rfc) => rfc.total)

@@ -17,6 +17,9 @@ export class EstadoCuentaContrato {
 	@Column()
 	contratoId: number;
 
+	@Column({default:"Total"})
+	concepto:string
+
 	@Column()
 	montoingreso:number
 

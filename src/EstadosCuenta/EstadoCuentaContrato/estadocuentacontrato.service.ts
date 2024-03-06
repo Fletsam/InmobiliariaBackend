@@ -26,7 +26,7 @@ export class EstadoCuentaContratoService {
 		
 	const contrato =	await this.contratoRepository.findOne({where: {id:Found.id}, relations:["IngresosContratos","EgresosContratos"] })
 	
-	const montoIngreso = contrato.IngresosContratos.reduce((total,monto)=> total + monto.monto,0 )	
+	const montoIngreso = contrato.IngresosContratos.reduce((total,monto)=> total + monto.montoingreso,0 )	
 
 	const saldo = ( Found.montoegreso - montoIngreso  ) 
 

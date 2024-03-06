@@ -12,6 +12,7 @@ import { CreateEgresosContratosDto } from "src/Egresoss/egresoscontratos/dto/egr
 import { Lotes } from "src/Fraccionamiento/lotes/lotes.entity";
 import { CreateIngresosFraccionamientoDto } from "src/Ingresoss/ingresosfraccionamientos/dto/ingresosfraccionamientos.dto";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
+import { Clientes } from "src/Cliente/clientes/clientes.entity";
 
 @Injectable()
 export class ContratoService {
@@ -22,6 +23,7 @@ export class ContratoService {
 	@InjectRepository(EgresosContratos) private egresoContratosRepository : Repository<EgresosContratos>,
 	@InjectRepository(IngresosFraccionamientos) private ingresosFraccionamientoRepository : Repository<IngresosFraccionamientos>,
 	@InjectRepository(EstadoCuentaContrato) private estadoCuentaContratoRepository : Repository<EstadoCuentaContrato>,
+	@InjectRepository(Clientes) private clientesRepository : Repository<Clientes>,
 	) {}
 	
 
@@ -71,7 +73,7 @@ export class ContratoService {
 
 	const newIngreso:CreateIngresosContratosDto = { 
 			concepto:"Enganche",
-			monto: contrato.enganche, 
+			montoingreso: contrato.enganche, 
 			contratoId : Lote.id ,
 			estadocuentacontratoId : Lote.id,
 		}
@@ -80,7 +82,7 @@ export class ContratoService {
 
 	const newEgreso:CreateEgresosContratosDto = { 
 			concepto:"Monto Total con intereses",
-			monto: TotalconIntereses, 
+			montoegreso: TotalconIntereses, 
 			contratoId : Lote.id ,
 			estadocuentacontratoId : Lote.id,
 		}
@@ -88,7 +90,7 @@ export class ContratoService {
 
 	const newIngresoFracc:CreateIngresosFraccionamientoDto = { 
 			concepto:"Monto Total con intereses",
-			monto: TotalconIntereses, 
+			montoingreso: TotalconIntereses, 
 			contratoId : Lote.id ,
 			estadocuentafraccionamientoId : Lote.fraccionamientoId,
 			fhcreacion: new Date()
@@ -108,11 +110,15 @@ async getContratoById(id: number) {
     const Found = await this.contratosRepository.findOne({
       where: { id }, relations: ["IngresosContratos", "EgresosContratos"]
     });
-
-	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.monto,0 )
+	
+	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
+	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
+	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.montoingreso,0 )
 		Found.pagado = monto
 		
 		
+		
+
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -120,7 +126,7 @@ async getContratoById(id: number) {
         status: HttpStatus.NOT_FOUND,
       });
     }
-    return Found;
+    return {Found, Cliente, Lote};
   }
 
 

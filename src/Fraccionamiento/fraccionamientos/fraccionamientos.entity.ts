@@ -1,5 +1,5 @@
 
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { FlujoPorFraccionamiento } from "../flujoporfraccionamiento/flujoporfraccionamiento.entity";
 import { Lotes } from "../lotes/lotes.entity";
@@ -7,6 +7,7 @@ import { Manzanas } from "../manzana/manzanas.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
+import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity";
 
 @Entity()
 
@@ -54,6 +55,10 @@ export class Fraccionamientos {
 	@OneToMany(() => EgresosFraccionamiento, (egresosfraccionamiento) => egresosfraccionamiento.fraccionamiento) 
   	EgresosFraccionamiento : EgresosFraccionamiento[]
 
+	@OneToOne(()=> EstadoCuentaFraccionamiento)
+	@JoinColumn()
+	EstadoCuentaFraccionamiento : EstadoCuentaFraccionamiento
+	
 
 	@OneToMany(()=>  FlujoPorFraccionamiento ,(flujoporfraccionamiento) => flujoporfraccionamiento.fraccionamientos )
   	FlujoPorFraccionamiento : FlujoPorFraccionamiento[]

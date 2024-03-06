@@ -9,6 +9,7 @@ import { EstadoCuentaContrato } from "src/EstadosCuenta/EstadoCuentaContrato/est
 import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos.entity";
 import { Lotes } from "src/Fraccionamiento/lotes/lotes.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
+import { Clientes } from "src/Cliente/clientes/clientes.entity";
 
 @Module({
 
@@ -19,6 +20,7 @@ import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos
 		EgresosContratos, 
 		EstadoCuentaContrato,
 		IngresosFraccionamientos,
+		Clientes,
 	]) ],
 	controllers: [ ContratoController],
 	providers: [ ContratoService],

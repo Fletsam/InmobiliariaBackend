@@ -1,7 +1,7 @@
 export class CreatAbonoDto {
   id?: number;
   rfcid?: number;
-  monto: number;
+  montoingreso: number;
   /* idcreacion:number */
   /* fecha: Date; */
   usuarioId: number;

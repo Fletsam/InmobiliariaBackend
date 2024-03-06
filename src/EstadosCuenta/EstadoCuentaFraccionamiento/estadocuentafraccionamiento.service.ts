@@ -24,25 +24,22 @@ export class EstadoCuentaFraccionamientoService {
 
 	async getEstadoCuentasbyContrato(id:number) {
 	const Found = await this.estadoCuentaFraccionamientoRepository.findOne( {where: {id},  relations:["IngresosFraccionamientos","EgresosFraccionamiento"] })
-	console.log(Found);
+	
 	
 	const fracc = await this.fraccionamientoRepository.findOne({where:{id}})
-	console.log(fracc);
-	
-	const costototalFracc = await this.fraccionamientoRepository.findOne({where: {nombre:Found.nombre}})
 	
 
 	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{fraccionamientoId:fracc.id}})
 
-		montoinicialegreso.monto = costototalFracc.costototal
+		montoinicialegreso.montoegreso = fracc.costototal
 
-	const montoIngreso = await Found.IngresosFraccionamientos.reduce((total,monto)=> total + monto.monto,0 )	
+	const montoIngreso = await Found.IngresosFraccionamientos.reduce((total,monto)=> total + monto.montoingreso,0 )	
 
-	const saldo = ( montoinicialegreso.monto - montoIngreso  ) 
+	const saldo = ( montoinicialegreso.montoegreso - montoIngreso  ) 
 
-	const estadoCuenta = {...Found, montoingreso : montoIngreso, montoegreso:montoinicialegreso.monto, cuentasaldo : saldo  }
+	const estadoCuenta = {...Found, montoingreso : montoIngreso, montoegreso:montoinicialegreso.montoegreso, cuentasaldo : saldo  }
 
-	await this.egresosFraccionamientoRepository.save({...montoinicialegreso,monto:montoinicialegreso.monto})
+	await this.egresosFraccionamientoRepository.save({...montoinicialegreso,monto:montoinicialegreso.montoegreso})
 
 	return {data : estadoCuenta, status: HttpStatus.OK }
 	}

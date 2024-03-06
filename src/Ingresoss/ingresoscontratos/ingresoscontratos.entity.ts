@@ -14,7 +14,7 @@ export class IngresosContratos {
 	concepto: string
 
 	@Column()
-	monto: number
+	montoingreso: number
 
 	@Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
 	fhcreacion:Date

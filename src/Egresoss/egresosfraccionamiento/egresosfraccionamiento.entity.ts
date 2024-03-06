@@ -13,7 +13,7 @@ export class EgresosFraccionamiento {
 	concepto:string
 
 	@Column()
-	monto:number
+	montoegreso:number
 
 	@Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
 	fhcreacion:Date
