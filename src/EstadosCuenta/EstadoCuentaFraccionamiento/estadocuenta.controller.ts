@@ -1,8 +1,10 @@
-import { Controller, Get, Param, ParseIntPipe } from "@nestjs/common"
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from "@nestjs/common"
 import { EstadoCuentaFraccionamiento } from "./estadocuentafraccionamiento.entity"
 import { EstadoCuentaFraccionamientoService } from "./estadocuentafraccionamiento.service"
+import { AuthGuard } from "src/auth/auth.guard"
 
 @Controller('estadocuenta')
+@UseGuards(AuthGuard)
 export class EstadoCuentaFraccionamientoController {	
 	constructor(private  EstadoCuentaFraccionamientoService : EstadoCuentaFraccionamientoService) {}
 

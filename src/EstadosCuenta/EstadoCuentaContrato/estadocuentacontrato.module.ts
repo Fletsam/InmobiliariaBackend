@@ -6,10 +6,11 @@ import { EstadoCuentaContrato } from "./estadocuentacontrato.entity";
 import { IngresosContratos } from "src/Ingresoss/ingresoscontratos/ingresoscontratos.entity";
 import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos.entity";
 import { Contratos } from "src/Contrato/contratos/contratos.entity";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
 
-	imports: [ TypeOrmModule.forFeature([EstadoCuentaContrato, IngresosContratos, EgresosContratos,Contratos]) ],
+	imports: [ TypeOrmModule.forFeature([EstadoCuentaContrato, IngresosContratos, EgresosContratos,Contratos]),JwtModule ],
 	controllers: [ EstadoCuentaContratoController],
 	providers: [ EstadoCuentaContratoService],
 	exports:[EstadoCuentaContratoService]

@@ -8,13 +8,14 @@ import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egre
 import { Contratos } from "src/Contrato/contratos/contratos.entity";
 import { EstadoCuentaFraccionamientoService } from "./estadocuentafraccionamiento.service";
 import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fraccionamientos.entity";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
 	imports: [ TypeOrmModule.forFeature([EstadoCuentaFraccionamiento,
 		IngresosFraccionamientos,
 		EgresosFraccionamiento,
 		Contratos,
-		Fraccionamientos]) ],
+		Fraccionamientos]),JwtModule ],
 	controllers: [ EstadoCuentaFraccionamientoController],
 	providers: [ EstadoCuentaFraccionamientoService],
 	exports:[EstadoCuentaFraccionamientoService]

@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
 import { FraccionamientoService } from "./fraccionamiento.service";
 import { CreateFraccionamientoDto } from "./dto/fraccionamiento.dto";
+import { AuthGuard } from "src/auth/auth.guard";
 
 
 @Controller('fraccionamientos')
+@UseGuards(AuthGuard)
 export class FraccionamientoCrontroller {
 
 	constructor(private FraccionamientoService : FraccionamientoService) {}

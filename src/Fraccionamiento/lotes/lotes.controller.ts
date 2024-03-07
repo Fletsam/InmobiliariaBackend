@@ -1,16 +1,35 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
 import { LotesService } from "./lotes.service";
 import { CreateLotesDto } from "./dto/lotes.dto";
+import { AuthGuard } from "src/auth/auth.guard";
 
 
 @Controller('lotes')
+@UseGuards(AuthGuard)
 export class  LotesController {
 
 	constructor(private lotesService : LotesService) {}
 
 	@Get('')
-	getLotes(){
-		return this.lotesService.getLotes()
+	getAllLotes(){
+		return this.lotesService.getAllLotes()
+
+	}
+	@Get('/disponibles')
+	getAllLotesDisponibles(){
+		return this.lotesService.getAllLotesDisponibles()
+
+	}
+	@Get('/vendidos')
+	getAllLotesVendidos(){
+		return this.lotesService.getAllLotesVendidos()
+
+	}
+	@Get('disponibles/:id')
+	getLotesDisponibles(
+		@Param('id',ParseIntPipe) id:number,
+	){
+		return this.lotesService.getLotesDisponibles(id)
 
 	}
 

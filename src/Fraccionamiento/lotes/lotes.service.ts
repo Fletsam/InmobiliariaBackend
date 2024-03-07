@@ -21,10 +21,32 @@ export class LotesService {
   ) {}
 	
 	
-	
-	async getLotes() {
+	async getAllLotes() {
+	const lotes = await this.lotesRepository.find()
+    
+	return {data : lotes, status: HttpStatus.OK }
+	}
+	async getAllLotesDisponibles() {
 	const lotes = await this.lotesRepository.find()
     const disponibles = lotes.filter((item)=> item.contratoId == 0)
+	return {data : disponibles, status: HttpStatus.OK }
+	}
+	async getAllLotesVendidos() {
+	const lotes = await this.lotesRepository.find()
+    const disponibles = lotes.filter((item)=> item.contratoId !== 0)
+	return {data : disponibles, status: HttpStatus.OK }
+	}
+
+
+
+
+	async getLotesDisponibles(id:number) {
+	const lotes = await this.lotesRepository.find()
+  const fracc = await this.fraccionamientoRepository.findOne({where:{id}})
+
+  const lotesfracc = lotes.filter((item) => item.fraccionamientoId === fracc.id)
+    const disponibles = lotesfracc.filter((item)=> item.contratoId == 0)
+
 
     console.log(disponibles);
     

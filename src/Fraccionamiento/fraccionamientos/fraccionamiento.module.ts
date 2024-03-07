@@ -9,6 +9,7 @@ import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFracc
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
+import { JwtModule } from "@nestjs/jwt";
 
 
 
@@ -23,7 +24,7 @@ import { Usuarios } from "src/usuarios/usuarios.entity";
 		EgresosFraccionamiento,
 		IngresosFraccionamientos,
 		Usuarios,
-	]) ],
+	]),JwtModule ],
 	controllers: [ FraccionamientoCrontroller],
 	providers: [ FraccionamientoService],
 	exports:[FraccionamientoService]

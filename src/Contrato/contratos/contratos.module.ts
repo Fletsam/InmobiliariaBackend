@@ -10,6 +10,7 @@ import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos
 import { Lotes } from "src/Fraccionamiento/lotes/lotes.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
 import { Clientes } from "src/Cliente/clientes/clientes.entity";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
 
@@ -21,7 +22,7 @@ import { Clientes } from "src/Cliente/clientes/clientes.entity";
 		EstadoCuentaContrato,
 		IngresosFraccionamientos,
 		Clientes,
-	]) ],
+	]),JwtModule ],
 	controllers: [ ContratoController],
 	providers: [ ContratoService],
 	exports:[ContratoService]

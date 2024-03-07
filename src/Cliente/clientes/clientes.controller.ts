@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { ClientesService } from "./clientes.service";
 import { CreateClientesDto } from "./dto/clientes.dto";
+import { AuthGuard } from "src/auth/auth.guard";
 
 
 
 @Controller('clientes')
+@UseGuards(AuthGuard)
 export class ClientesController {
 
 
