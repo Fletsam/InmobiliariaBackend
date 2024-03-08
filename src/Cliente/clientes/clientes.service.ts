@@ -5,19 +5,21 @@ import { BadRequestException, HttpStatus } from "@nestjs/common";
 import { CreateClientesDto } from "./dto/clientes.dto";
 import { UpdatedClientesDto } from "./dto/updatedCliente.dto";
 import { Usuarios } from "src/usuarios/usuarios.entity";
+import { Contratos } from "src/Contrato/contratos/contratos.entity";
 
 export class ClientesService {
 
 	constructor(
 	@InjectRepository(Clientes) private clientesRepository: Repository<Clientes>,
 	@InjectRepository(Usuarios) private usuariosRepository: Repository<Usuarios>,
+	@InjectRepository(Contratos) private contratosRepository: Repository<Contratos>,
   
   ) {}
 	
 	
 	
 	async getClientes() {
-	const items = await this.clientesRepository.find()
+	const items = await this.clientesRepository.find({relations:["Contratos"]})
   
 	return {data : items, status: HttpStatus.OK }
 	}
@@ -28,8 +30,11 @@ export class ClientesService {
 
     const Found = await this.usuariosRepository.findOne({where:{id}})
     const allclientes = await this.getClientes()
-    
+    const allContratos = await this.contratosRepository.find()
     const clientes =  allclientes.data.filter((clientes)=> clientes.usuarioId == Found.id)
+    
+    const contratos = clientes.map((cliente)=> ({cliente:cliente.nombre, contratos:cliente.Contratos}))
+    console.log(contratos);
     
      if (!clientes.length) {
       throw new BadRequestException({
@@ -38,7 +43,7 @@ export class ClientesService {
         status: HttpStatus.NOT_FOUND,
       });
     }
-     return clientes;
+     return {clientes, contratos};
   }
  
 	async getClienteById(id: number) {
