@@ -6,6 +6,7 @@ import { CreateClientesDto } from "./dto/clientes.dto";
 import { UpdatedClientesDto } from "./dto/updatedCliente.dto";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Contratos } from "src/Contrato/contratos/contratos.entity";
+import { Lotes } from "src/Fraccionamiento/lotes/lotes.entity";
 
 export class ClientesService {
 
@@ -13,6 +14,7 @@ export class ClientesService {
 	@InjectRepository(Clientes) private clientesRepository: Repository<Clientes>,
 	@InjectRepository(Usuarios) private usuariosRepository: Repository<Usuarios>,
 	@InjectRepository(Contratos) private contratosRepository: Repository<Contratos>,
+	@InjectRepository(Lotes) private lotesRepository: Repository<Lotes>,
   
   ) {}
 	
@@ -49,14 +51,12 @@ export class ClientesService {
 	async getClienteById(id: number) {
     
     const Found = await this.clientesRepository.findOne({
-      where: { id },/*  relations: ["Lotes"] */
+      where: { id }, relations: ["Contratos", "Contratos.Lote"]
     });
 
     const usuario = await this.usuariosRepository.findOne({where:{id:Found.usuarioId}})
-
-    console.log(usuario.id);
-    console.log(Found.usuarioId);
-    
+  
+ 
 
     if (usuario.id !== Found.usuarioId) {
       throw new BadRequestException({
