@@ -4,6 +4,7 @@ import { Usuarios } from "./usuarios.entity";
 import { Repository } from "typeorm";
 import { CreateUsuariosDto } from "./dto/usuarios.dto";
 import * as bcrypt from 'bcrypt';
+import { Area } from "src/Area/area.entity";
 
 
 @Injectable()
@@ -11,7 +12,8 @@ import * as bcrypt from 'bcrypt';
 export class UsuariosService {
 
 	constructor(
-		@InjectRepository(Usuarios) private usuarioRepository: Repository<Usuarios>  	) {}
+		@InjectRepository(Usuarios) private usuarioRepository: Repository<Usuarios>,  
+    	) {}
 
 	async getUsuarios() {
 	const usuario = await this.usuarioRepository.find(
@@ -22,7 +24,7 @@ export class UsuariosService {
 
 	async findById(id: number) {
     const usuarioFound = await this.usuarioRepository.findOne({
-      where: { id } , relations:["Rfcs"]
+      where: { id }, relations : ["area", "Funciones"]   
     });
     
     
@@ -36,14 +38,11 @@ export class UsuariosService {
     delete usuarioFound.pass
     return usuarioFound;
   }
+
 async findByUsuario(usuario: string) {
-    
-    
     const userFound = await this.usuarioRepository.findOne({
       where: { usuario },
     });
-    
-    
     if (!userFound) {
       throw new BadRequestException({
         data: null,

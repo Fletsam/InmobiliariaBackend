@@ -1,3 +1,5 @@
+import { Area } from 'src/Area/area.entity';
+import { Funciones } from 'src/Area/funciones/funciones.entity';
 import { Clientes } from 'src/Cliente/clientes/clientes.entity';
 import { ClienteNoInteres } from 'src/Cliente/clientesnointeres/clientesnointeres.entity';
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
@@ -30,26 +32,63 @@ export class Usuarios {
   @PrimaryGeneratedColumn()
   id:number
 
- @ManyToOne(()=>  Privilegios ,(privilegios) => privilegios.Usuarios)
+@ManyToOne(()=>  Privilegios ,(privilegios) => privilegios.Usuarios)
   privilegios  : Privilegios
-
   @Column()
   privilegiosId: number;
 
+@ManyToOne(()=>  Area ,(area) => area.Usuarios)
+  area  : Area
   @Column()
-  nombre: string;
+  areaId: number;
 
   @Column()
   usuario: string;
-
+  
   @Column()
   pass: string;
+  
+  @Column({default:false})
+  estatus: boolean;
+  
+  @Column()
+  nombre: string;
+  
+  @Column()
+  titulo:string
 
   @Column()
-  estatus: number;
+  telefono: string;
 
-  /* @Column()
-  idcreacion:number */
+  @Column()
+  curp: string;
+
+  @Column()
+  rfc: string;
+  
+  @Column()
+  colonia: string;
+  
+  @Column()
+  calle: string;
+  
+  @Column()
+  numero: string;
+  
+  @Column()
+  cp: string;
+  
+  @Column()
+  correo: string;
+  
+  @Column()
+  estadocivil: string;
+
+  @Column()
+  cargo:string
+
+  @Column()
+  salario: number
 
   @CreateDateColumn({
     name: 'fechadecreacion',
@@ -58,29 +97,27 @@ export class Usuarios {
   })
   fhcreacion: Date;
 
-/*   @Column()
-  idmodificacion: number;
- */
- /*  @Column()
-  fhmodificacion: Date; */
-
-  @OneToMany(() => Abono, (abono) => abono.usuario)
+@OneToMany(() => Abono, (abono) => abono.usuario)
   Abonos: Abono[];
 
-  @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
+@OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
 
-  @OneToMany(() => Cajas, (cajas) => cajas.usuario)
+@OneToMany(() => Cajas, (cajas) => cajas.usuario)
   Cajas: Cajas[];
 
+
+@OneToMany(() => Funciones, (funciones) => funciones.usuario)
+  Funciones: Funciones[];
+
   
-  @OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.usuario)
+@OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.usuario)
   ConceptosEgresos: ConceptosEgresos[];
 
-  @OneToMany(() => Egresos , (egresos) => egresos.usuario)
+@OneToMany(() => Egresos , (egresos) => egresos.usuario)
   Egresos: Egresos[];
 
-  @OneToMany(() => FlujoDiarioFraccionamiento , (flujodiariofraccionamiento) => flujodiariofraccionamiento.usuario)
+@OneToMany(() => FlujoDiarioFraccionamiento , (flujodiariofraccionamiento) => flujodiariofraccionamiento.usuario)
   FlujoDiarioFraccionamiento: FlujoDiarioFraccionamiento[]; 
 
 

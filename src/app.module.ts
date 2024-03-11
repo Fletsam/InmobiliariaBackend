@@ -75,6 +75,10 @@ import { IngresosFraccionamientos } from './Ingresoss/ingresosfraccionamientos/i
 import { EgresosFraccionamiento } from './Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity';
 import { EstadoCuentaFraccionamiento } from './EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity';
 import { EstadoCuentaFraccionamientoModule } from './EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.module';
+import { Area } from './Area/area.entity';
+import { Funciones } from './Area/funciones/funciones.entity';
+import { FuncionesModule } from './Area/funciones/funciones.module';
+import { AreaModule } from './Area/area.module';
 
 @Module({
   imports: 
@@ -157,6 +161,8 @@ import { EstadoCuentaFraccionamientoModule } from './EstadosCuenta/EstadoCuentaF
         IngresosFraccionamientos,
         EgresosFraccionamiento,
         EstadoCuentaFraccionamiento,
+        Area,
+        Funciones,
       ],
       synchronize: true,
     }),
@@ -173,6 +179,8 @@ import { EstadoCuentaFraccionamientoModule } from './EstadosCuenta/EstadoCuentaF
     IngresosContratosModule,
     EstadoCuentaContratoModule,
     EstadoCuentaFraccionamientoModule,
+    FuncionesModule,
+    AreaModule
   ],
   controllers: [],
   providers: [],

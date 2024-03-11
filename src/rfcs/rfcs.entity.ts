@@ -39,8 +39,6 @@ export class Rfcs {
   @Column()
   idcreacion: number;
 
-  @Column()
-  usuarioId:number
 
 @Column()
   total:number
@@ -60,6 +58,9 @@ export class Rfcs {
 
   @ManyToOne(() => Usuarios, (usuario) => usuario.Rfcs) 
   usuario : Usuarios
+
+  @Column()
+  usuarioId:number
 
   
 
