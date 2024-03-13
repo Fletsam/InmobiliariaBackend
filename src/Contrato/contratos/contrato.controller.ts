@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards } from "@ne
 import { ContratoService } from "./contrato.service";
 import { CreateContratoDto } from "./dto/contratos.dto";
 import { AuthGuard } from "src/auth/auth.guard";
+import { CreateContratoFracc } from "../contratosFracc/dto/contratosfracc.dto";
 
 
 @Controller('contratos')
@@ -11,8 +12,15 @@ export class ContratoController {
 	constructor(private ContratoService : ContratoService) {}
 
 	@Get('')
-	getContratos(){
-		return this.ContratoService.getContratos()
+	getContratosLote(){
+		return this.ContratoService.getContratosLote()
+
+	}
+	@Get('/fracc/:id')
+	getContratosFracc(
+		@Param('id',ParseIntPipe) id:number,
+	){
+		return this.ContratoService.getContratoByIdFracc(id)
 
 	}
 
@@ -25,12 +33,21 @@ export class ContratoController {
 	}
 
 	@Post('/lote/:id')
-	createContrato(
+	createContratoLote(
 		@Body() contrato:CreateContratoDto ,
 		@Param('id',ParseIntPipe) id:number,
 	) {
 		{
 			return this.ContratoService.createContrato(contrato, id)
+		}
+	} 
+	@Post('/fraccionamiento/:id')
+	createContratoFracc(
+		@Body() contratofracc:CreateContratoFracc ,
+		@Param('id',ParseIntPipe) id:number,
+	) {
+		{
+			return this.ContratoService.createContratoFracc(contratofracc, id)
 		}
 	} 
 }

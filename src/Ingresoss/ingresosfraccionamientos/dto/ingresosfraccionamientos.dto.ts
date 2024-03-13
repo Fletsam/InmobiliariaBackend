@@ -5,7 +5,6 @@ export class CreateIngresosFraccionamientoDto {
 	montoingreso:number
 	fhcreacion:Date
 	estadocuentafraccionamientoId:number
-	contratoId:number
-
-
+	/* contratoId:number */
+	contratosFraccId:number
 }

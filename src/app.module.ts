@@ -79,6 +79,7 @@ import { Area } from './Area/area.entity';
 import { Funciones } from './Area/funciones/funciones.entity';
 import { FuncionesModule } from './Area/funciones/funciones.module';
 import { AreaModule } from './Area/area.module';
+import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity';
 
 @Module({
   imports: 
@@ -163,6 +164,7 @@ import { AreaModule } from './Area/area.module';
         EstadoCuentaFraccionamiento,
         Area,
         Funciones,
+        ContratosFracc,
       ],
       synchronize: true,
     }),

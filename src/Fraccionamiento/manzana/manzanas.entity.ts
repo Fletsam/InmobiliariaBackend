@@ -17,9 +17,6 @@ export class Manzanas {
 
 	@Column()
 	clave:string
-	
-	@Column()
-	costototal:number
 
 	@OneToMany(() => Lotes, (lote) => lote.manzana) 
   	Lotes : Lotes[]

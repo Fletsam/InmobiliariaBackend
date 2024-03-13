@@ -21,9 +21,6 @@ export class Lotes {
 	@Column()
 	m2:number
 
-	@Column()
-	costo:number
-
 	@ManyToOne(() => Manzanas, (manzana) => manzana.Lotes) 
   	manzana : Manzanas
 

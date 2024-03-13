@@ -4,5 +4,5 @@ export class CreateEgresosFraccionamientoDto {
 	montoegreso:number
 	fhcreacion:Date
 	estadocuentafraccionamientoId: number
-	fraccionamientoId: number
+	contratosFraccId: number
 }

@@ -29,9 +29,10 @@ export class EstadoCuentaFraccionamientoService {
 	const fracc = await this.fraccionamientoRepository.findOne({where:{id}})
 	
 
-	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{fraccionamientoId:fracc.id}})
+	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{contratosFraccId:fracc.id}})
 
-		montoinicialegreso.montoegreso = fracc.costototal
+
+	
 
 	const montoIngreso = await Found.IngresosFraccionamientos.reduce((total,monto)=> total + monto.montoingreso,0 )	
 
@@ -39,7 +40,6 @@ export class EstadoCuentaFraccionamientoService {
 
 	const estadoCuenta = {...Found, montoingreso : montoIngreso, montoegreso:montoinicialegreso.montoegreso, cuentasaldo : saldo  }
 
-	await this.egresosFraccionamientoRepository.save({...montoinicialegreso,monto:montoinicialegreso.montoegreso})
 
 	return {data : estadoCuenta, status: HttpStatus.OK }
 	}

@@ -49,8 +49,7 @@ export class FraccionamientoService {
     }
     const totaldemanzanas = Found.Manzanas.length
     const totaldelotes  = Found.Lotes.length
-
-    const Flag =  {...Found, totaldelotes , totaldemanzanas}
+    const Flag =  {...Found, totaldelotes , totaldemanzanas,}
     await this.fraccionamientosRepository.save(Flag)
     const Fraccionamiento = await this.fraccionamientosRepository.findOne({
       where: { id }, relations: ["Manzanas", "Lotes"]
@@ -88,29 +87,8 @@ export class FraccionamientoService {
   const newItem = await this.fraccionamientosRepository.create({...newFlag})
 	const Saved = await this.fraccionamientosRepository.save({...newItem})
 
-      const estadocuenta:CreateEstadoCuentaFraccionamientoDto = {
-        id: Saved.id,
-        nombre: fraccionamiento.nombre,
-        montoingreso: 0,
-        montoegreso: 0,
-        cuentasaldo: 0,
-        fraccionamientoId: Saved.id
-      }
-      await this.estadoCuentaFraccionamientoRepository.create({...estadocuenta})
-      await this.estadoCuentaFraccionamientoRepository.save({...estadocuenta})
-      
-      
-      const newEgresosFracc:CreateEgresosFraccionamientoDto = { 
-
-			  concepto:"Costo del Fraccionamiento",
-			  montoegreso: fraccionamiento.costototal, 
-			  fraccionamientoId : Saved.id ,
-			  estadocuentafraccionamientoId : Saved.id,
-        fhcreacion: new Date()
-		    }
-	    await this.createEgresoFraccionamiento({...newEgresosFracc})	
+   
 	
-          
         return{ data:Saved, status : HttpStatus.OK}
 
   }

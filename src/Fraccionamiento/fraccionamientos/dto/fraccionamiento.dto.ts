@@ -9,6 +9,6 @@
   	totaldelotes: number;
   	totaldemanzanas: number;
   	costototal: number;
-
+	m2:number
  }
  

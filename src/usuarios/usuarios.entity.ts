@@ -3,6 +3,7 @@ import { Funciones } from 'src/Area/funciones/funciones.entity';
 import { Clientes } from 'src/Cliente/clientes/clientes.entity';
 import { ClienteNoInteres } from 'src/Cliente/clientesnointeres/clientesnointeres.entity';
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
+import { ContratosFracc } from 'src/Contrato/contratosFracc/contratosfracc.entity';
 import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos.entity';
 import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
 import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
@@ -20,6 +21,7 @@ import { ParcelasProyectos } from 'src/Parcela/parcelasproyectos/parcelasproyect
 import { Proyectos } from 'src/Proyecto/proyectos/proyectos.entity';
 import { proyectosproyectos } from 'src/Proyecto/proyectosproyectos/proyectosproyectos.entity';
 import { Abono } from 'src/abonos/abono.entity';
+import { AbonosFracc } from 'src/abonos/abonofracc/abonofracc.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
 import { Moratorio } from 'src/moratorio/moratorio.entity';
 import { Privilegios } from 'src/privilegios/privilegios.entity';
@@ -100,6 +102,9 @@ export class Usuarios {
 @OneToMany(() => Abono, (abono) => abono.usuario)
   Abonos: Abono[];
 
+@OneToMany(() => AbonosFracc, (abono) => abono.usuario)
+  AbonosFracc: AbonosFracc[];
+
 @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
 
@@ -167,6 +172,9 @@ export class Usuarios {
 
  @OneToMany(() => Contratos, (contratos) => contratos.usuario)
  Contratos  : Contratos[];
+
+ @OneToMany(() => ContratosFracc, (contratosfracc) => contratosfracc.usuario)
+ ContratosFracc  : ContratosFracc[];
  
  @OneToMany(() => Clientes, (clientes) => clientes.usuario)
   Clientes : Clientes[];

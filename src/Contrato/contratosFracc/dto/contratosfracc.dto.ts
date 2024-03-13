@@ -1,27 +1,24 @@
-export class CreateContratoDto {
-   id?: number;
-  fraccionamientoId?: number
-  loteId?: number;
+export class CreateContratoFracc {
+id: number;
   testigo1: string;
   testigo2: string;
   metros2: number;
   preciom2: number;
   costo: number;
-  comision:number
   descuento: number;
   enganche: number;
+  comision: number
   resto: number;
   pagosafinanciar: number;
   interesanual: number;
-  pagomensual:number
+  pagomensual: number;
   montototal: number;
   inicio: Date;
   fecha: Date;
   pagado: number;
   estatus: number;
   fhcreacion: Date;
-  fhmodificacion?: Date;
   usuarioId: number;
-  clientesId: number;
-  
+  estadoCuentaFraccionamientoId: number;
+  fraccionamientoId: number;
 }

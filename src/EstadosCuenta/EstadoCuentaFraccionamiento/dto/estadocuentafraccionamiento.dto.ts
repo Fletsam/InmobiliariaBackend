@@ -1,9 +1,10 @@
 export class CreateEstadoCuentaFraccionamientoDto {
 	
   id?: number;
-  nombre?: string;
+  nombre: string;
+  concepto?:string
   montoingreso: number;
   montoegreso: number;
   cuentasaldo: number;
-  fraccionamientoId:number
+  contratosFraccId:number
 }

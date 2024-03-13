@@ -1,3 +1,4 @@
+import { ContratosFracc } from "src/Contrato/contratosFracc/contratosfracc.entity";
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fraccionamientos.entity";
 import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity";
@@ -8,14 +9,16 @@ export class EstadoCuentaFraccionamiento {
 	@PrimaryGeneratedColumn()
 	id:number
 
-	@OneToOne(() => Fraccionamientos)
+	@OneToOne(() => ContratosFracc)
 	@JoinColumn()
-	fraccionamiento: Fraccionamientos
+	contratosFracc: ContratosFracc
 	@Column()
-	nombre: string;
+	contratosFraccId:number
 
-	@Column()
-	fraccionamientoId:number
+	@Column({default:"Total"})
+	concepto:string
+
+
 
 	@Column()
 	montoingreso:number

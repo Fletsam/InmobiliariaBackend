@@ -13,6 +13,7 @@ import { IngresosContratos } from 'src/Ingresoss/ingresoscontratos/ingresoscontr
 import { EgresosContratos } from 'src/Egresoss/egresoscontratos/egresoscontratos.entity';
 import { Lotes } from 'src/Fraccionamiento/lotes/lotes.entity';
 import { IngresosFraccionamientos } from 'src/Ingresoss/ingresosfraccionamientos/ingresosfraccionamientos.entity';
+import { Fraccionamientos } from 'src/Fraccionamiento/fraccionamientos/fraccionamientos.entity';
 
 @Entity()
 export class Contratos {
@@ -91,6 +92,9 @@ export class Contratos {
   
   @Column()
   clientesId: number;
+
+  @Column()
+  comision:number
   
   /* @ManyToOne(() => Usuarios, (usuario) => usuario.Contratos) 
   idmodificacion : Usuarios */
@@ -104,12 +108,12 @@ export class Contratos {
   @Column()
   loteId:number
 
-
+  
   @OneToMany(() => Abono, (abono) => abono.contrato) 
   Abonos : Abono[]
 
-  @OneToMany(() => IngresosFraccionamientos, (ingresosfraccionamientos) => ingresosfraccionamientos.contrato) 
-  IngresosFraccionamientos : IngresosFraccionamientos[]
+  /* @OneToMany(() => IngresosFraccionamientos, (ingresosfraccionamientos) => ingresosfraccionamientos.contrato) 
+  IngresosFraccionamientos : IngresosFraccionamientos[] */
 
   @OneToMany(() => IngresosContratos, (ingresoscontratos) => ingresoscontratos.contrato) 
   IngresosContratos : IngresosContratos[]

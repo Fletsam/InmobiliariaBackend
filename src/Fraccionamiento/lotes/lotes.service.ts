@@ -22,8 +22,7 @@ export class LotesService {
 	
 	
 	async getAllLotes() {
-	const lotes = await this.lotesRepository.find()
-    
+	const lotes = await this.lotesRepository.find()  
 	return {data : lotes, status: HttpStatus.OK }
 	}
 	async getAllLotesDisponibles() {
@@ -33,11 +32,9 @@ export class LotesService {
 	}
 	async getAllLotesVendidos() {
 	const lotes = await this.lotesRepository.find()
-    const disponibles = lotes.filter((item)=> item.contratoId !== 0)
-	return {data : disponibles, status: HttpStatus.OK }
+    const vendidos = lotes.filter((item)=> item.contratoId !== 0)
+	return {data : vendidos, status: HttpStatus.OK }
 	}
-
-
 
 
 	async getLotesDisponibles(id:number) {
@@ -46,9 +43,6 @@ export class LotesService {
 
   const lotesfracc = lotes.filter((item) => item.fraccionamientoId === fracc.id)
     const disponibles = lotesfracc.filter((item)=> item.contratoId == 0)
-
-
-    console.log(disponibles);
     
 	return {data : disponibles, status: HttpStatus.OK }
 	}
@@ -68,7 +62,7 @@ export class LotesService {
   }
 
   async createLote(lote: CreateLotesDto ){
-    const fracc=  await this.fraccionamientoRepository.findOne({where:{id : lote.fraccionamientoId}})
+    const fracc=  await this.fraccionamientoRepository.findOne({where:{id : lote.fraccionamientoId}, relations:["Lotes"]})
     const manzana=  await this.manzanasRepository.findOne({where:{id : lote.manzanaId}})
 
     if (fracc.usuarioId !== lote.usuarioId && !manzana) {
@@ -79,22 +73,15 @@ export class LotesService {
       });
     }
 
-
-
 	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${fracc.clave}${manzana.numero}${lote.numero}`}
 	const newItem = await this.lotesRepository.create({...newFlag})
 	const Saved = await this.lotesRepository.save({...newItem})
 
-
-
-
-	await this.getTotalMonto(Saved.manzanaId)
-	await this.getTotalMontoFracc(Saved.fraccionamientoId)
 	return { data:Saved, status : HttpStatus.OK}
   }
 
- async getTotalMonto (id:number) {
-   /*  const abonos = await this.abonoRepository.find() */
+ /* async getTotalMonto (id:number) {
+
      const foundTotal = await this.manzanasRepository.findOne({where:{id}}) 
       const FoundMonto = await this.lotesRepository.find({ 
     where: { manzanaId: foundTotal.id} })
@@ -105,10 +92,10 @@ export class LotesService {
     console.log(totalMontos);
     
    return this.manzanasRepository.save(foundTotal)  
-  }
-
+  } */
+/* 
 async getTotalMontoFracc (id:number) {
-   /*  const abonos = await this.abonoRepository.find() */
+  
      const foundTotal = await this.fraccionamientoRepository.findOne({where:{id}}) 
       const FoundMonto = await this.lotesRepository.find({ 
     where: { fraccionamientoId: foundTotal.id}
@@ -118,7 +105,7 @@ async getTotalMontoFracc (id:number) {
     foundTotal.costototal = totalMontos 
       
    return this.fraccionamientoRepository.save(foundTotal)  
-  }
+  } */
 
  async deleteLote(id: number ){
 	await this.lotesRepository.delete(id)

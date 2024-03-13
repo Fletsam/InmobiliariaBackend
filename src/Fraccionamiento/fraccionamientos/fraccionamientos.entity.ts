@@ -8,6 +8,8 @@ import { IngresosFraccionamientos } from "src/Ingresoss/ingresosfraccionamientos
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity";
+import { Contratos } from "src/Contrato/contratos/contratos.entity";
+import { ContratosFracc } from "src/Contrato/contratosFracc/contratosfracc.entity";
 
 @Entity()
 
@@ -38,6 +40,9 @@ export class Fraccionamientos {
 	totaldemanzanas:number
 
 	@Column()
+	m2:number
+
+	@Column()
 	costototal:number
 
 	@OneToMany(() => Lotes, (lotes) => lotes.fraccionamiento) 
@@ -46,14 +51,14 @@ export class Fraccionamientos {
 	@OneToMany(() => Manzanas, (manzana) => manzana.fraccionamiento) 
   	Manzanas : Manzanas[]
 
-	@ManyToOne( () => Usuarios, (usuario)=> usuario.Fraccionamientos   )
+	@ManyToOne( () => Usuarios, (usuario)=> usuario.Fraccionamientos)
 	usuario: Usuarios
 	
 	@Column()
 	usuarioId: number
 	
-	@OneToMany(() => EgresosFraccionamiento, (egresosfraccionamiento) => egresosfraccionamiento.fraccionamiento) 
-  	EgresosFraccionamiento : EgresosFraccionamiento[]
+/* 	@OneToMany(() => EgresosFraccionamiento, (egresosfraccionamiento) => egresosfraccionamiento.) 
+  	EgresosFraccionamiento : EgresosFraccionamiento[] */
 
 	@OneToOne(()=> EstadoCuentaFraccionamiento)
 	@JoinColumn()
@@ -62,5 +67,12 @@ export class Fraccionamientos {
 
 	@OneToMany(()=>  FlujoPorFraccionamiento ,(flujoporfraccionamiento) => flujoporfraccionamiento.fraccionamientos )
   	FlujoPorFraccionamiento : FlujoPorFraccionamiento[]
+
+
+	@OneToOne(() => ContratosFracc,(contrato)=> contrato.Fraccionamiento )
+	contratosFracc: ContratosFracc
+	@JoinColumn()
+	@Column()
+	contratoFraccId: number
 
 }
