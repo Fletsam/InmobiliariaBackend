@@ -107,7 +107,12 @@ async getAbonobyId(id: number) {
   
 	async createIngresoAbono(ingresoabono){
 
-		const newFlag:CreateIngresosContratosDto = {...ingresoabono , estadocuentacontratoId:ingresoabono.contratoId , contratoId:ingresoabono.contratoId , concepto:"Abono" , fhcreacion: new Date()
+		const newFlag:CreateIngresosContratosDto = {
+      ...ingresoabono , 
+      estadocuentacontratoId:ingresoabono.contratoId , 
+      contratoId:ingresoabono.contratoId , 
+      concepto:"Abono" , 
+      fhcreacion: new Date()
 		}
 		const newItem = await this.ingresoContratosRepository.create({...newFlag})
 		const Saved = await this.ingresoContratosRepository.save({...newItem})

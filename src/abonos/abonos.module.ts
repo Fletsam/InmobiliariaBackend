@@ -7,8 +7,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Contratos } from "src/Contrato/contratos/contratos.entity";
 import { IngresosContratos } from "src/Ingresoss/ingresoscontratos/ingresoscontratos.entity";
-import { AbonosFracc } from "./abonofracc/abonofracc.entity";
-
 @Module({
 
 	imports: [TypeOrmModule.forFeature([
@@ -16,7 +14,6 @@ import { AbonosFracc } from "./abonofracc/abonofracc.entity";
 		Contratos,
 		Usuarios,
 		IngresosContratos,
-		AbonosFracc
 	]), JwtModule],
 	controllers: [ AbonosController],
 	providers: [ AbonoService],

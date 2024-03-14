@@ -3,7 +3,6 @@ import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { IngresosProyecto } from '../ingresosproyecto/ingresosproyecto.entity';
 import { IngresosEnganches } from '../ingresosenganches/ingresosenganches.entity';
-import { IngresosInversiones } from '../ingresosinversiones/ingresosinversiones.entity';
 import { IngresosObservaciones } from '../ingresosobservaciones/ingresosobservaciones.entity';
 import { IngresosPagares } from '../ingresospagares/ingresospagares.entity';
 import { IngresosOtros } from '../ingresosotros/ingresosotros.entity';
@@ -48,8 +47,6 @@ export class Ingresos {
   @OneToMany(()=>  IngresosEnganches ,(ingresosenganches) => ingresosenganches.ingreso )
   IngresosEnganches : IngresosEnganches[]
 
-  @OneToMany(()=>  IngresosInversiones ,(ingresosinversiones) => ingresosinversiones.ingreso )
-  IngresosInversiones : IngresosInversiones[]
 
   @OneToMany(()=>  IngresosObservaciones ,(ingresosobservaciones) => ingresosobservaciones.ingresos )
   IngresosObservaciones  : IngresosObservaciones[]

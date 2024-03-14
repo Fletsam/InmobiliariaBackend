@@ -4,6 +4,7 @@ import { Clientes } from 'src/Cliente/clientes/clientes.entity';
 import { ClienteNoInteres } from 'src/Cliente/clientesnointeres/clientesnointeres.entity';
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { ContratosFracc } from 'src/Contrato/contratosFracc/contratosfracc.entity';
+import { ContratosInversionista } from 'src/Contrato/contratosInversionista/contratoinversionista.entity';
 import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos.entity';
 import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
 import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
@@ -176,6 +177,12 @@ export class Usuarios {
  @OneToMany(() => ContratosFracc, (contratosfracc) => contratosfracc.usuario)
  ContratosFracc  : ContratosFracc[];
  
+ @OneToMany(() => ContratosInversionista, (contratoinversionista) => contratoinversionista.usuario)
+ ContratosInversionista  : ContratosInversionista[];
+ 
+
+
+
  @OneToMany(() => Clientes, (clientes) => clientes.usuario)
   Clientes : Clientes[];
 

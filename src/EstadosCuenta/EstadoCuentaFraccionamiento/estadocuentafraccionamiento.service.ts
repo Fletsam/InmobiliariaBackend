@@ -25,14 +25,9 @@ export class EstadoCuentaFraccionamientoService {
 	async getEstadoCuentasbyContrato(id:number) {
 	const Found = await this.estadoCuentaFraccionamientoRepository.findOne( {where: {id},  relations:["IngresosFraccionamientos","EgresosFraccionamiento"] })
 	
-	
 	const fracc = await this.fraccionamientoRepository.findOne({where:{id}})
 	
-
 	const montoinicialegreso = await this.egresosFraccionamientoRepository.findOne({where:{contratosFraccId:fracc.id}})
-
-
-	
 
 	const montoIngreso = await Found.IngresosFraccionamientos.reduce((total,monto)=> total + monto.montoingreso,0 )	
 

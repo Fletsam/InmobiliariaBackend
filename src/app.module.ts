@@ -22,7 +22,6 @@ import { Contratos } from './Contrato/contratos/contratos.entity';
 import { ContratoAnualidad } from './Contrato/contratosanualidad/contratoanualidad.entity';
 import { ContratosMoratorio } from './Contrato/contratosmoratorio/contratosmoratorio.entity';
 import { Egresos } from './Egresoss/egresos/egresos.entity';
-import { EgresosInversiones } from './Egresoss/egresosinversiones/egresosinversiones.entity';
 import { EgresosSubConceptos } from './Egresoss/egresossubconceptos/egresossupconceptos.entity';
 import { EgresosParcelas } from './Egresoss/egresosparcelas/egresosparcelas.entity';
 import { EgresosSubConceptosGastos } from './Egresoss/egresossubconceptosgastos/egresossubconceptosgastos.entity';
@@ -34,7 +33,6 @@ import { Folios } from './folios/folios.entity';
 import { IdEstados } from './estados/idestados/idestados.entity';
 import { Ingresos } from './Ingresoss/ingresos/ingresos.entity';
 import { IngresosEnganches } from './Ingresoss/ingresosenganches/ingresosenganches.entity';
-import { IngresosInversiones } from './Ingresoss/ingresosinversiones/ingresosinversiones.entity';
 import { IngresosObservaciones } from './Ingresoss/ingresosobservaciones/ingresosobservaciones.entity';
 import { IngresosOtros } from './Ingresoss/ingresosotros/ingresosotros.entity';
 import { IngresosPagares } from './Ingresoss/ingresospagares/ingresospagares.entity';
@@ -80,6 +78,14 @@ import { Funciones } from './Area/funciones/funciones.entity';
 import { FuncionesModule } from './Area/funciones/funciones.module';
 import { AreaModule } from './Area/area.module';
 import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity';
+import { IngresosInversionista } from './Ingresoss/ingresosinversiones/ingresosinversiones.entity';
+import { EgresosInversionista } from './Egresoss/egresosinversiones/egresosinversiones.entity';
+import { ContratosInversionista } from './Contrato/contratosInversionista/contratoinversionista.entity';
+import { EstadoCuentaInversionista } from './EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.entity';
+import { EstadoCuentaInversionistaModule } from './EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.module';
+import { AbonosInvModule } from './abonos/abonoinv/abonoinv.module';
+import { AbonosInv } from './abonos/abonoinv/abonoinv.entity';
+import { AbonosFracc } from './abonos/abonofracc/abonofracc.entity';
 
 @Module({
   imports: 
@@ -116,7 +122,7 @@ import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity'
         ContratoAnualidad,
         ContratosMoratorio,
         Egresos,
-        EgresosInversiones,
+        EgresosInversionista,
         EgresosSubConceptos,
         EgresosParcelas,
         EgresosSubConceptosGastos,
@@ -128,7 +134,7 @@ import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity'
         IdEstados,
         Ingresos,
         IngresosEnganches,
-        IngresosInversiones,
+        IngresosInversionista,
         IngresosObservaciones,
         IngresosOtros,
         IngresosPagares,
@@ -165,6 +171,11 @@ import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity'
         Area,
         Funciones,
         ContratosFracc,
+        ContratosInversionista,
+        EstadoCuentaInversionista,
+        AbonosInv,
+        AbonosFracc
+
       ],
       synchronize: true,
     }),
@@ -181,8 +192,10 @@ import { ContratosFracc } from './Contrato/contratosFracc/contratosfracc.entity'
     IngresosContratosModule,
     EstadoCuentaContratoModule,
     EstadoCuentaFraccionamientoModule,
+    EstadoCuentaInversionistaModule,
     FuncionesModule,
-    AreaModule
+    AreaModule,
+    AbonosInvModule,
   ],
   controllers: [],
   providers: [],

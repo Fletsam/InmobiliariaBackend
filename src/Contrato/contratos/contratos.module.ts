@@ -15,21 +15,33 @@ import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fracciona
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { ContratosFracc } from "../contratosFracc/contratosfracc.entity";
 import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity";
+import { EstadoCuentaInversionista } from "src/EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.entity";
+import { IngresosInversionista } from "src/Ingresoss/ingresosinversiones/ingresosinversiones.entity";
+import { EgresosInversionista } from "src/Egresoss/egresosinversiones/egresosinversiones.entity";
+import { ContratosInversionista } from "../contratosInversionista/contratoinversionista.entity";
 
 @Module({
 
 	imports: [ TypeOrmModule.forFeature([
+	//Contratos Lotes//
 		Contratos,
-		ContratosFracc, 
 		Lotes, 
 		IngresosContratos ,
-		EgresosContratos, 
-		EstadoCuentaContrato,
+		EgresosContratos,
+		EstadoCuentaContrato, 
+	//Contratos Fracc//
+		ContratosFracc,
+		Fraccionamientos,
 		IngresosFraccionamientos,
 		EgresosFraccionamiento,
+		EstadoCuentaFraccionamiento,
+	//Contratos Inv//
+		ContratosInversionista, 
+		EstadoCuentaInversionista,
+		IngresosInversionista,
+		EgresosInversionista,	
 		Clientes,
-		Fraccionamientos,
-		EstadoCuentaFraccionamiento
+		
 	]),JwtModule ],
 	controllers: [ ContratoController],
 	providers: [ ContratoService],

@@ -1,5 +1,8 @@
-export class CreateEgresosInversionesDto {
+export class CreateEgresosInversionistaDto {
   id?: number;
-  tipo: string;
-  egresoId:number
+  concepto?: string;
+  montoegreso: number;
+  fhcreacion: Date;
+  estadoCuentaInversionistaId: number;
+  contratosInversionistaId: number;
 }

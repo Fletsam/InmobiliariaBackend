@@ -3,5 +3,6 @@ export class CreateIngresosContratosDto {
   contratoId: number;
   concepto: string;
   montoingreso:number
+  fhcreacion:Date
   estadocuentacontratoId: number;
 }

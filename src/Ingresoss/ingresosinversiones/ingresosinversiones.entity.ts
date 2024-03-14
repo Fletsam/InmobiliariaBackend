@@ -1,42 +1,30 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Ingresos } from '../ingresos/ingresos.entity';
-import { Inversionistas } from 'src/Inversionistass/inversionistas/inversionistas.entity';
-import { EgresosInversiones } from 'src/Egresoss/egresosinversiones/egresosinversiones.entity';
+
+import { EstadoCuentaInversionista } from 'src/EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.entity';
+import { ContratosInversionista } from 'src/Contrato/contratosInversionista/contratoinversionista.entity';
 
 @Entity()
-export class IngresosInversiones {
+export class IngresosInversionista {
   @PrimaryGeneratedColumn()
+	id:number
 
-  id:number
+	@Column()
+	concepto: string
 
-    @ManyToOne(() => Ingresos, (ingresos) => ingresos.IngresosInversiones)
-  ingreso:Ingresos
- 
-  /* @Column()
-  idinversionista: number; */
+	@Column()
+	montoingreso: number
 
-  @Column()
-  plazo: number;
+	@Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+	fhcreacion:Date
 
-  @Column()
-  rendimiento: number;
+	@ManyToOne(() => EstadoCuentaInversionista, (estadocuentainversionista) => estadocuentainversionista.IngresosInversionista) 
+	EstadoCuentaInversionista : EstadoCuentaInversionista
+	@Column()
+	estadoCuentaInversionistaId : number
 
-  @Column()
-  pagado: number;
-
-  @Column()
-  fpago: Date;
-
-  @Column()
-  tipo: number;
-
-
-  
-  @ManyToOne(() => Inversionistas, (inversionistas) => inversionistas.IngresosInversiones)
-  inversionista:Ingresos
-  
-  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.egreso) 
-  EgresosInversiones : EgresosInversiones[]
-
+	@ManyToOne(() => ContratosInversionista, (contratosInversionista) => contratosInversionista.IngresosInversionista) 
+	ContratosInversionista : ContratosInversionista
+	@Column()
+	contratosInversionistaId : number
 }

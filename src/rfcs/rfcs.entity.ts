@@ -50,9 +50,9 @@ export class Rfcs {
   @Column()
   fhmodificacion: Date;
 
-  @OneToMany(() => Abono, (abono) => abono.rfc) 
+/*   @OneToMany(() => Abono, (abono) => abono.rfc) 
   Abonos : Abono[]
-
+ */
   @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.rfc) 
   EgresosSubConceptosProveedor : EgresosSubConceptosProveedor[]
 

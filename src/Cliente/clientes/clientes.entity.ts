@@ -1,3 +1,4 @@
+import { ContratosInversionista } from 'src/Contrato/contratosInversionista/contratoinversionista.entity';
 import { ClienteNoInteres } from '../clientesnointeres/clientesnointeres.entity';
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { Inversionistas } from 'src/Inversionistass/inversionistas/inversionistas.entity'; 
@@ -91,6 +92,9 @@ export class Clientes {
 
   @OneToMany(() => Contratos, (contrato) => contrato.clientes)
   Contratos : Contratos[];
+  
+  @OneToMany(() => ContratosInversionista, (contratoinversionista) => contratoinversionista.cliente)
+  ContratosInversionista : ContratosInversionista[];
 
   @OneToMany(() => Inversionistas, (inversionista) => inversionista.clientes) 
   Inversionistas : Inversionistas[]

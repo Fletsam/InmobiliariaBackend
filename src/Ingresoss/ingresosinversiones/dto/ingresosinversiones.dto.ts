@@ -1,12 +1,8 @@
 export class CreateIngresosInversionesDto {
-  id: number;
-
-
-  plazo: number;
-  rendimiento: number;
-  pagado: number;
-  fpago: Date;
-  tipo: number;
-  inversionistaId: number;
-  ingresoId:number
+id?:number
+concepto:string
+montoingreso:number
+fhcreacion:Date
+estadoCuentaInversionistaId:number
+contratosInversionistaId:number
 }

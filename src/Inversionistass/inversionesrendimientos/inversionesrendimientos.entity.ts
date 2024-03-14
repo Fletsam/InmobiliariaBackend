@@ -3,10 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class InversionesRendimientos {
   @PrimaryGeneratedColumn()
-  idrendmiento: number;
-
-  @Column()
-  idingreso: number;
+  id: number;
 
   @Column()
   posicion: number;

@@ -22,14 +22,4 @@ export class EstadoCuentaFraccionamientoController {
 		return this.EstadoCuentaFraccionamientoService.getEstadoCuentasbyContrato(id)	
 	}
 
-/* 	@Post('/contratos/:id')
-	createContrato(
-		@Body() estadocuenta:CreateEstadoCuentaContratoDto ,
-		@Param('id',ParseIntPipe) id:number,
-	) {
-		{
-			return this.EstadoCuentaContratoService.createIngresoContratos(ingresoscontratos, id)
-		}
-	}  */
-
 }

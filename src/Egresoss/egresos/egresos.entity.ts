@@ -2,7 +2,6 @@
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { EgresosSubConceptosProveedor } from '../egresossubconceptosproveedor/egresossubconceptosproveedor';
-import { EgresosInversiones } from '../egresosinversiones/egresosinversiones.entity';
 import { EgresosParcelas } from '../egresosparcelas/egresosparcelas.entity';
 import { EgresosSubConceptosParcelas } from '../egresossubconceptosparcela/egresossubconceptosparcela.entity';
 import { EgresosSubConceptos } from '../egresossubconceptos/egresossupconceptos.entity';
@@ -48,9 +47,6 @@ export class Egresos {
   @OneToMany(() => EgresosSubConceptosProveedor, (egresossubconceptosproveedor) => egresossubconceptosproveedor.egreso) 
   EgresosSubConceptosProveedor : EgresosSubConceptosProveedor[]
 
-  @OneToMany(() => EgresosInversiones, (egresosinversiones) => egresosinversiones.egreso)
-  EgresosInversiones:EgresosInversiones[]
-  
   @OneToMany(() => EgresosParcelas, (egresosparcelas) => egresosparcelas.egreso)
   EgresosParcelas:EgresosParcelas[]
 

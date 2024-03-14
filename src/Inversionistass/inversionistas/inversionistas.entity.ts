@@ -1,6 +1,6 @@
 
 import { Clientes } from 'src/Cliente/clientes/clientes.entity';
-import { IngresosInversiones } from 'src/Ingresoss/ingresosinversiones/ingresosinversiones.entity';
+import { IngresosInversionista } from 'src/Ingresoss/ingresosinversiones/ingresosinversiones.entity';
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 
@@ -50,10 +50,6 @@ export class Inversionistas {
 
   @Column()
   usuarioId: string;
-
-  @OneToMany(() => IngresosInversiones, (ingresosinversiones) => ingresosinversiones.inversionista) 
-  IngresosInversiones : IngresosInversiones[]
-
 
   @ManyToOne(() => Clientes, (cliente) => cliente.Inversionistas) 
   clientes : Clientes

@@ -20,35 +20,46 @@ import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egre
 import { ContratosFracc } from "../contratosFracc/contratosfracc.entity";
 import { CreateContratoFracc } from "../contratosFracc/dto/contratosfracc.dto";
 import { EstadoCuentaFraccionamiento } from "src/EstadosCuenta/EstadoCuentaFraccionamiento/estadocuentafraccionamiento.entity";
+import { ContratosInversionista } from "../contratosInversionista/contratoinversionista.entity";
+import { CreateContratoInversionistaDto } from "../contratosInversionista/dto/contratoinversionista.dto";
+import { CreateEstadoCuentaInversionistaDto } from "src/EstadosCuenta/EstadoCuentaInversionista/dto/estadocuentainversionista.dto";
+import { CreateIngresosInversionesDto } from "src/Ingresoss/ingresosinversiones/dto/ingresosinversiones.dto";
+import { IngresosInversionista } from "src/Ingresoss/ingresosinversiones/ingresosinversiones.entity";
+import { EstadoCuentaInversionista } from "src/EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.entity";
+import { EgresosInversionista } from "src/Egresoss/egresosinversiones/egresosinversiones.entity";
+import { CreateEgresosInversionistaDto } from "src/Egresoss/egresosinversiones/dto/egresosinversiones.dto";
 
 @Injectable()
 export class ContratoService {
 	constructor(
-	@InjectRepository(Contratos) private contratosRepository: Repository<Contratos>, 
-	@InjectRepository(ContratosFracc) private contratosFraccRepository: Repository<ContratosFracc>, 
-	@InjectRepository(Lotes) private lotesRepository : Repository<Lotes>,
-	@InjectRepository(Fraccionamientos) private fraccRepository : Repository<Fraccionamientos>,
-	@InjectRepository(IngresosContratos) private ingresoContratosRepository : Repository<IngresosContratos>,
-	@InjectRepository(EgresosContratos) private egresoContratosRepository : Repository<EgresosContratos>,
-	@InjectRepository(IngresosFraccionamientos) private ingresosFraccionamientoRepository : Repository<IngresosFraccionamientos>,
-	@InjectRepository(EgresosFraccionamiento) private egresosFraccionamientoRepository : Repository<EgresosFraccionamiento>,
-	@InjectRepository(EstadoCuentaContrato) private estadoCuentaContratoRepository : Repository<EstadoCuentaContrato>,
-	@InjectRepository(EstadoCuentaFraccionamiento) private estadoCuentaContratoFraccRepository : Repository<EstadoCuentaFraccionamiento>,
-	@InjectRepository(Clientes) private clientesRepository : Repository<Clientes>,
+	//contratos lotes
+		@InjectRepository(Contratos) private contratosRepository: Repository<Contratos>, 
+		@InjectRepository(Lotes) private lotesRepository : Repository<Lotes>,
+		@InjectRepository(EstadoCuentaContrato) private estadoCuentaContratoRepository : Repository<EstadoCuentaContrato>,
+		@InjectRepository(IngresosContratos) private ingresoContratosRepository : Repository<IngresosContratos>,
+		@InjectRepository(EgresosContratos) private egresoContratosRepository : Repository<EgresosContratos>,
+		@InjectRepository(Clientes) private clientesRepository : Repository<Clientes>,
+	//contratos Fracc
+		@InjectRepository(ContratosFracc) private contratosFraccRepository: Repository<ContratosFracc>, 
+		@InjectRepository(Fraccionamientos) private fraccRepository : Repository<Fraccionamientos>,
+		@InjectRepository(IngresosFraccionamientos) private ingresosFraccionamientoRepository : Repository<IngresosFraccionamientos>,
+		@InjectRepository(EgresosFraccionamiento) private egresosFraccionamientoRepository : Repository<EgresosFraccionamiento>,
+		@InjectRepository(EstadoCuentaFraccionamiento) private estadoCuentaContratoFraccRepository : Repository<EstadoCuentaFraccionamiento>,
+
+	//contratos Inversionista 
+		@InjectRepository(ContratosInversionista) private contratosInvRepository: Repository<ContratosInversionista>,
+		@InjectRepository(IngresosInversionista) private ingresosInvRepository : Repository<IngresosInversionista>,
+		@InjectRepository(EgresosInversionista) private egresosInvRepository : Repository<EgresosInversionista>,
+		@InjectRepository(EstadoCuentaInversionista) private estadoCuentaContratoInversionistaRepository : Repository<EstadoCuentaInversionista>,
 	) {}
 	
 
-	async getContratosLote() {
-	const items = await this.contratosRepository.find({relations:["Lote"]})
-	return {data : items, status: HttpStatus.OK }
-	}
-
-	async getContratosFracc() {
-	const items = await this.contratosFraccRepository.find({relations:["Fraccionamiento"]})
-	return {data : items, status: HttpStatus.OK }
-	}
- 
 	
+	
+ 
+	 //---------------------Lotes Contratos --------------------------///	
+
+	 
   async createContrato(contrato: CreateContratoDto, id:number ){
 	const Lote = await this.lotesRepository.findOne( {where : {id}} )
 	const precioTotalpormetro2 = (Lote.m2 * contrato.preciom2)
@@ -92,6 +103,7 @@ export class ContratoService {
 			montoingreso: contrato.enganche, 
 			contratoId : Lote.id ,
 			estadocuentacontratoId : Lote.id,
+			fhcreacion:new Date
 		}
 	await this.createIngresoContratos({...newIngreso})
 
@@ -131,7 +143,38 @@ export class ContratoService {
 	return{ data:Saved, status : HttpStatus.OK}
   }
 
- async createContratoFracc(contratofracc: CreateContratoFracc, id:number ){
+  async getContratoById(id: number) {
+    const Found = await this.contratosRepository.findOne({
+      where: { id }, relations: ["IngresosContratos", "EgresosContratos"]
+    });
+	
+	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
+	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
+	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.montoingreso,0 )
+		Found.pagado = monto
+		
+		
+    if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return {Found, Cliente, Lote};
+  }
+
+  async getContratosLote() {
+	const items = await this.contratosRepository.find({relations:["Lote"]})
+	return {data : items, status: HttpStatus.OK }
+	}
+
+
+
+  //---------------------Fraccionamiento Contratos --------------------------///
+ 
+ 
+  async createContratoFracc(contratofracc: CreateContratoFracc, id:number ){
 	const fracc = await this.fraccRepository.findOne( {where : {id}} )
 	
 	
@@ -213,33 +256,7 @@ export class ContratoService {
 	return{ data:Saved, status : HttpStatus.OK}
   }
 
-
-
-
-async getContratoById(id: number) {
-    const Found = await this.contratosRepository.findOne({
-      where: { id }, relations: ["IngresosContratos", "EgresosContratos"]
-    });
-	
-	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
-	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
-	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.montoingreso,0 )
-		Found.pagado = monto
-		
-		
-		
-
-    if (!Found) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Contrato not found',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
-    return {Found, Cliente, Lote};
-  }
-
-async getContratoByIdFracc(id: number) {
+	async getContratoByIdFracc(id: number) {
     const Found = await this.contratosFraccRepository.findOne({
       where: { id }, relations: ["Fraccionamiento"]
     });
@@ -255,9 +272,113 @@ async getContratoByIdFracc(id: number) {
     return Found;
   }
 
+	async getContratosFracc() {
+	const items = await this.contratosFraccRepository.find({relations:["Fraccionamiento"]})
+	return {data : items, status: HttpStatus.OK }
+	}
 
 
-  async createIngresoContratos(ingresoscontratos:CreateIngresosContratosDto) {
+ //---------------------Inversionistas Contratos --------------------------///
+ 
+async createContratoInversionista(contratoinversionista: CreateContratoInversionistaDto, id:number ){
+	const cliente = await this.clientesRepository.findOne({where:{id}})
+	const montodeinteres = ((contratoinversionista.pagosafinanciar/contratoinversionista.pagosafinanciar)*(contratoinversionista.interesmensual*contratoinversionista.pagosafinanciar))*contratoinversionista.monto
+	const TotalconIntereses = (contratoinversionista.monto+montodeinteres)
+	/* const TotalReal = (precioTotalpormetro2+montodeinteres) */
+	const TotalDespuesdeComision = (contratoinversionista.monto-contratoinversionista.comision)
+	const pagoMensual = (contratoinversionista.monto+montodeinteres)/contratoinversionista.pagosafinanciar
+
+	const newFlag:CreateContratoInversionistaDto = { 
+		...contratoinversionista,
+		nombre: cliente.nombre,
+		utilidad: (TotalDespuesdeComision) ,
+		fhcreacion: new Date(),  
+		clienteId : cliente.id ,   
+		montototal: TotalconIntereses , 
+		montodeintereses: montodeinteres,
+		pagomensual: pagoMensual,
+	}
+
+	const newItem = await this.contratosInvRepository.create({...newFlag})
+	const Saved = await this.contratosInvRepository.save({...newItem})
+
+	 const estadocuenta:CreateEstadoCuentaInversionistaDto = {
+		id:contratoinversionista.id,
+		contratoInversionistaId: contratoinversionista.id, 
+		montoingreso: contratoinversionista.pagado,
+		montoegreso: TotalconIntereses,
+		cuentasaldo : (TotalconIntereses - contratoinversionista.pagado),
+		} 
+
+	await this.estadoCuentaContratoInversionistaRepository.create({...estadocuenta})
+	await this.estadoCuentaContratoInversionistaRepository.save({...estadocuenta})
+
+	/* const newIngreso:CreateIngresosInversionesDto = { 
+			concepto:"Monton neto de la Inversión",
+			montoingreso: contratoinversionista.monto,
+			contratosInversionistaId : contratoinversionista.id ,
+			estadoCuentaInversionistaId : contratoinversionista.id,
+			fhcreacion:new Date()
+		}
+	await this.ingresosInvRepository.create({...newIngreso})
+	await this.ingresosInvRepository.save({...newIngreso})
+ */
+
+	const newEgresoIntereses:CreateEgresosInversionistaDto = { 
+			concepto:`Monto de intereses` ,
+			montoegreso: montodeinteres, 
+			contratosInversionistaId : contratoinversionista.id ,
+			estadoCuentaInversionistaId : contratoinversionista.id,
+			fhcreacion: new Date()
+		}
+	await this.egresosInvRepository.create({...newEgresoIntereses})
+	await this.egresosInvRepository.save({...newEgresoIntereses})
+
+	const newEgreso:CreateEgresosInversionistaDto = { 
+			concepto:`Monto de la Inversion` ,
+			montoegreso: contratoinversionista.monto, 
+			contratosInversionistaId : contratoinversionista.id ,
+			estadoCuentaInversionistaId : contratoinversionista.id,
+			fhcreacion: new Date()
+		}
+	await this.egresosInvRepository.create({...newEgreso})
+	await this.egresosInvRepository.save({...newEgreso})
+	
+	const newEgresoComision:CreateEgresosInversionistaDto = { 
+			concepto:`Comision` ,
+			montoegreso: contratoinversionista.comision, 
+			contratosInversionistaId : contratoinversionista.id ,
+			estadoCuentaInversionistaId : contratoinversionista.id,
+			fhcreacion: new Date()
+		}
+	await this.egresosInvRepository.create({...newEgresoComision})
+	await this.egresosInvRepository.save({...newEgresoComision})
+
+
+
+	return{ data:Saved, status : HttpStatus.OK}
+  }
+
+
+  async getContratoByIdInv(id: number) {
+    const Found = await this.contratosInvRepository.findOne({
+      where: { id }, relations: ["cliente"]
+    });
+	
+    if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return {contratoInv : Found, clienteInv: Found.cliente};
+  }
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+
+  	async createIngresoContratos(ingresoscontratos:CreateIngresosContratosDto) {
 	
 		const newItem = await this.ingresoContratosRepository.create({...ingresoscontratos})
 		const Saved = await this.ingresoContratosRepository.save({...newItem})
