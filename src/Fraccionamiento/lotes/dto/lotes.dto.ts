@@ -1,6 +1,6 @@
   
 export class CreateLotesDto {
-	id: number;
+	id?: number;
   	m2: number;
   	manzanaId: number;
 	numero:string

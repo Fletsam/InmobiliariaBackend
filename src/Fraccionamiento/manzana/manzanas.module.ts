@@ -5,12 +5,13 @@ import {  ManzanasService } from "./manzanas.service";
 import {  Manzanas } from "./manzanas.entity";
 import { Fraccionamientos } from "../fraccionamientos/fraccionamientos.entity";
 import { JwtModule } from "@nestjs/jwt";
+import { Lotes } from "../lotes/lotes.entity";
 
 
 
 @Module({
 
-	imports: [ TypeOrmModule.forFeature([Manzanas,Fraccionamientos]),JwtModule ],
+	imports: [ TypeOrmModule.forFeature([Manzanas,Fraccionamientos,Lotes]),JwtModule ],
 	controllers: [ ManzanaController],
 	providers: [ ManzanasService],
 	exports:[ManzanasService]

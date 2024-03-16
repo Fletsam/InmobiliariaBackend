@@ -10,6 +10,8 @@ import {  CreateEgresosFraccionamientoDto } from "src/Egresoss/egresosfraccionam
 import { EgresosFraccionamiento } from "src/Egresoss/egresosfraccionamiento/egresosfraccionamiento.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Manzanas } from "../manzana/manzanas.entity";
+import { Lotes } from "../lotes/lotes.entity";
+import { CreateManzanaDto } from "../manzana/dto/manzanas.dto";
 
 
 
@@ -20,7 +22,8 @@ export class FraccionamientoService {
 	@InjectRepository(EgresosFraccionamiento) private egresosFraccionamientosRepository: Repository<EgresosFraccionamiento>, 
   @InjectRepository(EstadoCuentaFraccionamiento) private estadoCuentaFraccionamientoRepository : Repository<EstadoCuentaFraccionamiento>,
     @InjectRepository(Usuarios) private usuariosRepository: Repository<Usuarios>,  
-  
+   @InjectRepository(Lotes) private lotesRepository: Repository<Lotes>, 
+   @InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>, 
   ) {}
    
 	
@@ -35,7 +38,7 @@ export class FraccionamientoService {
 	async getFraccionamientoById(id: number,id2: number) {
     
     const Found = await this.fraccionamientosRepository.findOne({
-      where: { id }, relations: ["Manzanas", "Lotes"]
+      where: { id }, relations: ["Manzanas" , "Lotes"]
     });
 
     const usuario = await this.usuariosRepository.findOne({where:{id:id2}})
@@ -79,19 +82,38 @@ export class FraccionamientoService {
      return fracc;
   }
 
-
+ 
   async createFraccionamiento(fraccionamiento: CreateFraccionamientoDto ){
 
-	const newFlag = { ...fraccionamiento, fhcreacion: new Date()}
-	
+     let Manzanas = []
+	const newFlag = { ...fraccionamiento,fhcreacion: new Date()}
+
   const newItem = await this.fraccionamientosRepository.create({...newFlag})
 	const Saved = await this.fraccionamientosRepository.save({...newItem})
+  
+  const numeroManzana = fraccionamiento.totaldemanzanas
+   async function agreagarmanzana ()  {
+    for (let n = 0; n < numeroManzana; n++) {
+      const newManzana:CreateManzanaDto = {
+        numero: `${n+1}`,
+        clave: `${fraccionamiento.clave}0${n+1}`,
+        fraccionamientoId: Saved.id,
+        usuarioId: 1,
+    }
+        Manzanas.push(newManzana)
+    }}
+    await agreagarmanzana ()
+      await this.manzanasRepository.create(Manzanas)
+      await this.manzanasRepository.save(Manzanas)
+   const Fracc = await this.fraccionamientosRepository.create({...Saved , Manzanas:Manzanas})
+	  const SavedFracc = await this.fraccionamientosRepository.save({...Fracc , Manzanas:Manzanas})
 
-   
-	
-        return{ data:Saved, status : HttpStatus.OK}
+        return{ data:SavedFracc, status : HttpStatus.OK}
 
   }
+
+
+
 
 
   async deleteFracc(id: number ){

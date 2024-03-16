@@ -3,6 +3,7 @@
 	
  	id?: number;
   	nombre: string;
+	clave:string
 	propietario:string
 	telefono:string
 	direccion:string

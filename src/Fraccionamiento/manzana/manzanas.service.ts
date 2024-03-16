@@ -6,6 +6,9 @@ import {  CreateManzanaDto } from "./dto/manzanas.dto";
 import { Fraccionamientos } from "../fraccionamientos/fraccionamientos.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { throwError } from "rxjs";
+import { UpdateManzanaDto } from "./dto/updatemanzanas.dto";
+import { CreateLotesDto } from "../lotes/dto/lotes.dto";
+import { Lotes } from "../lotes/lotes.entity";
 
 
 
@@ -14,20 +17,21 @@ import { throwError } from "rxjs";
 export class ManzanasService {
 	constructor(
 	@InjectRepository(Manzanas) private manzanasRepository: Repository<Manzanas>,
+	@InjectRepository(Lotes) private lotesRepository: Repository<Lotes>,
   @InjectRepository(Fraccionamientos) private fraccionamientosRepository: Repository<Fraccionamientos>,
   ) {}
 	
 	
 	
 	async getManzanas() {
-	const items = await this.manzanasRepository.find()
+	const items = await this.manzanasRepository.find({relations:[ "fraccionamiento","Lotes"]})
   
 	return {data : items, status: HttpStatus.OK }
 	}
  
 	async getManzanaById(id: number) {
     const Found = await this.manzanasRepository.findOne({
-      where: { id }, relations : ['Lotes']
+      where: { id }, relations : ["fraccionamiento", 'Lotes']
     });
     if (!Found) {
       throw new BadRequestException({
@@ -65,7 +69,6 @@ async getManzanaByUsuario(id: number) {
       });
     }
 
-
 	const newFlag = { ...manzana, fhcreacion: new Date(), clave:(`${fracc.clave}${manzana.numero}`)}
 	const newItem = await this.manzanasRepository.create({...newFlag})
 	const Saved = await this.manzanasRepository.save({...newItem})
@@ -73,6 +76,7 @@ async getManzanaByUsuario(id: number) {
 	/* await this.getTotalMontoFracc(Saved.fraccionamientoId) */
 	return{ data:Saved, status : HttpStatus.OK}
   }
+
 
   
  async deleteManzana(id: number ){

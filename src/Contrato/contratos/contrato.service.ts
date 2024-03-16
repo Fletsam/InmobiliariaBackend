@@ -287,9 +287,13 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 	/* const TotalReal = (precioTotalpormetro2+montodeinteres) */
 	const TotalDespuesdeComision = (contratoinversionista.monto-contratoinversionista.comision)
 	const pagoMensual = (contratoinversionista.monto+montodeinteres)/contratoinversionista.pagosafinanciar
-
+	console.log(cliente.id);
+	
+	
+	
 	const newFlag:CreateContratoInversionistaDto = { 
 		...contratoinversionista,
+		
 		nombre: cliente.nombre,
 		utilidad: (TotalDespuesdeComision) ,
 		fhcreacion: new Date(),  
@@ -301,10 +305,10 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 
 	const newItem = await this.contratosInvRepository.create({...newFlag})
 	const Saved = await this.contratosInvRepository.save({...newItem})
-
-	 const estadocuenta:CreateEstadoCuentaInversionistaDto = {
-		id:contratoinversionista.id,
-		contratoInversionistaId: contratoinversionista.id, 
+	
+	  const estadocuenta:CreateEstadoCuentaInversionistaDto =  {
+		id:Saved.id,
+		contratoInversionistaId: Saved.id, 
 		montoingreso: contratoinversionista.pagado,
 		montoegreso: TotalconIntereses,
 		cuentasaldo : (TotalconIntereses - contratoinversionista.pagado),
@@ -324,31 +328,31 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 	await this.ingresosInvRepository.save({...newIngreso})
  */
 
-	const newEgresoIntereses:CreateEgresosInversionistaDto = { 
+	const newEgresoIntereses:CreateEgresosInversionistaDto =  { 
 			concepto:`Monto de intereses` ,
 			montoegreso: montodeinteres, 
-			contratosInversionistaId : contratoinversionista.id ,
-			estadoCuentaInversionistaId : contratoinversionista.id,
+			contratosInversionistaId : Saved.id ,
+			estadoCuentaInversionistaId : Saved.id,
 			fhcreacion: new Date()
 		}
 	await this.egresosInvRepository.create({...newEgresoIntereses})
 	await this.egresosInvRepository.save({...newEgresoIntereses})
 
-	const newEgreso:CreateEgresosInversionistaDto = { 
+	const newEgreso:CreateEgresosInversionistaDto =  { 
 			concepto:`Monto de la Inversion` ,
 			montoegreso: contratoinversionista.monto, 
-			contratosInversionistaId : contratoinversionista.id ,
-			estadoCuentaInversionistaId : contratoinversionista.id,
+			contratosInversionistaId : Saved.id ,
+			estadoCuentaInversionistaId : Saved.id,
 			fhcreacion: new Date()
 		}
 	await this.egresosInvRepository.create({...newEgreso})
 	await this.egresosInvRepository.save({...newEgreso})
 	
-	const newEgresoComision:CreateEgresosInversionistaDto = { 
+	const newEgresoComision:CreateEgresosInversionistaDto =   { 
 			concepto:`Comision` ,
 			montoegreso: contratoinversionista.comision, 
-			contratosInversionistaId : contratoinversionista.id ,
-			estadoCuentaInversionistaId : contratoinversionista.id,
+			contratosInversionistaId : Saved.id ,
+			estadoCuentaInversionistaId : Saved.id,
 			fhcreacion: new Date()
 		}
 	await this.egresosInvRepository.create({...newEgresoComision})
