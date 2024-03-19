@@ -18,6 +18,7 @@ export class Lotes {
 	@Column()
 	clave:string
 
+
 	@Column()
 	m2:number
 

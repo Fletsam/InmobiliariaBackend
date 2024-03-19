@@ -31,7 +31,7 @@ export class ManzanasService {
  
 	async getManzanaById(id: number) {
     const Found = await this.manzanasRepository.findOne({
-      where: { id }, relations : ["fraccionamiento", 'Lotes']
+      where: { id }, relations : ["fraccionamiento", 'Lotes', 'Lotes.Contrato']
     });
     if (!Found) {
       throw new BadRequestException({

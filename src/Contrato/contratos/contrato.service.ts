@@ -205,9 +205,9 @@ export class ContratoService {
 	const Saved = await this.contratosFraccRepository.save({...newItem})
 
 	 const estadocuenta:CreateEstadoCuentaFraccionamientoDto = {
-		id: fracc.id, 
+		id: Saved.id, 
 		nombre: fracc.nombre,
-		contratosFraccId: fracc.id, 
+		contratosFraccId: Saved.id, 
 		montoingreso: contratofracc.pagado,
 		montoegreso: TotalReal,
 		cuentasaldo : (TotalReal - contratofracc.pagado),
@@ -220,8 +220,8 @@ export class ContratoService {
 			concepto:"Enganche",
 			montoingreso: contratofracc.enganche,
 			/* contratoId: fracc.id,  */
-			contratosFraccId : fracc.id ,
-			estadocuentafraccionamientoId : fracc.id,
+			contratosFraccId : Saved.id ,
+			estadocuentafraccionamientoId : Saved.id,
 			fhcreacion:new Date()
 		}
 	await this.createIngresoFraccionamiento({...newIngreso})
@@ -230,8 +230,8 @@ export class ContratoService {
 	const newEgreso:CreateEgresosFraccionamientoDto = { 
 			concepto:`Monto Total con intereses de ${fracc.nombre}` ,
 			montoegreso: TotalReal, 
-			contratosFraccId : fracc.id ,
-			estadocuentafraccionamientoId : fracc.id,
+			contratosFraccId : Saved.id ,
+			estadocuentafraccionamientoId : Saved.id,
 			fhcreacion: new Date()
 		}
 	await this.createEgresoFraccionamiento({...newEgreso})
@@ -239,8 +239,8 @@ export class ContratoService {
 	const newEgresoComision:CreateEgresosFraccionamientoDto = { 
 			concepto:`Comision` ,
 			montoegreso: contratofracc.comision, 
-			contratosFraccId : fracc.id ,
-			estadocuentafraccionamientoId : fracc.id,
+			contratosFraccId : Saved.id ,
+			estadocuentafraccionamientoId : Saved.id,
 			fhcreacion: new Date()
 		}
 	await this.createEgresoFraccionamiento({...newEgresoComision})

@@ -18,8 +18,6 @@ export class Manzanas {
 	@Column()
 	clave:string
 
-
-
 	@OneToMany(() => Lotes, (lote) => lote.manzana) 
   	Lotes : Lotes[]
 
