@@ -283,13 +283,11 @@ export class ContratoService {
 async createContratoInversionista(contratoinversionista: CreateContratoInversionistaDto, id:number ){
 	const cliente = await this.clientesRepository.findOne({where:{id}})
 	const montodeinteres = ((contratoinversionista.pagosafinanciar/contratoinversionista.pagosafinanciar)*(contratoinversionista.interesmensual*contratoinversionista.pagosafinanciar))*contratoinversionista.monto
-	const TotalconIntereses = (contratoinversionista.monto+montodeinteres)
+	const TotalconIntereses = ((contratoinversionista.monto)+(montodeinteres))
 	/* const TotalReal = (precioTotalpormetro2+montodeinteres) */
 	const TotalDespuesdeComision = (contratoinversionista.monto-contratoinversionista.comision)
 	const pagoMensual = (contratoinversionista.monto+montodeinteres)/contratoinversionista.pagosafinanciar
-	console.log(cliente.id);
-	
-	
+;
 	
 	const newFlag:CreateContratoInversionistaDto = { 
 		...contratoinversionista,
@@ -378,6 +376,20 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
     }
     return {contratoInv : Found, clienteInv: Found.cliente};
   }
+
+  async getContratosInv() {
+    const Found = await this.contratosInvRepository.find();
+	
+    if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return Found;
+  }
+
 
 
 //----------------------------------------------------------------------------------------------------------------------//

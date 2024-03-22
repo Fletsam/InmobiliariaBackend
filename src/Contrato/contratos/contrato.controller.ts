@@ -26,10 +26,15 @@ export class ContratoController {
 
 	}
 	@Get('/inv/:id')
-	getContratosInv(
+	getContratoInv(
 		@Param('id',ParseIntPipe) id:number,
 	){
 		return this.ContratoService.getContratoByIdInv(id)
+
+	}
+	@Get('/inv')
+	getContratosInv(){
+		return this.ContratoService.getContratosInv()
 
 	}
 

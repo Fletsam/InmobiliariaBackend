@@ -51,7 +51,7 @@ export class ClientesService {
 	async getClienteById(id: number) {
     
     const Found = await this.clientesRepository.findOne({
-      where: { id }, relations: ["Contratos", "Contratos.Lote"]
+      where: { id }, relations: ["Contratos", "Contratos.Lote" ,"ContratosInversionista"]
     });
 
     const usuario = await this.usuariosRepository.findOne({where:{id:Found.usuarioId}})
