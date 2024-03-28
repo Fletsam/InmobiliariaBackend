@@ -26,6 +26,8 @@ export class AbonosController {
 		return this.abonoService.getAbonobyId(id)
 	}
 
+	
+
 
 	@Get('/usuario/:usuarioId')
 	GetbyUsuario(
@@ -42,6 +44,13 @@ export class AbonosController {
 		return this.abonoService.createAbonoContrato(abono ,id)
 	}
 
+	@Get('/contrato/:id')
+	getAbonobyEstadoCuenta(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonosByEstadoCuenta(id)
+	}
 
 	@Patch('/contrato/:contratoid/:id')
 	updateAbono(

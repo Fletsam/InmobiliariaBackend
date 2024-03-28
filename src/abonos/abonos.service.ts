@@ -8,6 +8,9 @@ import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Contratos } from "src/Contrato/contratos/contratos.entity";
 import { IngresosContratos } from "src/Ingresoss/ingresoscontratos/ingresoscontratos.entity";
 import { CreateIngresosContratosDto } from "src/Ingresoss/ingresoscontratos/dto/ingresoscontratos.dto";
+import { CreateEgresosContratosDto } from "src/Egresoss/egresoscontratos/dto/egresoscontratos.dto";
+import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos.entity";
+import { EstadoCuentaContrato } from "src/EstadosCuenta/EstadoCuentaContrato/estadocuentacontrato.entity";
 
 @Injectable()
 
@@ -17,7 +20,9 @@ export class AbonoService {
 		@InjectRepository(Abono) private abonoRepository: Repository<Abono> , 
     @InjectRepository(Contratos) private contratoRepository: Repository<Contratos>, 
     @InjectRepository(Usuarios) private usuarioRepository: Repository<Usuarios>,
+    @InjectRepository(EstadoCuentaContrato) private estadoCuentaContratoRepository: Repository<EstadoCuentaContrato>,
     @InjectRepository(IngresosContratos) private ingresoContratosRepository: Repository<IngresosContratos>,
+    @InjectRepository(EgresosContratos) private egresoContratosRepository: Repository<EgresosContratos>,
     ) {}
    
     
@@ -31,6 +36,15 @@ async getAbonosByUsuario(id:number) {
   const foundUsuario = await this.usuarioRepository.findOne( {where: {id}} ) 
 	const abonos = await this.abonoRepository.find({ 
     where: { usuarioId : foundUsuario.id }
+  })
+  
+  
+	return {data : abonos, status: HttpStatus.OK }
+}
+async getAbonosByEstadoCuenta(id:number) {
+  const found = await this.estadoCuentaContratoRepository.findOne( {where: {id}} ) 
+	const abonos = await this.abonoRepository.find({ 
+    where: { contratoId : found.id }
   })
   
   
@@ -57,6 +71,7 @@ async getAbonobyId(id: number) {
       const newAbono = await this.abonoRepository.create({...newAbonoFlag , contratoId:contrato.id })
       const AbonoSaved = await this.abonoRepository.save({...newAbono })
       await this.createIngresoAbono({...newAbono})
+      await this.createEgresoAbono({...newAbono})
       await this.getTotalMontoContrato(AbonoSaved.contratoId)
       return[{ data:AbonoSaved,  status : HttpStatus.OK}]
 
@@ -95,11 +110,24 @@ async getAbonobyId(id: number) {
       ...ingresoabono , 
       estadocuentacontratoId:ingresoabono.contratoId , 
       contratoId:ingresoabono.contratoId , 
-      concepto:"Abono" , 
+      concepto:`Abono`, 
       fhcreacion: new Date()
 		}
 		const newItem = await this.ingresoContratosRepository.create({...newFlag})
 		const Saved = await this.ingresoContratosRepository.save({...newItem})
+		return{ data:Saved, status : HttpStatus.OK}
+	}
+	async createEgresoAbono(egresoabono){
+		const newFlag:CreateEgresosContratosDto = {
+      ...egresoabono ,
+      montoegreso:egresoabono.descuento,
+      estadocuentacontratoId:egresoabono.contratoId , 
+      contratoId:egresoabono.contratoId , 
+      concepto:`Descuento`, 
+      fhcreacion: new Date()
+		}
+		const newItem = await this.egresoContratosRepository.create({...newFlag})
+		const Saved = await this.egresoContratosRepository.save({...newItem})
 		return{ data:Saved, status : HttpStatus.OK}
 	}
 }

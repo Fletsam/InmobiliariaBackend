@@ -14,6 +14,12 @@ export class Abono {
   @Column()
   montoingreso: number;
 
+  @Column()
+  descuento:number
+
+  @Column()
+  concepto:string
+
   @CreateDateColumn({
     name: 'fechadecreacion',
     type: 'datetime',
