@@ -3,6 +3,8 @@ export class CreatAbonoDto {
   montoingreso: number;
   descuento:number
   concepto:string;
+  formadepago:string
+  saldo:number
   usuarioId?: number;
   fhcreacion: Date;
   contratoid?:number

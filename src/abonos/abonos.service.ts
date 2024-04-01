@@ -67,8 +67,11 @@ async getAbonobyId(id: number) {
 
   async createAbonoContrato(abono: CreatAbonoDto , id:number){
       const contrato = await this.contratoRepository.findOne({where : {id}})
-      const newAbonoFlag = { ...abono , fhcreacion: new Date()}
-      const newAbono = await this.abonoRepository.create({...newAbonoFlag , contratoId:contrato.id })
+   
+
+      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+      const saldo =  contrato.montototal -(contrato.pagado + newAbonoFlag.montoingreso)
+      const newAbono = await this.abonoRepository.create({...newAbonoFlag , saldo, contratoId:contrato.id })
       const AbonoSaved = await this.abonoRepository.save({...newAbono })
       await this.createIngresoAbono({...newAbono})
       await this.createEgresoAbono({...newAbono})
@@ -110,7 +113,7 @@ async getAbonobyId(id: number) {
       ...ingresoabono , 
       estadocuentacontratoId:ingresoabono.contratoId , 
       contratoId:ingresoabono.contratoId , 
-      concepto:`Abono`, 
+      concepto:`Abono ${ingresoabono.concepto}`, 
       fhcreacion: new Date()
 		}
 		const newItem = await this.ingresoContratosRepository.create({...newFlag})
@@ -123,7 +126,7 @@ async getAbonobyId(id: number) {
       montoegreso:egresoabono.descuento,
       estadocuentacontratoId:egresoabono.contratoId , 
       contratoId:egresoabono.contratoId , 
-      concepto:`Descuento`, 
+      concepto:`Descuento ${egresoabono.concepto}`, 
       fhcreacion: new Date()
 		}
 		const newItem = await this.egresoContratosRepository.create({...newFlag})

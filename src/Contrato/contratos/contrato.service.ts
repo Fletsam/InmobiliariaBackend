@@ -145,15 +145,19 @@ export class ContratoService {
 
   async getContratoById(id: number) {
     const Found = await this.contratosRepository.findOne({
-      where: { id }, relations: ["IngresosContratos", "EgresosContratos"]
+      where: { id }, relations: ["IngresosContratos", "EgresosContratos", "Abonos"]
     });
 	
 	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
 	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
 	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.montoingreso,0 )
 		Found.pagado = monto
-		
-		
+	const descuento = Found.Abonos.reduce((monto,item) => monto + item.descuento,0 )	
+		Found.descuento = descuento
+
+	const ingresoneto = (Found.montototal - descuento - Found.comision)
+		Found.ingresoneto= ingresoneto
+
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -165,7 +169,8 @@ export class ContratoService {
   }
 
   async getContratosLote() {
-	const items = await this.contratosRepository.find({relations:["Lote"]})
+	const items = await this.contratosRepository.find({relations:["Lote","clientes"]})
+
 	return {data : items, status: HttpStatus.OK }
 	}
 

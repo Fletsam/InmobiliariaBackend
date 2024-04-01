@@ -55,6 +55,9 @@ export class Contratos {
 
   @Column()
   montototal: number;
+
+  @Column()
+  ingresoneto: number
 /* 
   @Column()
   abono: number; */

@@ -13,6 +13,7 @@ export class CreateContratoDto {
   resto: number;
   pagosafinanciar: number;
   interesanual: number;
+  ingresoneto:number
   pagomensual:number
   montototal: number;
   inicio: Date;

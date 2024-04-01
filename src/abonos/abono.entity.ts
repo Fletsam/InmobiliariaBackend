@@ -10,7 +10,6 @@ export class Abono {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @Column()
   montoingreso: number;
 
@@ -19,6 +18,12 @@ export class Abono {
 
   @Column()
   concepto:string
+
+  @Column()
+  formadepago:string
+
+  @Column()
+  saldo:number
 
   @CreateDateColumn({
     name: 'fechadecreacion',
