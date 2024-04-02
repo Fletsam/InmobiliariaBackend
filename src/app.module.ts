@@ -86,6 +86,9 @@ import { EstadoCuentaInversionistaModule } from './EstadosCuenta/EstadoCuentaInv
 import { AbonosInvModule } from './abonos/abonoinv/abonoinv.module';
 import { AbonosInv } from './abonos/abonoinv/abonoinv.entity';
 import { AbonosFracc } from './abonos/abonofracc/abonofracc.entity';
+import { Proveedores } from './Proveedores/proveedores.entity';
+import { ContratosProveedores } from './Contrato/contratosProveedores/contratosproveedores.entity';
+import { ProveedorModule } from './Proveedores/proveedor.module';
 
 @Module({
   imports: 
@@ -174,8 +177,9 @@ import { AbonosFracc } from './abonos/abonofracc/abonofracc.entity';
         ContratosInversionista,
         EstadoCuentaInversionista,
         AbonosInv,
-        AbonosFracc
-
+        AbonosFracc,
+        Proveedores,
+        ContratosProveedores
       ],
       synchronize: true,
     }),
@@ -196,6 +200,7 @@ import { AbonosFracc } from './abonos/abonofracc/abonofracc.entity';
     FuncionesModule,
     AreaModule,
     AbonosInvModule,
+    ProveedorModule
   ],
   controllers: [],
   providers: [],

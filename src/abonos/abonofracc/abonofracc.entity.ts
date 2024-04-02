@@ -9,8 +9,20 @@ export class AbonosFracc {
   id: number;
 
 
-  @Column()
+  @Column(  {default: 0}  )
   montoingreso: number;
+
+  @Column(  {default:0}  )
+  penalizacion: number;
+
+  @Column()
+  concepto: string
+
+  @Column()
+  formadepago: string
+
+  @Column()
+  saldo:number
 
 
   @CreateDateColumn({

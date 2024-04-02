@@ -11,6 +11,9 @@ import { CreateIngresosContratosDto } from "src/Ingresoss/ingresoscontratos/dto/
 import { CreateEgresosContratosDto } from "src/Egresoss/egresoscontratos/dto/egresoscontratos.dto";
 import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos.entity";
 import { EstadoCuentaContrato } from "src/EstadosCuenta/EstadoCuentaContrato/estadocuentacontrato.entity";
+import { createAbonoFraccDto } from "./abonofracc/dto/abonofracc.dto";
+import { ContratosFracc } from "src/Contrato/contratosFracc/contratosfracc.entity";
+import { AbonosFracc } from "./abonofracc/abonofracc.entity";
 
 @Injectable()
 
@@ -23,6 +26,10 @@ export class AbonoService {
     @InjectRepository(EstadoCuentaContrato) private estadoCuentaContratoRepository: Repository<EstadoCuentaContrato>,
     @InjectRepository(IngresosContratos) private ingresoContratosRepository: Repository<IngresosContratos>,
     @InjectRepository(EgresosContratos) private egresoContratosRepository: Repository<EgresosContratos>,
+  //ContratosFraccs
+    @InjectRepository(ContratosFracc) private contratosFraccRepository: Repository<ContratosFracc>,
+    @InjectRepository(AbonosFracc) private abonosFraccRepository: Repository<AbonosFracc>,
+
     ) {}
    
     
@@ -45,6 +52,7 @@ async getAbonosByEstadoCuenta(id:number) {
   const found = await this.estadoCuentaContratoRepository.findOne( {where: {id}} ) 
 	const abonos = await this.abonoRepository.find({ 
     where: { contratoId : found.id }
+    
   })
   
   
@@ -65,13 +73,14 @@ async getAbonobyId(id: number) {
     return AbonoFound;
   }
 
-  async createAbonoContrato(abono: CreatAbonoDto , id:number){
-      const contrato = await this.contratoRepository.findOne({where : {id}})
-   
-
-      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
-      const saldo =  contrato.montototal -(contrato.pagado + newAbonoFlag.montoingreso)
-      const newAbono = await this.abonoRepository.create({...newAbonoFlag , saldo, contratoId:contrato.id })
+  //Contratos Clientes
+async createAbonoContrato(abono: CreatAbonoDto , id:number){
+      const contrato = await this.contratoRepository.findOne({where : {id}})   
+      const newAbonoFlag = await { ...abono, fhcreacion: new Date()}
+      
+      const saldo = (contrato.montototal - (newAbonoFlag.montoingreso +  contrato.pagado) )
+      
+      const newAbono = await this.abonoRepository.create({...newAbonoFlag , saldo: saldo, contratoId:contrato.id })
       const AbonoSaved = await this.abonoRepository.save({...newAbono })
       await this.createIngresoAbono({...newAbono})
       await this.createEgresoAbono({...newAbono})
@@ -79,35 +88,6 @@ async getAbonobyId(id: number) {
       return[{ data:AbonoSaved,  status : HttpStatus.OK}]
 
   }
-
-  async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
-    const abonoFlag = {...abono, contratoId:contratoId }
-    const updatedAbono = await this.abonoRepository.update(
-      { id},
-      {...abonoFlag},
-    )
-    if (updatedAbono.affected=== 0) {
-      throw new BadRequestException({
-        data:null,
-        message: "no se ha podido actualizar",
-        status: HttpStatus.CONFLICT
-      })
-    }
-    await this.getTotalMontoContrato(contratoId)
-    return { data:abonoFlag , status: HttpStatus.OK}
-  }
-
-  async getTotalMontoContrato (id:number) {
-    const found = await this.contratoRepository.findOne({where :{id}})
-    const abonos = await this.abonoRepository.find({ 
-    where: {contratoId: found.id}
-      })
-    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
-      found.pagado = totalMontos 
-      
-    return this.contratoRepository.save(found) 
-  }
-
 	async createIngresoAbono(ingresoabono){
 		const newFlag:CreateIngresosContratosDto = {
       ...ingresoabono , 
@@ -132,6 +112,84 @@ async getAbonobyId(id: number) {
 		const newItem = await this.egresoContratosRepository.create({...newFlag})
 		const Saved = await this.egresoContratosRepository.save({...newItem})
 		return{ data:Saved, status : HttpStatus.OK}
+  
 	}
+   async getTotalMontoContrato (id:number) {
+    const found = await this.contratoRepository.findOne({where :{id}})
+    const abonos = await this.abonoRepository.find({ 
+    where: {contratoId: found.id}
+      })
+      	const monto = abonos.reduce((monto, item) => monto + item.montoingreso,0 )
+		    found.pagado = (monto + found.enganche)
+ 
+    return this.contratoRepository.save(found) 
+  }  
+
+
+// Abonos Fraccs
+
+
+async createAbonoFracc(abono: createAbonoFraccDto , id:number){
+      const contratoFracc = await this.contratosFraccRepository.findOne({where : {id}})
+      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+      console.log(contratoFracc);
+      
+      console.log(contratoFracc.montototal - (newAbonoFlag.montoingreso +  contratoFracc.pagado))
+      
+    console.log(contratoFracc.costoneto);
+    
+  
+        const saldo =  (contratoFracc.costoneto - (newAbonoFlag.montoingreso +  contratoFracc.pagado - (newAbonoFlag.penalizacion)) )
+        const newAbono = await this.abonosFraccRepository.create({...newAbonoFlag , saldo:saldo, contratosFraccId:contratoFracc.id })
+        const AbonoSaved = await this.abonosFraccRepository.save({...newAbono })
+        await this.getTotalMontoContratoFracc(AbonoSaved.contratosFraccId)
+        return[{ data:AbonoSaved,  status : HttpStatus.OK}]
+   
+      
+
+  }
+
+async getTotalMontoContratoFracc (id:number) {
+    const found = await this.contratosFraccRepository.findOne({where :{id}})
+    const abonos = await this.abonosFraccRepository.find({ 
+    where: {contratosFraccId: found.id}
+      })
+    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
+     found.pagado = (totalMontos + found.enganche)
+    found.penalizaciones = abonos.reduce((total, monto) => total + monto.penalizacion ,0)
+    return this.contratosFraccRepository.save(found) 
+  } 
+async getTotalPenalContratoFracc (id:number) {
+    const found = await this.contratosFraccRepository.findOne({where :{id}})
+    const abonos = await this.abonosFraccRepository.find({ 
+    where: {contratosFraccId: found.id}
+      })
+    const totalMontos = abonos.reduce((total,monto) => total + monto.penalizacion , 0 )
+     const pagado =   found.penalizaciones + totalMontos 
+      found.penalizaciones = pagado 
+
+    return this.contratosFraccRepository.save(found) 
+  } 
+
+async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
+    const abonoFlag = {...abono, contratoId:contratoId }
+    const updatedAbono = await this.abonoRepository.update(
+      { id},
+      {...abonoFlag},
+    )
+    if (updatedAbono.affected=== 0) {
+      throw new BadRequestException({
+        data:null,
+        message: "no se ha podido actualizar",
+        status: HttpStatus.CONFLICT
+      })
+    }
+    await this.getTotalMontoContrato(contratoId)
+    return { data:abonoFlag , status: HttpStatus.OK}
+  }
+
+ 
+
+
 }
 

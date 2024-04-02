@@ -72,7 +72,7 @@ export class LotesService {
         status: HttpStatus.NOT_FOUND,
       });
     }
-
+  
 	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${fracc.clave}${manzana.numero}${lote.numero}`}
 	const newItem = await this.lotesRepository.create({...newFlag})
 	const Saved = await this.lotesRepository.save({...newItem})

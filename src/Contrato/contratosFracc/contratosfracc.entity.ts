@@ -30,6 +30,9 @@ export class ContratosFracc {
   costo: number;
 
   @Column()
+  costoneto: number
+
+  @Column()
   descuento: number;
 
   @Column()
@@ -47,6 +50,9 @@ export class ContratosFracc {
   @Column( {type:'float'})
   interesanual: number;
 
+  @Column()
+  penalizaciones:number
+   
   @Column()
   pagomensual: number
 

@@ -3,6 +3,7 @@ import { AbonoService } from "./abonos.service";
 import { CreatAbonoDto } from "./dto/abono.dto";
 import { AuthGuard } from "src/auth/auth.guard";
 import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
+import { createAbonoFraccDto } from "./abonofracc/dto/abonofracc.dto";
 
 
 
@@ -26,7 +27,12 @@ export class AbonosController {
 		return this.abonoService.getAbonobyId(id)
 	}
 
-	
+	@Post('/contratoFracc/:id')
+	createAbonoFracc(
+		@Param("id", ParseIntPipe) id:number,
+		@Body() abonoFracc: createAbonoFraccDto){
+		return this.abonoService.createAbonoFracc(abonoFracc ,id)
+	}
 
 
 	@Get('/usuario/:usuarioId')
@@ -43,6 +49,7 @@ export class AbonosController {
 		@Body() abono: CreatAbonoDto){
 		return this.abonoService.createAbonoContrato(abono ,id)
 	}
+
 
 	@Get('/contrato/:id')
 	getAbonobyEstadoCuenta(

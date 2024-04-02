@@ -5,6 +5,7 @@ import { ClienteNoInteres } from 'src/Cliente/clientesnointeres/clientesnointere
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { ContratosFracc } from 'src/Contrato/contratosFracc/contratosfracc.entity';
 import { ContratosInversionista } from 'src/Contrato/contratosInversionista/contratoinversionista.entity';
+import { ContratosProveedores } from 'src/Contrato/contratosProveedores/contratosproveedores.entity';
 import { ConceptosEgresos } from 'src/Egresoss/conceptosegresos/conceptosegresos.entity';
 import { Egresos } from 'src/Egresoss/egresos/egresos.entity';
 import { FlujoDiarioFraccionamiento } from 'src/Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
@@ -19,6 +20,7 @@ import { PagaresCancelados } from 'src/Pagare/pagarescancelados/pagarescancelado
 import { Parcelas } from 'src/Parcela/parcelas/parcelas.entity';
 import { ParcelasPenalizacion } from 'src/Parcela/parcelaspenalizacion/parcelaspenalizacion.entity';
 import { ParcelasProyectos } from 'src/Parcela/parcelasproyectos/parcelasproyectos.entity';
+import { Proveedores } from 'src/Proveedores/proveedores.entity';
 import { Proyectos } from 'src/Proyecto/proyectos/proyectos.entity';
 import { proyectosproyectos } from 'src/Proyecto/proyectosproyectos/proyectosproyectos.entity';
 import { Abono } from 'src/abonos/abono.entity';
@@ -180,11 +182,14 @@ export class Usuarios {
  @OneToMany(() => ContratosInversionista, (contratoinversionista) => contratoinversionista.usuario)
  ContratosInversionista  : ContratosInversionista[];
  
-
-
-
+ @OneToMany(() => ContratosProveedores, (contratosProveedores) => contratosProveedores.usuario)
+ ContratosProveedores  : ContratosProveedores[];
+ 
  @OneToMany(() => Clientes, (clientes) => clientes.usuario)
   Clientes : Clientes[];
+
+ @OneToMany(() => Proveedores, (proveedores) => proveedores.usuario)
+  Proveedores : Proveedores[];
 
   @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.cliente)
   ClienteNoInteres : ClienteNoInteres[];

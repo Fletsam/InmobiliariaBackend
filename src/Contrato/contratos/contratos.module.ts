@@ -19,6 +19,8 @@ import { EstadoCuentaInversionista } from "src/EstadosCuenta/EstadoCuentaInversi
 import { IngresosInversionista } from "src/Ingresoss/ingresosinversiones/ingresosinversiones.entity";
 import { EgresosInversionista } from "src/Egresoss/egresosinversiones/egresosinversiones.entity";
 import { ContratosInversionista } from "../contratosInversionista/contratoinversionista.entity";
+import { ContratosProveedores } from "../contratosProveedores/contratosproveedores.entity";
+import { Proveedores } from "src/Proveedores/proveedores.entity";
 
 @Module({
 
@@ -41,7 +43,9 @@ import { ContratosInversionista } from "../contratosInversionista/contratoinvers
 		IngresosInversionista,
 		EgresosInversionista,	
 		Clientes,
-		
+	//Contratos Proveedores//
+		ContratosProveedores,
+		Proveedores
 	]),JwtModule ],
 	controllers: [ ContratoController],
 	providers: [ ContratoService],

@@ -28,6 +28,8 @@ import { IngresosInversionista } from "src/Ingresoss/ingresosinversiones/ingreso
 import { EstadoCuentaInversionista } from "src/EstadosCuenta/EstadoCuentaInversionista/estadocuentainversionista.entity";
 import { EgresosInversionista } from "src/Egresoss/egresosinversiones/egresosinversiones.entity";
 import { CreateEgresosInversionistaDto } from "src/Egresoss/egresosinversiones/dto/egresosinversiones.dto";
+import { ContratosProveedores } from "../contratosProveedores/contratosproveedores.entity";
+import { Proveedores } from "src/Proveedores/proveedores.entity";
 
 @Injectable()
 export class ContratoService {
@@ -51,6 +53,10 @@ export class ContratoService {
 		@InjectRepository(IngresosInversionista) private ingresosInvRepository : Repository<IngresosInversionista>,
 		@InjectRepository(EgresosInversionista) private egresosInvRepository : Repository<EgresosInversionista>,
 		@InjectRepository(EstadoCuentaInversionista) private estadoCuentaContratoInversionistaRepository : Repository<EstadoCuentaInversionista>,
+
+	//contratos Proveedores	
+		@InjectRepository(ContratosProveedores) private contratosProveRepository: Repository<ContratosProveedores>,
+		@InjectRepository(Proveedores) private proveedoresRepository : Repository<Proveedores>,
 	) {}
 	
 
@@ -150,14 +156,14 @@ export class ContratoService {
 	
 	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
 	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
-	const monto = Found.IngresosContratos.reduce((monto, item) => monto + item.montoingreso,0 )
-		Found.pagado = monto
+	const monto = Found.Abonos.reduce((monto, item) => monto + item.montoingreso,0 )
+		Found.pagado = (monto + Found.enganche)
 	const descuento = Found.Abonos.reduce((monto,item) => monto + item.descuento,0 )	
 		Found.descuento = descuento
 
 	const ingresoneto = (Found.montototal - descuento - Found.comision)
 		Found.ingresoneto= ingresoneto
-
+		console.log(Found);
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -263,10 +269,19 @@ export class ContratoService {
 
 	async getContratoByIdFracc(id: number) {
     const Found = await this.contratosFraccRepository.findOne({
-      where: { id }, relations: ["Fraccionamiento"]
+      where: { id }, relations: ["Fraccionamiento", "AbonosFracc" ]
     });
 	
-		
+		const montoIngreso = Found.AbonosFracc.reduce((monto, item)=> monto + item.montoingreso,0)
+			Found.pagado = (montoIngreso+Found.enganche)
+		const penalizaciones = Found.AbonosFracc.reduce((monto,item)=> monto + item.penalizacion , 0)
+			Found.penalizaciones = penalizaciones
+
+		const costoneto = (Found.montototal + Found.comision + Found.penalizaciones )
+			Found.costoneto = costoneto	
+		const newFlag = {...Found}
+		const Flag = await this.contratosFraccRepository.create(newFlag)
+		await this.contratosFraccRepository.save(Flag)
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -278,8 +293,9 @@ export class ContratoService {
   }
 
 	async getContratosFracc() {
-	const items = await this.contratosFraccRepository.find({relations:["Fraccionamiento"]})
-	return {data : items, status: HttpStatus.OK }
+	const Found = await this.contratosFraccRepository.find({relations:["Fraccionamiento"]})
+
+	return {data : Found, status: HttpStatus.OK }
 	}
 
 

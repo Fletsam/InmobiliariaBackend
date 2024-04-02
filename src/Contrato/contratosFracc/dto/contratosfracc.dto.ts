@@ -5,12 +5,14 @@ id: number;
   metros2: number;
   preciom2: number;
   costo: number;
+  costoneto: number
   descuento: number;
   enganche: number;
   comision: number
   resto: number;
   pagosafinanciar: number;
   interesanual: number;
+  penalizaciones:number
   pagomensual: number;
   montototal: number;
   inicio: Date;
