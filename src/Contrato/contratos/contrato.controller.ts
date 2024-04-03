@@ -5,6 +5,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { CreateContratoFracc } from "../contratosFracc/dto/contratosfracc.dto";
 import { ContratosInversionista } from "../contratosInversionista/contratoinversionista.entity";
 import { CreateContratoInversionistaDto } from "../contratosInversionista/dto/contratoinversionista.dto";
+import { createContratoProveedorDto } from "../contratosProveedores/dto/contratosproveedores.dto";
 
 
 @Controller('contratos')
@@ -31,6 +32,18 @@ export class ContratoController {
 		return this.ContratoService.getContratosFracc()
 
 	}
+	@Get('/prov/:id')
+	getContratoProv(
+		@Param('id',ParseIntPipe) id:number,
+	)
+	{
+		return this.ContratoService.getContratosProvbyId(id)	
+	}
+	@Get('/prov')
+	getContratosProv()
+	{
+		return this.ContratoService.getContratosProv()	
+	}
 	@Get('/inv/:id')
 	getContratoInv(
 		@Param('id',ParseIntPipe) id:number,
@@ -51,6 +64,8 @@ export class ContratoController {
 	{
 		return this.ContratoService.getContratoById(id)	
 	}
+
+	
 
 	@Post('/lote/:id')
 	createContratoLote(
@@ -77,6 +92,16 @@ export class ContratoController {
 	) {
 		{
 			return this.ContratoService.createContratoInversionista(ContratosInversionista, id)
+		}
+	} 
+
+	@Post('/proveedor/:id')
+	createContratoProv(
+		@Body() contratosProveedor:createContratoProveedorDto ,
+		@Param('id',ParseIntPipe) id:number,
+	) {
+		{
+			return this.ContratoService.createContratoProveedor(contratosProveedor, id)
 		}
 	} 
 }

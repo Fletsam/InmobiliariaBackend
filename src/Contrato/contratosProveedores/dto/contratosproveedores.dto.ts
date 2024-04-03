@@ -6,6 +6,7 @@ export class createContratoProveedorDto {
     resto: number;
     pagosafinanciar: number;
     interesanual: number;
+    montointereses:number
     pagomensual: number;
     montototal: number;
     inicio: Date;

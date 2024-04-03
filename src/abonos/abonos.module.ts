@@ -11,6 +11,8 @@ import { EgresosContratos } from "src/Egresoss/egresoscontratos/egresoscontratos
 import { EstadoCuentaContrato } from "src/EstadosCuenta/EstadoCuentaContrato/estadocuentacontrato.entity";
 import { ContratosFracc } from "src/Contrato/contratosFracc/contratosfracc.entity";
 import { AbonosFracc } from "./abonofracc/abonofracc.entity";
+import { AbonosProv } from "./abonoprov/abonoprov.entity";
+import { ContratosProveedores } from "src/Contrato/contratosProveedores/contratosproveedores.entity";
 @Module({
 
 	imports: [TypeOrmModule.forFeature([
@@ -21,7 +23,9 @@ import { AbonosFracc } from "./abonofracc/abonofracc.entity";
 		EgresosContratos,
 		EstadoCuentaContrato,
 		ContratosFracc,
-		AbonosFracc
+		AbonosFracc,
+		AbonosProv,
+		ContratosProveedores
 	]), JwtModule],
 	controllers: [ AbonosController],
 	providers: [ AbonoService],

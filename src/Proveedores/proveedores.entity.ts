@@ -16,6 +16,9 @@ export class Proveedores {
 	telefono:string
 
 	@Column()
+	rubro:string
+
+	@Column()
 	direccion:string
 
 	@Column()

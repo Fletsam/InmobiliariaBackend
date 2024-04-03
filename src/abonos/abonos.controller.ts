@@ -4,6 +4,7 @@ import { CreatAbonoDto } from "./dto/abono.dto";
 import { AuthGuard } from "src/auth/auth.guard";
 import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 import { createAbonoFraccDto } from "./abonofracc/dto/abonofracc.dto";
+import { createAbonoProvDto } from "./abonoprov/dto/abonoprov.dto";
 
 
 
@@ -32,6 +33,13 @@ export class AbonosController {
 		@Param("id", ParseIntPipe) id:number,
 		@Body() abonoFracc: createAbonoFraccDto){
 		return this.abonoService.createAbonoFracc(abonoFracc ,id)
+	}
+	
+	@Post('/contratoProv/:id')
+	createAbonoProv(
+		@Param("id", ParseIntPipe) id:number,
+		@Body() abonosProv: createAbonoProvDto){
+		return this.abonoService.createAbonoProv(abonosProv ,id)
 	}
 
 

@@ -1,5 +1,5 @@
 
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { ProveedorService } from "./proveedor.service";
 import { createProveedorDto } from "./dto/proveedor.dto";
 
@@ -14,10 +14,16 @@ export class ProveedorController {
 		return this.proveedorService.getProveedores()
 	}
 
-	@Get('')
+	@Get(':id')
 	getProveedorbyId(
 		@Param('id', ParseIntPipe) id:number) {
 		return this.proveedorService.getProveedorById(id)
+	}
+
+	@Delete(':id')
+	deleteProveedorbyId(
+		@Param('id', ParseIntPipe) id:number) {
+		return this.proveedorService.deleteProveedor(id)
 	}
 
 	@Post()

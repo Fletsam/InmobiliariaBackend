@@ -28,19 +28,8 @@ export class ProveedorService {
 	async getProveedorById(id: number) {
     
     const Found = await this.proveedorRepository.findOne({
-      where: { id }
+      where: { id }, relations: ["ContratosProveedores"]
     });
-
-    const usuario = await this.usuariosRepository.findOne({where:{id:Found.usuarioId}})
-  
-
-    if (usuario.id !== Found.usuarioId) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Cliente not found',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
     return Found;
   }
 
@@ -53,7 +42,7 @@ export class ProveedorService {
 	return{ data:Saved, status : HttpStatus.OK}
   }
 
-async deleteCliente(id: number ){
+async deleteProveedor(id: number ){
 	await this.proveedorRepository.delete(id)
 
 	return{  status : HttpStatus.OK}

@@ -2,6 +2,7 @@
 	id?: number;
     nombre: string;
     telefono: string;
+    rubro:string
     direccion: string;
     rfc: string;
     correo: string;

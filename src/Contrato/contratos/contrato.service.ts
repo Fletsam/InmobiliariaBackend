@@ -30,6 +30,7 @@ import { EgresosInversionista } from "src/Egresoss/egresosinversiones/egresosinv
 import { CreateEgresosInversionistaDto } from "src/Egresoss/egresosinversiones/dto/egresosinversiones.dto";
 import { ContratosProveedores } from "../contratosProveedores/contratosproveedores.entity";
 import { Proveedores } from "src/Proveedores/proveedores.entity";
+import { createContratoProveedorDto } from "../contratosProveedores/dto/contratosproveedores.dto";
 
 @Injectable()
 export class ContratoService {
@@ -409,6 +410,58 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
       });
     }
     return Found;
+  }
+ //---------------------Proveedores Contratos --------------------------///
+
+ async createContratoProveedor(contratoProveedor: createContratoProveedorDto, id:number ){
+	const proveedor = await this.proveedoresRepository.findOne({where:{id}})
+	const montodeinteres = ((contratoProveedor.pagosafinanciar/12)*contratoProveedor.interesanual)*contratoProveedor.credito
+	const TotalconIntereses = ((contratoProveedor.credito)+(montodeinteres))
+	/* const TotalReal = (precioTotalpormetro2+montodeinteres) */
+	const pagoMensual = (contratoProveedor.credito+montodeinteres)/contratoProveedor.pagosafinanciar
+
+	const newFlag:createContratoProveedorDto = { 
+		...contratoProveedor,
+		fhcreacion: new Date(),  
+		proveedorId : proveedor.id ,   
+		montototal: TotalconIntereses , 
+		montointereses: montodeinteres,
+		pagomensual: pagoMensual,
+	}
+
+
+	
+	const newItem = await this.contratosProveRepository.create({...newFlag})
+	const Saved = await this.contratosProveRepository.save({...newItem})
+		return{ data:Saved, status : HttpStatus.OK}
+  }
+
+  async getContratosProv() {
+    const Found = await this.contratosProveRepository.find( { relations: ["proveedor"]});
+	
+    if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return {data : Found, status: HttpStatus.OK }
+  }
+
+  async getContratosProvbyId(id:number) {
+    const Found = await this.contratosProveRepository.findOne({
+      where: { id }, relations: ["proveedor" , "AbonosProv"]
+    });
+	
+    if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return {data : Found, status: HttpStatus.OK }
   }
 
 
