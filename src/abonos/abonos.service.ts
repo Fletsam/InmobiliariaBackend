@@ -130,17 +130,23 @@ async createAbonoContrato(abono: CreatAbonoDto , id:number){
     return this.contratoRepository.save(found) 
   }  
 
-
+async deleteAbonoContrato(id:number){
+  await this.abonoRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
 // Abonos Fraccs ------------------------------------------------------------------------------------------------------------------------------
 
 
 async createAbonoFracc(abono: createAbonoFraccDto , id:number){
       const contratoFracc = await this.contratosFraccRepository.findOne({where : {id}})
-      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+      const newAbonoFlag = { ...abono,contratosFraccId:contratoFracc.id, fhcreacion: new Date()}
+      
         const saldo =  (contratoFracc.costoneto - (newAbonoFlag.montoingreso +  contratoFracc.pagado - (newAbonoFlag.penalizacion)) )
-        const newAbono = await this.abonosFraccRepository.create({...newAbonoFlag , saldo:saldo, contratosFraccId:contratoFracc.id })
+        const newAbono = await this.abonosFraccRepository.create({...newAbonoFlag , saldo:saldo})
         const AbonoSaved = await this.abonosFraccRepository.save({...newAbono })
-        await this.getTotalMontoContratoFracc(AbonoSaved.contratosFraccId)
+      await this.getTotalMontoContratoFracc(newAbonoFlag.contratosFraccId)
         return[{ data:AbonoSaved,  status : HttpStatus.OK}]
    
   }
@@ -167,6 +173,13 @@ async getTotalPenalContratoFracc (id:number) {
     return this.contratosFraccRepository.save(found) 
   } 
 
+  async deleteAbonoContratoFracc(id:number){
+  await this.abonosFraccRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
+
 // Abonos Proveedores ------------------------------------------------------------------------------------------------------------------------------
 
 async createAbonoProv(abono: createAbonoProvDto , id:number){
@@ -187,13 +200,21 @@ async getTotalMontoContratoProv (id:number) {
     const abonos = await this.abonosProvRepository.find({ 
     where: {contratosProveedoresId: found.id}
       })
+   
     const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
-    found.pagado = totalMontos 
+    found.pagado = (totalMontos+found.enganche) 
     const credito  = abonos.reduce((total, monto) => total + monto.credito ,0)
      found.credito =  credito + found.montototal 
     return this.contratosProvRepository.save(found) 
   } 
+ async deleteAbonoContratoProv(id:number){
+  await this.abonosProvRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
 
+ //--------------------------------------------------------------------------------------------------------------------------------------------v 
 
 async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
     const abonoFlag = {...abono, contratoId:contratoId }

@@ -164,7 +164,10 @@ export class ContratoService {
 
 	const ingresoneto = (Found.montototal - descuento - Found.comision)
 		Found.ingresoneto= ingresoneto
-		console.log(Found);
+		
+		const newFlag = {...Found}
+		const Flag = await this.contratosRepository.create(newFlag)
+		await this.contratosRepository.save(Flag)
     if (!Found) {
       throw new BadRequestException({
         data: null,
@@ -454,6 +457,15 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
       where: { id }, relations: ["proveedor" , "AbonosProv"]
     });
 	
+		const montoIngreso = Found.AbonosProv.reduce((monto, item)=> monto + item.montoingreso,0)
+			Found.pagado = (montoIngreso+Found.enganche)
+		const credito = Found.AbonosProv.reduce((monto,item)=> monto + item.credito , 0)
+			Found.credito = Found.montototal + credito 
+
+		const newFlag = {...Found}
+		const Flag = await this.contratosProveRepository.create(newFlag)
+		await this.contratosProveRepository.save(Flag)
+
     if (!Found) {
       throw new BadRequestException({
         data: null,

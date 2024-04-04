@@ -26,8 +26,6 @@ export class ClientesService {
 	return {data : items, status: HttpStatus.OK }
 	}
 	
-
-  
   async getClientesbyUsuario(id: number) {
 
     const Found = await this.usuariosRepository.findOne({where:{id}})

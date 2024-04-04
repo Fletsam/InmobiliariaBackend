@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { AbonoService } from "./abonos.service";
 import { CreatAbonoDto } from "./dto/abono.dto";
 import { AuthGuard } from "src/auth/auth.guard";
@@ -28,11 +28,27 @@ export class AbonosController {
 		return this.abonoService.getAbonobyId(id)
 	}
 
+	@Delete('contrato/:id')
+	deleteAbono(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.deleteAbonoContrato(id)
+	}
+
 	@Post('/contratoFracc/:id')
 	createAbonoFracc(
 		@Param("id", ParseIntPipe) id:number,
 		@Body() abonoFracc: createAbonoFraccDto){
 		return this.abonoService.createAbonoFracc(abonoFracc ,id)
+	}
+
+	@Delete('/contratoFracc/:id')
+	deleteAbonoFracc(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.deleteAbonoContratoFracc(id)
 	}
 	
 	@Post('/contratoProv/:id')
@@ -40,6 +56,14 @@ export class AbonosController {
 		@Param("id", ParseIntPipe) id:number,
 		@Body() abonosProv: createAbonoProvDto){
 		return this.abonoService.createAbonoProv(abonosProv ,id)
+	}
+
+	@Delete('/contratoProv/:id')
+	deleteAbonoProv(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.deleteAbonoContratoProv(id)
 	}
 
 
