@@ -1,7 +1,7 @@
 import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { ContratosProveedores } from 'src/Contrato/contratosProveedores/contratosproveedores.entity';
 import { Usuarios } from 'src/usuarios/usuarios.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Proveedores {
@@ -33,10 +33,12 @@ export class Proveedores {
 	@Column()
 	usuarioId: number;
 
-	@OneToMany(() => ContratosProveedores, (contratosProveedores) => contratosProveedores.proveedor)
-  	ContratosProveedores : ContratosProveedores[];
 
-
+	@OneToOne(() => ContratosProveedores,(contrato)=> contrato.proveedores )
+	contratosProveedores: ContratosProveedores[]
+	@JoinColumn()
+	@Column()
+	contratosProveedoresId: number
 
 
 }

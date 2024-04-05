@@ -7,6 +7,7 @@
     rfc: string;
     correo: string;
     usuarioId: number;
+    contratosProveedoresId:number
 } 	
 	
 	

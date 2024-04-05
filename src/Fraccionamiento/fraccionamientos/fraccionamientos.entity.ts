@@ -70,7 +70,7 @@ export class Fraccionamientos {
 
 
 	@OneToOne(() => ContratosFracc,(contrato)=> contrato.Fraccionamiento )
-	contratosFracc: ContratosFracc
+	contratosFracc: ContratosFracc[]
 	@JoinColumn()
 	@Column()
 	contratoFraccId: number

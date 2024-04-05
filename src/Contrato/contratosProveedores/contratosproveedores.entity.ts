@@ -1,7 +1,7 @@
 import { Proveedores } from "src/Proveedores/proveedores.entity";
 import { AbonosProv } from "src/abonos/abonoprov/abonoprov.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ContratosProveedores {
@@ -50,17 +50,18 @@ export class ContratosProveedores {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   fhcreacion: Date;
 
+
+  @OneToOne(() => Proveedores , (proveedor) => proveedor.contratosProveedores )
+  @JoinColumn()
+  proveedores: Proveedores
+  @Column()
+  proveedoresId: number;
+
   @ManyToOne(() => Usuarios, (usuario) => usuario.ContratosProveedores) 
   usuario : Usuarios
 
   @Column()
   usuarioId: number;
-
-  @ManyToOne(() => Proveedores, (proveedores) => proveedores.ContratosProveedores) 
-  proveedor : Proveedores
-  
-  @Column()
-  proveedorId: number;
 
   @OneToMany(() => AbonosProv, (abono) => abono.contratosProveedores) 
   AbonosProv : AbonosProv[]

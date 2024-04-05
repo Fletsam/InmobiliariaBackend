@@ -31,6 +31,7 @@ import { CreateEgresosInversionistaDto } from "src/Egresoss/egresosinversiones/d
 import { ContratosProveedores } from "../contratosProveedores/contratosproveedores.entity";
 import { Proveedores } from "src/Proveedores/proveedores.entity";
 import { createContratoProveedorDto } from "../contratosProveedores/dto/contratosproveedores.dto";
+import { AbonosProv } from "src/abonos/abonoprov/abonoprov.entity";
 
 @Injectable()
 export class ContratoService {
@@ -425,6 +426,7 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 
 	const newFlag:createContratoProveedorDto = { 
 		...contratoProveedor,
+		id:proveedor.id,
 		fhcreacion: new Date(),  
 		proveedorId : proveedor.id ,   
 		montototal: TotalconIntereses , 
@@ -440,7 +442,7 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
   }
 
   async getContratosProv() {
-    const Found = await this.contratosProveRepository.find( { relations: ["proveedor"]});
+    const Found = await this.contratosProveRepository.find( { relations: ["proveedores", "AbonosProv"]});
 	
     if (!Found) {
       throw new BadRequestException({
@@ -454,17 +456,20 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 
   async getContratosProvbyId(id:number) {
     const Found = await this.contratosProveRepository.findOne({
-      where: { id }, relations: ["proveedor" , "AbonosProv"]
+      where: { id }, relations: ["proveedores" , "AbonosProv"]
     });
 	
-		const montoIngreso = Found.AbonosProv.reduce((monto, item)=> monto + item.montoingreso,0)
+		if (AbonosProv.length) {
+				const montoIngreso = Found?.AbonosProv?.reduce((monto, item)=> monto + item.montoingreso,0)
 			Found.pagado = (montoIngreso+Found.enganche)
-		const credito = Found.AbonosProv.reduce((monto,item)=> monto + item.credito , 0)
+		const credito = Found?.AbonosProv?.reduce((monto,item)=> monto + item.credito , 0)
 			Found.credito = Found.montototal + credito 
 
 		const newFlag = {...Found}
 		const Flag = await this.contratosProveRepository.create(newFlag)
 		await this.contratosProveRepository.save(Flag)
+		}
+		
 
     if (!Found) {
       throw new BadRequestException({

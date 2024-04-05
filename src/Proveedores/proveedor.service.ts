@@ -35,8 +35,11 @@ export class ProveedorService {
 
   async createProveedor(proveedor: createProveedorDto ){
 
-	const newFlag = { ...proveedor, fhcreacion: new Date(), fhmodificacion: new Date()  }
+	const newFlag = { ...proveedor,  fhcreacion: new Date(), fhmodificacion: new Date()  }
+  
+  
 	const newItem = await this.proveedorRepository.create({...newFlag})
+ 
 	const Saved = await this.proveedorRepository.save({...newItem})
 
 	return{ data:Saved, status : HttpStatus.OK}
