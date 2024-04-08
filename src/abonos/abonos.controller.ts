@@ -20,6 +20,11 @@ export class AbonosController {
 		return this.abonoService.getAbonos()
 	}
 	
+	@Get('mes')
+	getAbonosMes() {
+		return this.abonoService.getAbonosMes()
+	}
+
 	@Get(':id')
 	getAbono(
 		@Param('id', ParseIntPipe) id: number,
@@ -27,6 +32,8 @@ export class AbonosController {
 		
 		return this.abonoService.getAbonobyId(id)
 	}
+
+
 
 	@Delete('contrato/:id')
 	deleteAbono(

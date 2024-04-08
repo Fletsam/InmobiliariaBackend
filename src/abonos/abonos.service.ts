@@ -43,6 +43,17 @@ async getAbonos() {
 	const abonos = await this.abonoRepository.find()
 	return {data : abonos, status: HttpStatus.OK }
 }
+async getAbonosMes() {
+	const abonos = await this.abonoRepository.find()
+  const fechaActual = new Date();
+  const mesActual = fechaActual.getMonth() + 1;
+  const objetosMes = abonos.filter(objeto => {
+  const fecha = new Date(objeto.fhcreacion);
+  return fecha.getMonth() + 1 === mesActual; // +1 porque getMonth() retorna el índice del mes (0-11)
+});
+
+	return {data : objetosMes, status: HttpStatus.OK }
+}
 
 async getAbonosByUsuario(id:number) {
   const foundUsuario = await this.usuarioRepository.findOne( {where: {id}} ) 
@@ -66,7 +77,7 @@ async getAbonosByEstadoCuenta(id:number) {
 
 async getAbonobyId(id: number) {
     const AbonoFound = await this.abonoRepository.findOne({
-      where: { id },
+      where: { id } , relations: ["contrato" ,"contrato.clientes"]
     });
     if (!AbonoFound) {
       throw new BadRequestException({

@@ -180,7 +180,7 @@ export class ContratoService {
   }
 
   async getContratosLote() {
-	const items = await this.contratosRepository.find({relations:["Lote","clientes"]})
+	const items = await this.contratosRepository.find({relations:["Lote","clientes","Abonos"]})
 
 	return {data : items, status: HttpStatus.OK }
 	}
