@@ -24,8 +24,14 @@ export class AbonosController {
 	getAbonosMes() {
 		return this.abonoService.getAbonosMes()
 	}
+	@Get('mes/:id')
+	getAbonosMesbyId(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		return this.abonoService.getAbonoMesId(id)
+	}
 
-	@Get(':id')
+	@Get('contrato/:id')
 	getAbono(
 		@Param('id', ParseIntPipe) id: number,
 	) {
@@ -50,6 +56,13 @@ export class AbonosController {
 		return this.abonoService.createAbonoFracc(abonoFracc ,id)
 	}
 
+	@Get('fracc/:id')
+	getAbonoFracc(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonoFraccbyId(id)
+	}
 	@Delete('/contratoFracc/:id')
 	deleteAbonoFracc(
 		@Param('id', ParseIntPipe) id: number,
@@ -57,7 +70,18 @@ export class AbonosController {
 		
 		return this.abonoService.deleteAbonoContratoFracc(id)
 	}
-	
+	@Get('prov/:id')
+	getAbonoProv(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonoProvbyId(id)
+	}
+	@Get('prov')
+	getAbonosProv() {
+		
+		return this.abonoService.getAbonosProv()
+	}
 	@Post('/contratoProv/:id')
 	createAbonoProv(
 		@Param("id", ParseIntPipe) id:number,

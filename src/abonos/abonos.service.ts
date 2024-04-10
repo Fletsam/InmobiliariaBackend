@@ -45,23 +45,32 @@ async getAbonos() {
 }
 async getAbonosMes() {
   
-	const abonos = await this.abonoRepository.find()
-  const abonosProv = await this.abonosProvRepository.find()
-  const abonosFracc = await this.abonosFraccRepository.find()
+	const abonos = await this.abonoRepository.find( { relations: ["contrato" ,"contrato.clientes"]})
+ 
   
-  const abonosLot = abonos.map( (item ) =>  ({ id:item.id}))
-  const abonosprov = abonosProv.map((item) => ({ id:item.id}))
-  const abonosfracc = abonosFracc.map((item) => ({ id:item.id}))
+  const abonosProv = await this.abonosProvRepository.find( {relations: ["contratosProveedores.proveedores"]})
+  const abonosFracc = await this.abonosFraccRepository.find(  {relations: ["contratosFracc.Fraccionamiento"]})
   
-  abonosLot.concat(abonosprov,abonosfracc)
+  const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
+ 
+  const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
+  const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
+  
+  const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
+  const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
+  const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
+ 
+  
+  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc)
+  
   const fechaActual = new Date();
-  const mesActual = fechaActual.getMonth() + 1;
-  const objetosMes = abonosLot.filter(objeto => {
-  const fecha = new Date(objeto.fhcreacion);
-  return fecha.getMonth() + 1 === mesActual; // +1 porque getMonth() retorna el índice del mes (0-11)
+  const mesActual = fechaActual?.getMonth() + 1;
+  const objetosMes = allabonos?.filter(objeto => {
+  const fecha = new Date(objeto?.fhcreacion);
+  return fecha?.getMonth() + 1 === mesActual;
 });
-
-	return {data : objetosMes.length, status: HttpStatus.OK }
+  
+	return {data : objetosMes , ultimoAbonoFracc: ultimoAbonoFracc?.id , ultimoAbonoLot:ultimoAbonoLot?.id, ultimoAbonoProv:ultimoAbonoProv?.id , status: HttpStatus.OK }
 }
 
 async getAbonosByUsuario(id:number) {
@@ -200,17 +209,44 @@ async getTotalPenalContratoFracc (id:number) {
  */ return{ status : HttpStatus.OK}
 }
 
+async getAbonosFracc() {
+    const AbonoFound = await this.abonosProvRepository.find({ relations: ["contratosProveedores" ,"contratosProveedores.proveedores"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound;
+  }
+
+async getAbonoFraccbyId(id: number) {
+    const AbonoFound = await this.abonosFraccRepository.findOne({
+      where: { id } , relations: ["contratosFracc" ,"contratosFracc.Fraccionamiento"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
+
 // Abonos Proveedores ------------------------------------------------------------------------------------------------------------------------------
 
 async createAbonoProv(abono: createAbonoProvDto , id:number){
       const contratoProv = await this.contratosProvRepository.findOne({where : {id}})
       const newAbonoFlag = { ...abono, fhcreacion: new Date()}
-      console.log(contratoProv);
       
         const saldo = (contratoProv.credito - (newAbonoFlag.montoingreso +  contratoProv.pagado - newAbonoFlag.credito) )
         const newAbono = await this.abonosProvRepository.create({...newAbonoFlag , saldo:saldo, contratosProveedoresId:contratoProv.id })
         const AbonoSaved = await this.abonosProvRepository.save({...newAbono })
         await this.getTotalMontoContratoProv(AbonoSaved.contratosProveedoresId)
+        await this.getAbonosMes()
         return[{ data:AbonoSaved,  status : HttpStatus.OK}]
    
   }
@@ -234,6 +270,32 @@ async getTotalMontoContratoProv (id:number) {
  */ return{ status : HttpStatus.OK}
 }
 
+async getAbonosProv() {
+    const AbonoFound = await this.abonosProvRepository.find({ relations: ["contratosProveedores" ,"contratosProveedores.proveedores"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound;
+  }
+
+async getAbonoProvbyId(id: number) {
+    const AbonoFound = await this.abonosProvRepository.findOne({
+      where: { id } , relations: ["contratosProveedores" ,"contratosProveedores.proveedores"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
  //--------------------------------------------------------------------------------------------------------------------------------------------v 
 
 async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
@@ -254,7 +316,20 @@ async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
   }
 
  
-
+  async getAbonoMesId(id: number) {
+    const AbonosFound = await this.getAbonosMes()
+    const AbonoFound = AbonosFound.data.filter((abono) => abono.id === id   )
+    
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
 
 }
+
 
