@@ -19,7 +19,7 @@ export class ProveedorService {
 	
 	
 	async getProveedores() {
-	const items = await this.proveedorRepository.find()
+	const items = await this.proveedorRepository.find({relations:["contratosProveedores"]})
   
 	return {data : items, status: HttpStatus.OK }
 	}
@@ -28,7 +28,7 @@ export class ProveedorService {
 	async getProveedorById(id: number) {
     
     const Found = await this.proveedorRepository.findOne({
-      where: { id }, relations: ["ContratosProveedores"]
+      where: { id }, relations: ["contratosProveedores"]
     });
     return Found;
   }

@@ -8,5 +8,6 @@ export class CreatAbonoDto {
   usuarioId?: number;
   fhcreacion: Date;
   contratoid?:number
+  folio:string
 
 }

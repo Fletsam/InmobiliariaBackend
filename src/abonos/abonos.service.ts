@@ -44,15 +44,24 @@ async getAbonos() {
 	return {data : abonos, status: HttpStatus.OK }
 }
 async getAbonosMes() {
+  
 	const abonos = await this.abonoRepository.find()
+  const abonosProv = await this.abonosProvRepository.find()
+  const abonosFracc = await this.abonosFraccRepository.find()
+  
+  const abonosLot = abonos.map( (item ) =>  ({ id:item.id}))
+  const abonosprov = abonosProv.map((item) => ({ id:item.id}))
+  const abonosfracc = abonosFracc.map((item) => ({ id:item.id}))
+  
+  abonosLot.concat(abonosprov,abonosfracc)
   const fechaActual = new Date();
   const mesActual = fechaActual.getMonth() + 1;
-  const objetosMes = abonos.filter(objeto => {
+  const objetosMes = abonosLot.filter(objeto => {
   const fecha = new Date(objeto.fhcreacion);
   return fecha.getMonth() + 1 === mesActual; // +1 porque getMonth() retorna el índice del mes (0-11)
 });
 
-	return {data : objetosMes, status: HttpStatus.OK }
+	return {data : objetosMes.length, status: HttpStatus.OK }
 }
 
 async getAbonosByUsuario(id:number) {

@@ -24,6 +24,8 @@ export class AbonosFracc {
   @Column()
   saldo:number
 
+  @Column()
+  folio:string
 
   @CreateDateColumn({
     name: 'fechadecreacion',

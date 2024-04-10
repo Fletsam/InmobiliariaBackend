@@ -8,4 +8,5 @@ export class createAbonoProvDto {
   fechaCreacion: Date;
   contratosProveedoresId: number;
   usuarioId: number;
+  folio:string
 }

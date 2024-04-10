@@ -20,6 +20,9 @@ export class Abono {
   concepto:string
 
   @Column()
+  folio:string
+
+  @Column()
   formadepago:string
 
   @Column()
