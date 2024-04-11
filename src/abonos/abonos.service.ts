@@ -17,6 +17,9 @@ import { AbonosFracc } from "./abonofracc/abonofracc.entity";
 import { ContratosProveedores } from "src/Contrato/contratosProveedores/contratosproveedores.entity";
 import { AbonosProv } from "./abonoprov/abonoprov.entity";
 import { createAbonoProvDto } from "./abonoprov/dto/abonoprov.dto";
+import { CreateAbonoVentasDto } from "./abonoventas/dto/abonoventas.dto";
+import { Vendedores } from "src/vendedores/vendedores.entity";
+import { AbonosVentas } from "./abonoventas/abonoventas.entity";
 
 @Injectable()
 
@@ -35,6 +38,9 @@ export class AbonoService {
   //ContratosProveedores 
     @InjectRepository(ContratosProveedores) private contratosProvRepository: Repository<ContratosProveedores>,
     @InjectRepository(AbonosProv) private abonosProvRepository: Repository<AbonosProv>,
+  //Vendedores  
+    @InjectRepository(Vendedores) private vendedoresRepository: Repository<Vendedores>,
+    @InjectRepository(AbonosVentas) private abonosVentasRepository: Repository<AbonosVentas>,
     ) {}
    
     
@@ -172,7 +178,7 @@ async createAbonoFracc(abono: createAbonoFraccDto , id:number){
       const contratoFracc = await this.contratosFraccRepository.findOne({where : {id}})
       const newAbonoFlag = { ...abono,contratosFraccId:contratoFracc.id, fhcreacion: new Date()}
       
-        const saldo =  (contratoFracc.costoneto - (newAbonoFlag.montoingreso +  contratoFracc.pagado - (newAbonoFlag.penalizacion)) )
+        const saldo =  (contratoFracc.montototal - (newAbonoFlag.montoingreso +  contratoFracc.pagado - (newAbonoFlag.penalizacion)) )
         const newAbono = await this.abonosFraccRepository.create({...newAbonoFlag , saldo:saldo})
         const AbonoSaved = await this.abonosFraccRepository.save({...newAbono })
       await this.getTotalMontoContratoFracc(newAbonoFlag.contratosFraccId)
@@ -296,6 +302,37 @@ async getAbonoProvbyId(id: number) {
     }
     return AbonoFound
   }
+ //Abonos Ventas ---------------------------------------------------------------------------------------------------------------------------------v 
+  async createAbonoVentas(abono: CreateAbonoVentasDto , id:number){
+      const vendedor = await this.vendedoresRepository.findOne({where : {id}})
+      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+        await this.getTotalMontoComisiones(vendedor.id)
+        const saldo = (vendedor.comisiones - (newAbonoFlag.abono + vendedor.pagado - newAbonoFlag.comision) )
+        const newAbono = await this.abonosVentasRepository.create({...newAbonoFlag , saldo:saldo, vendedorId:vendedor.id })
+        const AbonoSaved = await this.abonosVentasRepository.save({...newAbono })
+        await this.getTotalMontoComisiones(vendedor.id)
+        return[{ data:AbonoSaved,  status : HttpStatus.OK}]
+   
+  }
+ async getTotalMontoComisiones (id:number) {
+    const found = await this.vendedoresRepository.findOne({where :{id}})
+    const abonos = await this.abonosVentasRepository.find({ 
+    where: { vendedorId: found.id}
+      })
+   
+    const totalMontos = abonos.reduce((total,monto) => total + monto.abono , 0 )
+    found.pagado = (totalMontos) 
+    const comisiones  = abonos.reduce((total, monto) => total + monto.comision ,0)
+     found.comisiones =  comisiones 
+    return this.vendedoresRepository.save(found) 
+  } 
+  async deleteAbonoVentas(id:number){
+  await this.abonosVentasRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
+ 
  //--------------------------------------------------------------------------------------------------------------------------------------------v 
 
 async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){

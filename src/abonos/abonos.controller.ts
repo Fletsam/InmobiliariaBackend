@@ -5,6 +5,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 import { createAbonoFraccDto } from "./abonofracc/dto/abonofracc.dto";
 import { createAbonoProvDto } from "./abonoprov/dto/abonoprov.dto";
+import { CreateAbonoVentasDto } from "./abonoventas/dto/abonoventas.dto";
 
 
 
@@ -19,6 +20,7 @@ export class AbonosController {
 		
 		return this.abonoService.getAbonos()
 	}
+
 	
 	@Get('mes')
 	getAbonosMes() {
@@ -38,8 +40,6 @@ export class AbonosController {
 		
 		return this.abonoService.getAbonobyId(id)
 	}
-
-
 
 	@Delete('contrato/:id')
 	deleteAbono(
@@ -113,14 +113,28 @@ export class AbonosController {
 		return this.abonoService.createAbonoContrato(abono ,id)
 	}
 
+	@Post('/vendedores/:id')
+	createAbonoVentas(
+		@Param("id", ParseIntPipe) id:number,
+		@Body() abono: CreateAbonoVentasDto){
+		return this.abonoService.createAbonoVentas(abono, id)
+	}
 
-	@Get('/contrato/:id')
+	@Delete('/vendedores/:id')
+	deleteAbonoVenta(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.deleteAbonoVentas(id)
+	}
+
+	/* @Get('/contrato/:id')
 	getAbonobyEstadoCuenta(
 		@Param('id', ParseIntPipe) id: number,
 	) {
 		
 		return this.abonoService.getAbonosByEstadoCuenta(id)
-	}
+	} */
 
 	@Patch('/contrato/:contratoid/:id')
 	updateAbono(

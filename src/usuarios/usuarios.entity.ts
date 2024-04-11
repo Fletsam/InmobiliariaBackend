@@ -26,11 +26,13 @@ import { proyectosproyectos } from 'src/Proyecto/proyectosproyectos/proyectospro
 import { Abono } from 'src/abonos/abono.entity';
 import { AbonosFracc } from 'src/abonos/abonofracc/abonofracc.entity';
 import { AbonosProv } from 'src/abonos/abonoprov/abonoprov.entity';
+import { AbonosVentas } from 'src/abonos/abonoventas/abonoventas.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
 import { Moratorio } from 'src/moratorio/moratorio.entity';
 import { Privilegios } from 'src/privilegios/privilegios.entity';
 
 import { Rfcs } from 'src/rfcs/rfcs.entity';
+import { Vendedores } from 'src/vendedores/vendedores.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, CreateDateColumn } from 'typeorm';
 
 @Entity()
@@ -111,9 +113,15 @@ export class Usuarios {
 
   @OneToMany(() => AbonosProv, (abono) => abono.usuario)
   AbonosProv: AbonosProv[];
+  
+  @OneToMany(() => AbonosVentas, (abono) => abono.usuario)
+  AbonosVentas: AbonosVentas[];
 
 @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
+
+  @OneToMany(() => Vendedores, (vendedor) => vendedor.usuario )
+  Vendedores: Vendedores[];
 
 @OneToMany(() => Cajas, (cajas) => cajas.usuario)
   Cajas: Cajas[];
