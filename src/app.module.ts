@@ -92,6 +92,11 @@ import { ProveedorModule } from './Proveedores/proveedor.module';
 import { Vendedores } from './vendedores/vendedores.entity';
 import { AbonosVentas } from './abonos/abonoventas/abonoventas.entity';
 import { VendedoresModule } from './vendedores/vendedores.module';
+import { Gerencia } from './gerencia/gerencia.entity';
+import { AbonosGerencia } from './abonos/abonogerencia/abonogerencia.entity';
+import { GerenciaModule } from './gerencia/gerencia.module';
+import { Dias } from './gerencia/dias/dias.entity';
+import { DiasModule } from './gerencia/dias/dias.module';
 
 @Module({
   imports: 
@@ -184,7 +189,10 @@ import { VendedoresModule } from './vendedores/vendedores.module';
         Proveedores,
         ContratosProveedores,
         Vendedores,
-        AbonosVentas
+        AbonosVentas,
+        Gerencia,
+        AbonosGerencia,
+        Dias
       ],
       synchronize: true,
     }),
@@ -206,7 +214,9 @@ import { VendedoresModule } from './vendedores/vendedores.module';
     AreaModule,
     AbonosInvModule,
     ProveedorModule,
-    VendedoresModule
+    VendedoresModule,
+    GerenciaModule,
+    DiasModule
   ],
   controllers: [],
   providers: [],

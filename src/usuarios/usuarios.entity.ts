@@ -25,9 +25,11 @@ import { Proyectos } from 'src/Proyecto/proyectos/proyectos.entity';
 import { proyectosproyectos } from 'src/Proyecto/proyectosproyectos/proyectosproyectos.entity';
 import { Abono } from 'src/abonos/abono.entity';
 import { AbonosFracc } from 'src/abonos/abonofracc/abonofracc.entity';
+import { AbonosGerencia } from 'src/abonos/abonogerencia/abonogerencia.entity';
 import { AbonosProv } from 'src/abonos/abonoprov/abonoprov.entity';
 import { AbonosVentas } from 'src/abonos/abonoventas/abonoventas.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
+import { Dias } from 'src/gerencia/dias/dias.entity';
 import { Moratorio } from 'src/moratorio/moratorio.entity';
 import { Privilegios } from 'src/privilegios/privilegios.entity';
 
@@ -117,6 +119,9 @@ export class Usuarios {
   @OneToMany(() => AbonosVentas, (abono) => abono.usuario)
   AbonosVentas: AbonosVentas[];
 
+  @OneToMany(() => AbonosGerencia, (abono) => abono.usuario)
+  AbonosGerencia: AbonosGerencia[];
+
 @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
 
@@ -205,5 +210,8 @@ export class Usuarios {
 
   @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.cliente)
   ClienteNoInteres : ClienteNoInteres[];
+
+  @OneToMany(() => Dias, (dias) => dias.usuario)
+  Dias : Dias[];
 
 }

@@ -128,6 +128,13 @@ export class AbonosController {
 		return this.abonoService.deleteAbonoVentas(id)
 	}
 
+	@Get('vendedores/:id')
+	getAbonoVentas(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonoVentaById(id)
+	}
 	/* @Get('/contrato/:id')
 	getAbonobyEstadoCuenta(
 		@Param('id', ParseIntPipe) id: number,

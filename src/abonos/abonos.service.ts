@@ -20,6 +20,8 @@ import { createAbonoProvDto } from "./abonoprov/dto/abonoprov.dto";
 import { CreateAbonoVentasDto } from "./abonoventas/dto/abonoventas.dto";
 import { Vendedores } from "src/vendedores/vendedores.entity";
 import { AbonosVentas } from "./abonoventas/abonoventas.entity";
+import { Gerencia } from "src/gerencia/gerencia.entity";
+import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
 
 @Injectable()
 
@@ -41,6 +43,9 @@ export class AbonoService {
   //Vendedores  
     @InjectRepository(Vendedores) private vendedoresRepository: Repository<Vendedores>,
     @InjectRepository(AbonosVentas) private abonosVentasRepository: Repository<AbonosVentas>,
+  //Gerencia  
+    @InjectRepository(Gerencia) private gerenciaRepository: Repository<Gerencia>,
+    @InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
     ) {}
    
     
@@ -56,18 +61,20 @@ async getAbonosMes() {
   
   const abonosProv = await this.abonosProvRepository.find( {relations: ["contratosProveedores.proveedores"]})
   const abonosFracc = await this.abonosFraccRepository.find(  {relations: ["contratosFracc.Fraccionamiento"]})
+  const abonosVentas = await this.abonosVentasRepository.find(  {relations: ["vendedor"]})
   
   const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
- 
   const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
   const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
+  const abonosventas = await abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
   
   const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
   const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
   const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
+  const ultimoAbonoVenta = await abonosventas[abonosventas?.length - 1] 
  
   
-  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc)
+  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas)
   
   const fechaActual = new Date();
   const mesActual = fechaActual?.getMonth() + 1;
@@ -76,7 +83,7 @@ async getAbonosMes() {
   return fecha?.getMonth() + 1 === mesActual;
 });
   
-	return {data : objetosMes , ultimoAbonoFracc: ultimoAbonoFracc?.id , ultimoAbonoLot:ultimoAbonoLot?.id, ultimoAbonoProv:ultimoAbonoProv?.id , status: HttpStatus.OK }
+	return {data : objetosMes ,ulitmoAbonoVentas:ultimoAbonoVenta.id, ultimoAbonoFracc: ultimoAbonoFracc?.id , ultimoAbonoLot:ultimoAbonoLot?.id, ultimoAbonoProv:ultimoAbonoProv?.id , status: HttpStatus.OK }
 }
 
 async getAbonosByUsuario(id:number) {
@@ -326,6 +333,22 @@ async getAbonoProvbyId(id: number) {
      found.comisiones =  comisiones 
     return this.vendedoresRepository.save(found) 
   } 
+
+
+  async getAbonoVentaById(id: number) {
+    const AbonoFound = await this.abonosVentasRepository.findOne({
+      where: { id } , relations: ["vendedor"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
+
   async deleteAbonoVentas(id:number){
   await this.abonosVentasRepository.delete(id)
   

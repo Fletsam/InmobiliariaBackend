@@ -15,6 +15,8 @@ import { AbonosProv } from "./abonoprov/abonoprov.entity";
 import { ContratosProveedores } from "src/Contrato/contratosProveedores/contratosproveedores.entity";
 import { Vendedores } from "src/vendedores/vendedores.entity";
 import { AbonosVentas } from "./abonoventas/abonoventas.entity";
+import { Gerencia } from "src/gerencia/gerencia.entity";
+import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
 @Module({
 
 	imports: [TypeOrmModule.forFeature([
@@ -29,7 +31,9 @@ import { AbonosVentas } from "./abonoventas/abonoventas.entity";
 		AbonosProv,
 		ContratosProveedores,
 		Vendedores,
-		AbonosVentas
+		AbonosVentas,
+		Gerencia,
+		AbonosGerencia
 	]), JwtModule],
 	controllers: [ AbonosController],
 	providers: [ AbonoService],
