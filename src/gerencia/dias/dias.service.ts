@@ -13,34 +13,15 @@ export class DiasService {
 	@InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
     ) {}
 
-	async  formatearFecha(fecha) {
-  const dia = fecha.getDate();
-  const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0
-  const año = fecha.getFullYear();
-
-  // Formatea el día y mes para que tengan dos dígitos
-  const diaFormateado = dia < 10 ? '0' + dia : dia;
-  const mesFormateado = mes < 10 ? '0' + mes : mes;
-
-  // Formatea la fecha en el formato deseado (día/mes/año)
-  return `${diaFormateado}/${mesFormateado}/${año}`;
-}
-
 
 
 	async createDia(dia: createDiasDto ){
-		const items = await this.diasRepository.find()
-		const fh = items.map((item)=> item.fhcreacion)
-		const fhcreacion = new Date("2024-04-12T10:00:00.000Z")
 
-							
-		const Found  = fh.find(async (item) =>  ( await this.formatearFecha(item) === ( await this.formatearFecha(fhcreacion))))
-		console.log(Found);
- 		return
+
 	const newFlag = { ...dia  }
 	const newItem = await this.diasRepository.create({...newFlag})
 	const Saved = await this.diasRepository.save({...newItem})
-		
+
 	return{ data:Saved, status : HttpStatus.OK}
   }
   async getDias(){

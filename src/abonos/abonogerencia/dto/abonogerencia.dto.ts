@@ -6,7 +6,7 @@ export class createAbonoGerenciaDto {
   folio: string;
   formadepago: string;
   saldo: number;
-  fechadecreacion: Date;
+  fhcreacion: Date;
   gerenciaId: number;
   usuarioId: number;
 }

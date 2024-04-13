@@ -1,5 +1,5 @@
 export class createDiasDto { 
-	id: number;
+	id?: number;
   fhcreacion: Date;
   montoinicio:number
   ingresototal: number;
