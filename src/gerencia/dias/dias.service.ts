@@ -15,18 +15,32 @@ export class DiasService {
 
 
 
-	async createDia(dia: createDiasDto ){
-
-
+async createDia(dia: createDiasDto ){
 	const newFlag = { ...dia  }
 	const newItem = await this.diasRepository.create({...newFlag})
 	const Saved = await this.diasRepository.save({...newItem})
-
 	return{ data:Saved, status : HttpStatus.OK}
   }
+
+
   async getDias(){
 		const items  = await this.diasRepository.find({relations: ["AbonosGerencia"]})
-		
+		return { data: items , status : HttpStatus.OK}
+	}
+
+  async getDia(id:number){
+		const items  = await this.diasRepository.findOne( {where:{id} , relations: ["AbonosGerencia"]})
+
+		const totalIngresos = items.AbonosGerencia?.reduce((total, monto)=> total + monto.ingreso , 0)
+		items.ingresototal = totalIngresos
+
+		const totalEgresos = items.AbonosGerencia?.reduce((total,monto)=> total + monto.egreso,0)
+		items.egresototal = totalEgresos
+
+		const Flag = {...items}
+		const newFlag = await this.diasRepository.create(Flag)
+		await this.diasRepository.save(newFlag)
+
 		return { data: items , status : HttpStatus.OK}
 	}
 

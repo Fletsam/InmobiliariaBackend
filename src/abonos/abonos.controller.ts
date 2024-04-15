@@ -6,6 +6,7 @@ import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 import { createAbonoFraccDto } from "./abonofracc/dto/abonofracc.dto";
 import { createAbonoProvDto } from "./abonoprov/dto/abonoprov.dto";
 import { CreateAbonoVentasDto } from "./abonoventas/dto/abonoventas.dto";
+import { createAbonoGerenciaDto } from "./abonogerencia/dto/abonogerencia.dto";
 
 
 
@@ -135,6 +136,22 @@ export class AbonosController {
 		
 		return this.abonoService.getAbonoVentaById(id)
 	}
+
+	@Post('/dias/:id')
+	createAbonosGerencia(
+		@Param("id", ParseIntPipe) id:number,
+		@Body() abono: createAbonoGerenciaDto){
+		return this.abonoService.createAbonoGerencia(abono, id)
+	}
+
+	@Delete('/dias/:id')
+	deleteAbonoGerencia(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.deleteAbonoGerencia(id)
+	}
+
 	/* @Get('/contrato/:id')
 	getAbonobyEstadoCuenta(
 		@Param('id', ParseIntPipe) id: number,

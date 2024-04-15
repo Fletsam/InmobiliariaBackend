@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { DiasService } from "./dias.service";
 import { createDiasDto } from "./dto/dias.dto";
 
@@ -13,7 +13,14 @@ export class DiasController {
 	}
 	
 	@Get('')
-	getDia() {
+	getDias() {
 		return this.diasService.getDias()
+	}
+
+	@Get('/:id')
+	getDia(
+		@Param('id', ParseIntPipe) id:number
+	) {
+		return this.diasService.getDia(id)
 	}
 }

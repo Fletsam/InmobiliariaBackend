@@ -22,6 +22,8 @@ import { Vendedores } from "src/vendedores/vendedores.entity";
 import { AbonosVentas } from "./abonoventas/abonoventas.entity";
 import { Gerencia } from "src/gerencia/gerencia.entity";
 import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
+import { createAbonoGerenciaDto } from "./abonogerencia/dto/abonogerencia.dto";
+import { Dias } from "src/gerencia/dias/dias.entity";
 
 @Injectable()
 
@@ -45,6 +47,7 @@ export class AbonoService {
     @InjectRepository(AbonosVentas) private abonosVentasRepository: Repository<AbonosVentas>,
   //Gerencia  
     @InjectRepository(Gerencia) private gerenciaRepository: Repository<Gerencia>,
+    @InjectRepository(Dias) private diasRepository: Repository<Dias>,
     @InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
     ) {}
    
@@ -57,24 +60,25 @@ async getAbonos() {
 async getAbonosMes() {
   
 	const abonos = await this.abonoRepository.find( { relations: ["contrato" ,"contrato.clientes"]})
- 
-  
   const abonosProv = await this.abonosProvRepository.find( {relations: ["contratosProveedores.proveedores"]})
   const abonosFracc = await this.abonosFraccRepository.find(  {relations: ["contratosFracc.Fraccionamiento"]})
   const abonosVentas = await this.abonosVentasRepository.find(  {relations: ["vendedor"]})
+  const abonosGerencia = await this.abonosGerenciaRepository.find(  {relations: ["dia"]})
   
   const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
   const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
   const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
   const abonosventas = await abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
+  const abonosgerencia = await abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: (item.dia.fhcreacion).toString()}))
   
   const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
   const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
   const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
   const ultimoAbonoVenta = await abonosventas[abonosventas?.length - 1] 
+  const ultimoAbonoGerencia = await abonosgerencia[abonosgerencia?.length - 1] 
  
   
-  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas)
+  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia)
   
   const fechaActual = new Date();
   const mesActual = fechaActual?.getMonth() + 1;
@@ -83,7 +87,13 @@ async getAbonosMes() {
   return fecha?.getMonth() + 1 === mesActual;
 });
   
-	return {data : objetosMes ,ulitmoAbonoVentas:ultimoAbonoVenta.id, ultimoAbonoFracc: ultimoAbonoFracc?.id , ultimoAbonoLot:ultimoAbonoLot?.id, ultimoAbonoProv:ultimoAbonoProv?.id , status: HttpStatus.OK }
+	return {data : objetosMes ,
+    ulitmoAbonoVentas:ultimoAbonoVenta.id, 
+    ultimoAbonoFracc: ultimoAbonoFracc?.id , 
+    ultimoAbonoLot:ultimoAbonoLot?.id, 
+    ultimoAbonoProv:ultimoAbonoProv?.id ,
+    ultimoAbonoGerencia:ultimoAbonoGerencia?.id ,
+    status: HttpStatus.OK }
 }
 
 async getAbonosByUsuario(id:number) {
@@ -355,7 +365,39 @@ async getAbonoProvbyId(id: number) {
 /*   await this.getTotalMontoContrato(abono.affected)
  */ return{ status : HttpStatus.OK}
 }
- 
+ //Abonos Gerencia ---------------------------------------------------------------------------------------------------------------------------------v 
+ async createAbonoGerencia(abono: createAbonoGerenciaDto , id:number){
+      const dia = await this.diasRepository.findOne({where : {id}})
+      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+       
+        const saldo = (dia.montoinicio - newAbonoFlag.ingreso + dia.ingresototal - newAbonoFlag.egreso - dia.egresototal )
+        const newAbono = await this.abonosGerenciaRepository.create({...newAbonoFlag , saldo:saldo, diaId:dia.id })
+        const AbonoSaved = await this.abonosGerenciaRepository.save({...newAbono })
+        await this.getTotalMontoIngresosDia(dia.id)
+        return[{ data:AbonoSaved,  status : HttpStatus.OK}]
+   
+  }
+
+async getTotalMontoIngresosDia (id:number) {
+    const found = await this.diasRepository.findOne({where :{id}})
+    const abonos = await this.abonosGerenciaRepository.find({ 
+    where: { diaId: found.id}
+      })
+   
+    const ingresos = abonos.reduce((total,monto) => total + monto.ingreso , 0 )
+    found.ingresototal = (ingresos) 
+    const egresos  = abonos.reduce((total, monto) => total + monto.egreso ,0)
+     found.egresototal =  egresos 
+    return this.diasRepository.save(found) 
+  } 
+
+  async deleteAbonoGerencia(id:number){
+  await this.abonosGerenciaRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
+
  //--------------------------------------------------------------------------------------------------------------------------------------------v 
 
 async editAbono ( id:number, contratoId:number, abono: UpdateAbonoDto){
