@@ -65,6 +65,24 @@ export class ContratoService {
 	
 	
  
+
+	async getAllContratos(){
+		const contratosfraccs =	await this.contratosFraccRepository.find( {relations:["Fraccionamiento"]})
+		const fraccs = contratosfraccs.map((item)=> item.Fraccionamiento)
+		const inv = await this.contratosInvRepository.find({relations:["cliente"]} )
+	
+		const contratoslotes = await this.contratosRepository.find({relations:["Lote"]})
+		const lotes = await contratoslotes.map((item)=> item.Lote)
+		
+		const contratosprov = await this.contratosProveRepository.find({relations:["proveedores"]})
+		const prov = contratosprov.map((item) => item.proveedores)
+
+
+			return { fraccs , inv , lotes, prov , status: HttpStatus.OK}
+	}
+
+
+
 	 //---------------------Lotes Contratos --------------------------///	
 
 	 
@@ -76,7 +94,7 @@ export class ContratoService {
 	const TotalconIntereses = (CostoaFinanciar+montodeinteres)
 	const TotalReal = (precioTotalpormetro2+montodeinteres)
 	const pagoMensual = (CostoaFinanciar+montodeinteres)/contrato.pagosafinanciar
-
+	
 	const newFlag = { 
 		...contrato,
 		id:Lote.id, 
@@ -195,7 +213,6 @@ export class ContratoService {
 	
 	
 	const precioTotalpormetro2 = (fracc.m2 * contratofracc.preciom2)
-	
 	const CostoaFinanciar = (precioTotalpormetro2 - contratofracc.descuento - contratofracc.enganche)
 	const montodeinteres = ((contratofracc.pagosafinanciar/12)*contratofracc.interesanual)*CostoaFinanciar
 	const TotalconIntereses = (CostoaFinanciar+montodeinteres)

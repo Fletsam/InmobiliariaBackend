@@ -17,7 +17,7 @@ export class UsuariosService {
 
 	async getUsuarios() {
 	const usuario = await this.usuarioRepository.find(
-    {relations: ["Rfcs",]}
+    
   )
 	return {data : usuario, status: HttpStatus.OK }
 }

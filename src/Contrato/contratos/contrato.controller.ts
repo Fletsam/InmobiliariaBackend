@@ -19,6 +19,11 @@ export class ContratoController {
 		return this.ContratoService.getContratosLote()
 
 	}
+	@Get('/all')
+	getAllContratosAll(){
+		return this.ContratoService.getAllContratos()
+
+	}
 	@Get('/fracc/:id')
 	getContratosFraccById(
 		@Param('id',ParseIntPipe) id:number,

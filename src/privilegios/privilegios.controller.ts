@@ -8,7 +8,7 @@ export class PrivilegiosController {
 
 	@Get('')
 	getPrivilegios() {
-		return this.PrivilegiosService.getPrivilegios
+		return this.PrivilegiosService.getPrivilegios()
 	}
 
 	@Post()
