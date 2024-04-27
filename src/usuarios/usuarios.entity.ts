@@ -27,6 +27,7 @@ import { Abono } from 'src/abonos/abono.entity';
 import { AbonosFracc } from 'src/abonos/abonofracc/abonofracc.entity';
 import { AbonosGerencia } from 'src/abonos/abonogerencia/abonogerencia.entity';
 import { AbonosProv } from 'src/abonos/abonoprov/abonoprov.entity';
+import { AbonosNomina } from 'src/abonos/abonosnomina/abonosnomina.entity';
 import { AbonosVentas } from 'src/abonos/abonoventas/abonoventas.entity';
 import { Cajas } from 'src/cajas/cajas.entity';
 import { Dias } from 'src/gerencia/dias/dias.entity';
@@ -100,6 +101,12 @@ export class Usuarios {
   @Column()
   salario: number
 
+  @Column()
+  adeudo:number
+
+  @Column()
+  pagado:number
+
   @CreateDateColumn({
     name: 'fechadecreacion',
     type: 'datetime',
@@ -107,105 +114,103 @@ export class Usuarios {
   })
   fhcreacion: Date;
 
-@OneToMany(() => Abono, (abono) => abono.usuario)
+  @OneToMany(() => Abono, (abono) => abono.usuario)
   Abonos: Abono[];
+  
+  @OneToMany(() => AbonosNomina, (abono) => abono.usuario)
+  AbonosNomina: AbonosNomina[];
 
-@OneToMany(() => AbonosFracc, (abono) => abono.usuario)
+  @OneToMany(() => AbonosFracc, (abono) => abono.usuario)
   AbonosFracc: AbonosFracc[];
 
   @OneToMany(() => AbonosProv, (abono) => abono.usuario)
   AbonosProv: AbonosProv[];
-  
+
   @OneToMany(() => AbonosVentas, (abono) => abono.usuario)
   AbonosVentas: AbonosVentas[];
 
   @OneToMany(() => AbonosGerencia, (abono) => abono.usuario)
   AbonosGerencia: AbonosGerencia[];
 
-@OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
+  @OneToMany(() => Inversionistas, (inversionistas) => inversionistas.usuario )
   Inversionistas: Inversionistas[];
 
   @OneToMany(() => Vendedores, (vendedor) => vendedor.usuario )
   Vendedores: Vendedores[];
 
-@OneToMany(() => Cajas, (cajas) => cajas.usuario)
+  @OneToMany(() => Cajas, (cajas) => cajas.usuario)
   Cajas: Cajas[];
 
-
-@OneToMany(() => Funciones, (funciones) => funciones.usuario)
+  @OneToMany(() => Funciones, (funciones) => funciones.usuario)
   Funciones: Funciones[];
 
-  
-@OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.usuario)
+  @OneToMany(() => ConceptosEgresos, (conceptosegresos) => conceptosegresos.usuario)
   ConceptosEgresos: ConceptosEgresos[];
 
-@OneToMany(() => Egresos , (egresos) => egresos.usuario)
+  @OneToMany(() => Egresos , (egresos) => egresos.usuario)
   Egresos: Egresos[];
 
-@OneToMany(() => FlujoDiarioFraccionamiento , (flujodiariofraccionamiento) => flujodiariofraccionamiento.usuario)
+  @OneToMany(() => FlujoDiarioFraccionamiento , (flujodiariofraccionamiento) => flujodiariofraccionamiento.usuario)
   FlujoDiarioFraccionamiento: FlujoDiarioFraccionamiento[]; 
 
-
-@OneToMany(() => ConceptosIngresos, (conceptosingresos) => conceptosingresos.usuario)
+  @OneToMany(() => ConceptosIngresos, (conceptosingresos) => conceptosingresos.usuario)
   ConceptoIngresos: ConceptosIngresos[];
 
-@OneToMany(() => Moratorio, (moratorio) => moratorio.usuario)
+  @OneToMany(() => Moratorio, (moratorio) => moratorio.usuario)
   Moratorio: Moratorio[];
 
-@OneToMany(() => Proyectos, (proyectos) => proyectos.usuario)
+  @OneToMany(() => Proyectos, (proyectos) => proyectos.usuario)
   Proyectos: Proyectos[];
 
-@OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.usuario)
+  @OneToMany(() => proyectosproyectos, (proyectosproyectos) => proyectosproyectos.usuario)
   proyectosproyectos : proyectosproyectos[];
 
-@OneToMany(() => Parcelas, (parcelas) => parcelas.usuario)
+  @OneToMany(() => Parcelas, (parcelas) => parcelas.usuario)
   Parcelas : Parcelas[];
 
-@OneToMany(() => Fraccionamientos, (fraccionamiento) => fraccionamiento.usuario)
+  @OneToMany(() => Fraccionamientos, (fraccionamiento) => fraccionamiento.usuario)
   Fraccionamientos: Fraccionamientos[];
 
-
-@OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.usuario)
+  @OneToMany(() => ParcelasProyectos, (parcelasproyectos) => parcelasproyectos.usuario)
   ParcelasProyectos : ParcelasProyectos[];
-  
-@OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.usuario)
+
+  @OneToMany(() => ParcelasPenalizacion, (parcelaspenalizacion) => parcelaspenalizacion.usuario)
   ParcelasPenalizacion : ParcelasPenalizacion[];
-  
-@OneToMany(() => Rfcs, (rfcs) => rfcs.usuario)
+
+  @OneToMany(() => Rfcs, (rfcs) => rfcs.usuario)
   Rfcs : Rfcs[];
-  
-@OneToMany(() => Manzanas, (manzana) => manzana.usuario)
+
+  @OneToMany(() => Manzanas, (manzana) => manzana.usuario)
   Manzanas : Manzanas[];
 
-@OneToMany(() => Lotes, (lotes) => lotes.usuario)
+  @OneToMany(() => Lotes, (lotes) => lotes.usuario)
   Lotes : Lotes[];
-  
+
   @OneToMany(() => Ingresos, (ingresos) => ingresos.usuario)
   Ingresos : Ingresos[];
 
-@OneToMany(() => Pagares, (pagares) => pagares.usuario)
- Pagares  : Pagares[];
- 
+  @OneToMany(() => Pagares, (pagares) => pagares.usuario)
+  Pagares  : Pagares[];
 
- @OneToMany(() => PagaresCancelados, (pagarescancelados) => pagarescancelados.usuario)
- PagaresCancelados  : PagaresCancelados[];
+  @OneToMany(() => PagaresCancelados, (pagarescancelados) => pagarescancelados.usuario)
+  PagaresCancelados  : PagaresCancelados[];
 
- @OneToMany(() => Contratos, (contratos) => contratos.usuario)
- Contratos  : Contratos[];
+  @OneToMany(() => Contratos, (contratos) => contratos.usuario)
+  Contratos  : Contratos[];
 
- @OneToMany(() => ContratosFracc, (contratosfracc) => contratosfracc.usuario)
- ContratosFracc  : ContratosFracc[];
- 
- @OneToMany(() => ContratosInversionista, (contratoinversionista) => contratoinversionista.usuario)
- ContratosInversionista  : ContratosInversionista[];
- 
- @OneToMany(() => ContratosProveedores, (contratosProveedores) => contratosProveedores.usuario)
- ContratosProveedores  : ContratosProveedores[];
- 
- @OneToMany(() => Clientes, (clientes) => clientes.usuario)
+  @OneToMany(() => ContratosFracc, (contratosfracc) => contratosfracc.usuario)
+  ContratosFracc  : ContratosFracc[];
+
+  @OneToMany(() => ContratosInversionista, (contratoinversionista) => contratoinversionista.usuario)
+  ContratosInversionista  : ContratosInversionista[];
+
+  @OneToMany(() => ContratosProveedores, (contratosProveedores) => contratosProveedores.usuario)
+  ContratosProveedores  : ContratosProveedores[];
+
+  @OneToMany(() => Clientes, (clientes) => clientes.usuario)
   Clientes : Clientes[];
 
- @OneToMany(() => Proveedores, (proveedores) => proveedores.usuario)
+  @OneToMany(() => Proveedores, (proveedores) => proveedores.usuario)
   Proveedores : Proveedores[];
 
   @OneToMany(() => ClienteNoInteres, (clientesnointeres) => clientesnointeres.cliente)

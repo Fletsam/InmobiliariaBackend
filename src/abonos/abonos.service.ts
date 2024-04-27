@@ -24,6 +24,8 @@ import { Gerencia } from "src/gerencia/gerencia.entity";
 import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
 import { createAbonoGerenciaDto } from "./abonogerencia/dto/abonogerencia.dto";
 import { Dias } from "src/gerencia/dias/dias.entity";
+import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
+import {createAbonoNominaDto} from "./abonosnomina/dto/abonosnomina.dto"
 
 @Injectable()
 
@@ -49,6 +51,8 @@ export class AbonoService {
     @InjectRepository(Gerencia) private gerenciaRepository: Repository<Gerencia>,
     @InjectRepository(Dias) private diasRepository: Repository<Dias>,
     @InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
+  //Nomina  
+    @InjectRepository(AbonosNomina) private abonosNominaRepository: Repository<AbonosNomina>,
     ) {}
    
     
@@ -64,21 +68,24 @@ async getAbonosMes() {
   const abonosFracc = await this.abonosFraccRepository.find(  {relations: ["contratosFracc.Fraccionamiento"]})
   const abonosVentas = await this.abonosVentasRepository.find(  {relations: ["vendedor"]})
   const abonosGerencia = await this.abonosGerenciaRepository.find(  {relations: ["dia"]})
-  
+  const abonosNomina = await this.abonosNominaRepository.find({relations:["usuario"]})
+
   const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
   const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
   const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
   const abonosventas = await abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
   const abonosgerencia = await abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: (item.dia.fhcreacion).toString()}))
-  
+  const abonosnomina = await abonosNomina?.map((item) => ({id:item.id ,fhcreacion:item.fhcreacion , descuento:item.adeudo, formadepago:item.formadepago , nombre : item.usuario.nombre}) )
+
+
   const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
   const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
   const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
   const ultimoAbonoVenta = await abonosventas[abonosventas?.length - 1] 
   const ultimoAbonoGerencia = await abonosgerencia[abonosgerencia?.length - 1] 
- 
+  const ultimoAbonoNomina = await abonosnomina[abonosnomina?.length - 1]
   
-  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia)
+  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina)
   
   const fechaActual = new Date();
   const mesActual = fechaActual?.getMonth() + 1;
@@ -93,6 +100,7 @@ async getAbonosMes() {
     ultimoAbonoLot:ultimoAbonoLot?.id, 
     ultimoAbonoProv:ultimoAbonoProv?.id ,
     ultimoAbonoGerencia:ultimoAbonoGerencia?.id ,
+    ultimoAbonoNomina: ultimoAbonoNomina?.id,
     status: HttpStatus.OK }
 }
 
@@ -393,6 +401,56 @@ async getTotalMontoIngresosDia (id:number) {
 
   async deleteAbonoGerencia(id:number){
   await this.abonosGerenciaRepository.delete(id)
+  
+/*   await this.getTotalMontoContrato(abono.affected)
+ */ return{ status : HttpStatus.OK}
+}
+ //Abono Nomina-----------------------------------------------------------------------------------------------------------------------------------------v 
+
+  async createAbonoNomina(abono: createAbonoNominaDto , id:number){
+      const usuario = await this.usuarioRepository.findOne({where : {id}})
+      const newAbonoFlag = { ...abono, fhcreacion: new Date()}
+       
+        const saldo = (usuario.adeudo - (newAbonoFlag.nomina + usuario.pagado - newAbonoFlag.adeudo)  )
+        const newAbono = await this.abonosNominaRepository.create({...newAbonoFlag , saldo:saldo, usuarioId:usuario.id })
+        const AbonoSaved = await this.abonosNominaRepository.save({...newAbono })
+        await this.getTotalMontoNomina(usuario.id)
+        return[{ data:AbonoSaved,  status : HttpStatus.OK}]
+   
+  }
+
+  async getTotalMontoNomina(id :number) {
+   
+    const found = await this.usuarioRepository.findOne({where :{id}})
+    const abonos = await this.abonosNominaRepository.find({ 
+    where: { usuarioId: found.id}
+      })
+   
+    const ingresos = abonos.reduce((total,monto) => total + monto.nomina , 0 )
+    found.pagado = (ingresos) 
+    const egresos  = abonos.reduce((total, monto) => total + monto.adeudo ,0)
+     found.adeudo =  egresos 
+    return this.usuarioRepository.save(found) 
+  
+
+  }
+  
+  async getAbonoNominaById(id: number) {
+    const AbonoFound = await this.abonosNominaRepository.findOne({
+      where: { id } , relations: ["usuario"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
+
+    async deleteAbonoNomina(id:number){
+  await this.abonosNominaRepository.delete(id)
   
 /*   await this.getTotalMontoContrato(abono.affected)
  */ return{ status : HttpStatus.OK}

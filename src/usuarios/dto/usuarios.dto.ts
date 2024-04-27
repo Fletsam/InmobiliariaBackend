@@ -3,7 +3,6 @@ export class CreateUsuariosDto {
   usuario: string;
   pass: string;
   estatus?: boolean;
-  
   nombre: string;
   titulo: string
   telefono: string;
@@ -16,6 +15,8 @@ export class CreateUsuariosDto {
   correo: string;
   estadocivil: string;
   salario: number;
+  adeudo: number
+  pagado: number
   cargo:string
   fhcreacion: Date;
   privilegiosId:number

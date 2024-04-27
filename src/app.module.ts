@@ -10,7 +10,6 @@ import { UsuarioModule } from './usuarios/usuario.module';
 import { RfcsModule } from './rfcs/rfcs.module';
 import { PrivilegiosModule } from './privilegios/privilegios.module';
 import { ConfigModule } from '@nestjs/config';
-
 import * as Joi from 'joi';
 import config from './config';
 import { AuthModule } from './auth/auth.module';
@@ -52,7 +51,6 @@ import { Proyectos } from './Proyecto/proyectos/proyectos.entity';
 import { subconceptoegresos } from './Egresoss/subconceptosegresos/subconceptoegresos.entity';
 import { Ticket } from './ticket/ticket.entity';
 import { Fraccionamientos } from './Fraccionamiento/fraccionamientos/fraccionamientos.entity';
-
 import { CarteraClientes } from './Cliente/carteraclientes/carteraclientes.entity';
 import { FlujoDiarioFraccionamiento } from './Fraccionamiento/flujodiariofraccionamiento/flujodiariofraccionamiento.entity';
 import { FlujoPorFraccionamiento } from './Fraccionamiento/flujoporfraccionamiento/flujoporfraccionamiento.entity';
@@ -97,6 +95,7 @@ import { AbonosGerencia } from './abonos/abonogerencia/abonogerencia.entity';
 import { GerenciaModule } from './gerencia/gerencia.module';
 import { Dias } from './gerencia/dias/dias.entity';
 import { DiasModule } from './gerencia/dias/dias.module';
+import { AbonosNomina } from './abonos/abonosnomina/abonosnomina.entity';
 
 @Module({
   imports: 
@@ -192,7 +191,8 @@ import { DiasModule } from './gerencia/dias/dias.module';
         AbonosVentas,
         Gerencia,
         AbonosGerencia,
-        Dias
+        Dias,
+        AbonosNomina
       ],
       synchronize: true,
     }),
