@@ -73,7 +73,7 @@ export class LotesService {
       });
     }
   
-	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${fracc.clave}${manzana.numero}${lote.numero}`}
+	const newFlag = { ...lote, fhcreacion: new Date(), clave:`${manzana.clave}${lote.numero}`}
 	const newItem = await this.lotesRepository.create({...newFlag})
 	const Saved = await this.lotesRepository.save({...newItem})
 

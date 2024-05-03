@@ -95,12 +95,12 @@ async getAbonosMes() {
 });
   
 	return {data : objetosMes ,
-    ulitmoAbonoVentas:ultimoAbonoVenta.id, 
-    ultimoAbonoFracc: ultimoAbonoFracc?.id , 
-    ultimoAbonoLot:ultimoAbonoLot?.id, 
-    ultimoAbonoProv:ultimoAbonoProv?.id ,
-    ultimoAbonoGerencia:ultimoAbonoGerencia?.id ,
-    ultimoAbonoNomina: ultimoAbonoNomina?.id,
+    ulitmoAbonoVentas:ultimoAbonoVenta?.id || 0, 
+    ultimoAbonoFracc: ultimoAbonoFracc?.id || 0, 
+    ultimoAbonoLot:ultimoAbonoLot?.id || 0, 
+    ultimoAbonoProv:ultimoAbonoProv?.id || 0,
+    ultimoAbonoGerencia:ultimoAbonoGerencia?.id || 0 ,
+    ultimoAbonoNomina: ultimoAbonoNomina?.id || 0,
     status: HttpStatus.OK }
 }
 

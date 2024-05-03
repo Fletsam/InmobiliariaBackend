@@ -67,18 +67,47 @@ export class ContratoService {
  
 
 	async getAllContratos(){
-		const contratosfraccs =	await this.contratosFraccRepository.find( {relations:["Fraccionamiento"]})
-		const fraccs = contratosfraccs.map((item)=> item.Fraccionamiento)
-		const inv = await this.contratosInvRepository.find({relations:["cliente"]} )
+		const contratosfraccs =	await this.contratosFraccRepository.find( {relations:["Fraccionamiento"], 
+		select:{
+			id:true,
+			Fraccionamiento:{
+				clave:true,
+				nombre:true,
+			}
+		}})
+
+
+		const inv = await this.contratosInvRepository.find({relations:["cliente"], select:{
+			id:true,
+			pagomensual:true,
+			cliente:{
+				nombre:true,
+			}
+		}} )
 	
-		const contratoslotes = await this.contratosRepository.find({relations:["Lote"]})
-		const lotes = await contratoslotes.map((item)=> item.Lote)
+		const contratoslotes = await this.contratosRepository.find({relations:["Lote","clientes"], select: {
+			id:true,
+			Lote: {
+				clave: true,
+				m2 : true,
+				id: true
+			},
+			clientes:{
+				nombre: true
+			}
+		}})
 		
-		const contratosprov = await this.contratosProveRepository.find({relations:["proveedores"]})
-		const prov = contratosprov.map((item) => item.proveedores)
+		const contratosprov = await this.contratosProveRepository.find({relations:["proveedores"] ,select:{
+			id:true,
+			proveedores:{
+				nombre:true,
+				rubro:true
+			}
+		}})
+		
 
 
-			return { fraccs , inv , lotes, prov , status: HttpStatus.OK}
+			return { contratosfraccs , inv , contratoslotes, contratosprov , status: HttpStatus.OK}
 	}
 
 

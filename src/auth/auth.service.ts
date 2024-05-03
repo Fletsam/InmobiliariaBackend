@@ -13,7 +13,6 @@ export class AuthService {
 	) {}
 
 	async signIn(usuario: string, pass: string) {
-		console.log(usuario);
 		const {data} = await this.usuariosService.findByUsuario(usuario);
 
 		
@@ -22,7 +21,7 @@ export class AuthService {
 		 console.log(isMatch);
 			console.log(pass); */
 		if (!isMatch) {
-			throw new UnauthorizedException()
+			throw new UnauthorizedException("Contraseña Incorrecta o No es el Usuario Correcto")
 		}
 
 		const payload = { ...data}
