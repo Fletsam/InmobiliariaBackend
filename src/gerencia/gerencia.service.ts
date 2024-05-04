@@ -28,9 +28,9 @@ export class GerenciaService {
 		const items  = await this.gerenciaRepository.find({relations: ["Dias", "AbonosGerencia"]})
 		const item = items[items.length - 1];
 
-		const totalIngresos = item.Dias.reduce((total,monto)=> total + monto.ingresototal, 0 )
+		const totalIngresos = item.Dias?.reduce((total,monto)=> total + monto.ingresototal, 0 )
 			item.ingresototal = totalIngresos
-		const totalEgresos = item.Dias.reduce((total, monto ) => total + monto.egresototal, 0)
+		const totalEgresos = item.Dias?.reduce((total, monto ) => total + monto.egresototal, 0)
 			item.egresototal  = totalEgresos
 
   		const Flag = {...item}
