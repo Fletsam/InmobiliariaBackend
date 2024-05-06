@@ -42,6 +42,9 @@ export class Contratos {
   enganche: number;
 
   @Column()
+  anualidad : number
+
+  @Column()
   resto: number;
 
   @Column()

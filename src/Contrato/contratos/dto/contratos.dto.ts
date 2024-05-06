@@ -11,6 +11,7 @@ export class CreateContratoDto {
   descuento: number;
   enganche: number;
   resto: number;
+  anualidad:number
   pagosafinanciar: number;
   interesanual: number;
   ingresoneto:number

@@ -89,8 +89,7 @@ export class LotesService {
     const totalMontos = FoundMonto.reduce((total,monto) => total + monto.costo , 0 )
     foundTotal.costototal = totalMontos 
       
-    console.log(totalMontos);
-    
+
    return this.manzanasRepository.save(foundTotal)  
   } */
 /* 

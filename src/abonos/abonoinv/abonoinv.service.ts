@@ -57,7 +57,6 @@ async getAbonobyId(id: number) {
       const contrato = await this.contratosInversionistaRepository.findOne({where : {id}})
       const newAbonoFlag = { ...abono , fhcreacion: new Date()}
       const newAbono = await this.abonoInvRepository.create({...newAbonoFlag , contratosInversionistaId:contrato.id })
-	  console.log(newAbono);
 	  
       const AbonoSaved = await this.abonoInvRepository.save({...newAbono })
       await this.createIngresoAbono({...newAbono})

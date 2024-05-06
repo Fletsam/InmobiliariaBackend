@@ -122,7 +122,7 @@ export class ContratoService {
 	const montodeinteres = ((contrato.pagosafinanciar/12)*contrato.interesanual)*CostoaFinanciar
 	const TotalconIntereses = (CostoaFinanciar+montodeinteres)
 	const TotalReal = (precioTotalpormetro2+montodeinteres)
-	const pagoMensual = (CostoaFinanciar+montodeinteres)/contrato.pagosafinanciar
+	const pagoMensual = (CostoaFinanciar+montodeinteres- contrato.anualidad)/contrato.pagosafinanciar
 	
 	const newFlag = { 
 		...contrato,

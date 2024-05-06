@@ -34,7 +34,6 @@ export class ClientesService {
     const clientes =  allclientes.data.filter((clientes)=> clientes.usuarioId == Found.id)
     
     const contratos = clientes.map((cliente)=> ({cliente:cliente.nombre, contratos:cliente.Contratos}))
-    console.log(contratos);
     
      if (!clientes.length) {
       throw new BadRequestException({
