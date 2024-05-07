@@ -41,7 +41,7 @@ async getAbonosByUsuario(id:number) {
 
 async getAbonobyId(id: number) {
     const AbonoFound = await this.abonoInvRepository.findOne({
-      where: { id },
+      where: { id }, relations : ["contratosInversionista", "contratosInversionista.cliente"]
     });
     if (!AbonoFound) {
       throw new BadRequestException({
@@ -55,11 +55,12 @@ async getAbonobyId(id: number) {
 
   async createAbonoContrato(abono: CreateAbonoInvDto , id:number){
       const contrato = await this.contratosInversionistaRepository.findOne({where : {id}})
-      const newAbonoFlag = { ...abono , fhcreacion: new Date()}
-      const newAbono = await this.abonoInvRepository.create({...newAbonoFlag , contratosInversionistaId:contrato.id })
+     const newAbonoFlag = { ...abono, fhcreacion: new Date()}
 	  
-      const AbonoSaved = await this.abonoInvRepository.save({...newAbono })
-      await this.createIngresoAbono({...newAbono})
+      const saldo = (contrato.montototal + newAbonoFlag.credito - newAbonoFlag.pago + contrato.pagado )
+        const newAbono = await this.abonoInvRepository.create({...newAbonoFlag , saldo:saldo })
+        const AbonoSaved = await this.abonoInvRepository.save({...newAbono })
+      
       await this.getTotalMontoContrato(AbonoSaved.contratosInversionistaId)
       return[{ data:AbonoSaved,  status : HttpStatus.OK}]
 
@@ -87,7 +88,7 @@ async getAbonobyId(id: number) {
     const abonos = await this.abonoInvRepository.find({ 
     where: {contratosInversionistaId: found.id}
       })
-    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
+    const totalMontos = abonos.reduce((total,monto) => total + monto.pago , 0 )
       found.pagado = totalMontos 
       
     return this.contratosInversionistaRepository.save(found) 

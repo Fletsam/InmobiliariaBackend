@@ -26,6 +26,7 @@ import { createAbonoGerenciaDto } from "./abonogerencia/dto/abonogerencia.dto";
 import { Dias } from "src/gerencia/dias/dias.entity";
 import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
 import {createAbonoNominaDto} from "./abonosnomina/dto/abonosnomina.dto"
+import { AbonosInv } from "./abonoinv/abonoinv.entity";
 
 @Injectable()
 
@@ -53,6 +54,9 @@ export class AbonoService {
     @InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
   //Nomina  
     @InjectRepository(AbonosNomina) private abonosNominaRepository: Repository<AbonosNomina>,
+  //Inversionistas
+    @InjectRepository(AbonosInv) private abonosInvRepository: Repository<AbonosInv>,
+    
     ) {}
    
     
@@ -69,8 +73,11 @@ async getAbonosMes() {
   const abonosVentas = await this.abonosVentasRepository.find(  {relations: ["vendedor"]})
   const abonosGerencia = await this.abonosGerenciaRepository.find(  {relations: ["dia"]})
   const abonosNomina = await this.abonosNominaRepository.find({relations:["usuario"]})
+  const abonosInv = await this.abonosInvRepository.find({relations:["contratosInversionista", "contratosInversionista.cliente"]})
+
 
   const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
+  const abonosinv = await abonosInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.credito , formadepago: item.formadepago , nombre: item.contratosInversionista.cliente.nombre}))
   const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
   const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
   const abonosventas = await abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
@@ -80,12 +87,13 @@ async getAbonosMes() {
 
   const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
   const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
+  const ultimoAbonoInv = await abonosinv[abonosinv?.length - 1] 
   const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
   const ultimoAbonoVenta = await abonosventas[abonosventas?.length - 1] 
   const ultimoAbonoGerencia = await abonosgerencia[abonosgerencia?.length - 1] 
   const ultimoAbonoNomina = await abonosnomina[abonosnomina?.length - 1]
   
-  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina)
+  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina,ultimoAbonoInv)
   
   const fechaActual = new Date();
   const mesActual = fechaActual?.getMonth() + 1;
@@ -101,6 +109,7 @@ async getAbonosMes() {
     ultimoAbonoProv:ultimoAbonoProv?.id || 0,
     ultimoAbonoGerencia:ultimoAbonoGerencia?.id || 0 ,
     ultimoAbonoNomina: ultimoAbonoNomina?.id || 0,
+    ultimoAbonoInv: ultimoAbonoInv?.id || 0,
     status: HttpStatus.OK }
 }
 

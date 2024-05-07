@@ -436,7 +436,7 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
 
   async getContratoByIdInv(id: number) {
     const Found = await this.contratosInvRepository.findOne({
-      where: { id }, relations: ["cliente"]
+      where: { id }, relations: ["cliente" , "AbonosInv"]
     });
 	
     if (!Found) {
@@ -450,7 +450,9 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
   }
 
   async getContratosInv() {
-    const Found = await this.contratosInvRepository.find();
+    const Found = await this.contratosInvRepository.find({
+		relations: ["cliente"]
+	});
 	
     if (!Found) {
       throw new BadRequestException({

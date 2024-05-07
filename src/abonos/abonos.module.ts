@@ -19,6 +19,7 @@ import { Gerencia } from "src/gerencia/gerencia.entity";
 import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
 import { Dias } from "src/gerencia/dias/dias.entity";
 import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
+import { AbonosInv } from "./abonoinv/abonoinv.entity";
 @Module({
 
 	imports: [TypeOrmModule.forFeature([
@@ -37,7 +38,8 @@ import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
 		Gerencia,
 		AbonosGerencia,
 		Dias,
-		AbonosNomina
+		AbonosNomina,
+		AbonosInv
 	]), JwtModule],
 	controllers: [ AbonosController],
 	providers: [ AbonoService],

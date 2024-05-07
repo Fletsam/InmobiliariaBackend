@@ -9,10 +9,25 @@ export class AbonosInv {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  formadepago: string
 
   @Column()
-  montoingreso: number;
+  pago: number;
 
+  @Column()
+  credito :  number
+  
+  @Column()
+  concepto :  string
+
+  @Column()
+  folio : string
+
+  
+
+  @Column()
+  saldo: number
 
   @CreateDateColumn({
     name: 'fechadecreacion',

@@ -32,6 +32,14 @@ export class AbonosInvController {
 	}
  */
 
+	@Get('/inv/:id')
+	getAbono(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoInvService.getAbonobyId(id)
+	}
+
 	@Post('/contratoInv/:id')
 	createAbonoContrato(
 		@Param("id", ParseIntPipe) id:number,

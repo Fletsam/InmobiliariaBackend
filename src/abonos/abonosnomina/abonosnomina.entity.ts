@@ -1,5 +1,4 @@
 import { Usuarios } from "src/usuarios/usuarios.entity";
-import { Vendedores } from "src/vendedores/vendedores.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
