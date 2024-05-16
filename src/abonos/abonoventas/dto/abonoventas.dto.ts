@@ -9,4 +9,5 @@ export class CreateAbonoVentasDto {
     fhcreacion: Date;
     vendedorId: number;
     usuarioId: number;
+    estatus:boolean
 }

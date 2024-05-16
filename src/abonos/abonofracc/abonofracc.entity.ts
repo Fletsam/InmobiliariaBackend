@@ -27,6 +27,11 @@ export class AbonosFracc {
   @Column()
   folio:string
 
+  
+	@Column( {default:true})
+	estatus:boolean
+
+
   @CreateDateColumn({
     name: 'fechadecreacion',
     type: 'datetime',

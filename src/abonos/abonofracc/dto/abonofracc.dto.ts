@@ -9,4 +9,5 @@ export class createAbonoFraccDto {
   fhcreacion: Date;
   contratoFraccId?:number
   folio:string
+  estatus:boolean
 }

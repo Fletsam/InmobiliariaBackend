@@ -35,21 +35,12 @@ export class FraccionamientoService {
 	return {data : items, status: HttpStatus.OK }
 	}
  
-	async getFraccionamientoById(id: number,id2: number) {
+	async getFraccionamientoById(id: number) {
     
     const Found = await this.fraccionamientosRepository.findOne({
       where: { id }, relations: ["Manzanas" , "Lotes"]
     });
 
-    const usuario = await this.usuariosRepository.findOne({where:{id:id2}})
-
-    if (Found.usuarioId !== usuario.id) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Fraccionamiento not found',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
     const totaldemanzanas = Found.Manzanas.length
     const totaldelotes  = Found.Lotes.length
     const Flag =  {...Found, totaldelotes , totaldemanzanas,}
@@ -58,8 +49,13 @@ export class FraccionamientoService {
       where: { id }, relations: ["Manzanas", "Lotes"]
     });
     
-  /*   Found.totaldelotes = totaldelotes */
-    return Fraccionamiento;
+    const itemsActived = Fraccionamiento.Lotes.filter(item => item.estatus)
+
+    const newFlag = {...Fraccionamiento, 
+      Lotes: itemsActived
+    }
+    
+    return newFlag;
   }
 
   async getFraccionamientoByUsuario(id: number) {

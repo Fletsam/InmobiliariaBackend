@@ -5,6 +5,7 @@ export class CreateLotesDto {
   	manzanaId: number;
 	numero:string
 	clave:string
+	estatus:boolean
   	fraccionamientoId: number;
 	usuarioId:number
 

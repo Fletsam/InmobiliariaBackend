@@ -33,14 +33,22 @@ export class ManzanasService {
     const Found = await this.manzanasRepository.findOne({
       where: { id }, relations : ["fraccionamiento", 'Lotes', 'Lotes.Contrato']
     });
-    if (!Found) {
+
+     if (!Found) {
       throw new BadRequestException({
         data: null,
         message: 'Manzana not found',
         status: HttpStatus.NOT_FOUND,
       });
     }
-    return Found;
+    const items = Found.Lotes.filter(item=> item.estatus)
+
+    const itemValidated = {
+      ...Found,
+      Lotes : items
+    }
+   
+    return itemValidated;
   }
 async getManzanaByUsuario(id: number) {
     const Found = await this.fraccionamientosRepository.findOne({where:{id}})

@@ -24,7 +24,10 @@ export class AbonosInv {
   @Column()
   folio : string
 
-  
+    
+	@Column( {default:true})
+	estatus:boolean
+
 
   @Column()
   saldo: number

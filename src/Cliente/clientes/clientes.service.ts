@@ -23,7 +23,10 @@ export class ClientesService {
 	async getClientes() {
 	const items = await this.clientesRepository.find({relations:["Contratos"]})
   
-	return {data : items, status: HttpStatus.OK }
+
+  const itemsActived = items.filter(item => item.estatus)
+
+	return {data : itemsActived, status: HttpStatus.OK }
 	}
 	
   async getClientesbyUsuario(id: number) {
@@ -75,9 +78,16 @@ export class ClientesService {
   }
 
 async deleteCliente(id: number ){
-	await this.clientesRepository.delete(id)
+	const item = await this.clientesRepository.findOne({where:{id}})
 
-	return{  status : HttpStatus.OK}
+  const newFlag = {
+    ...item,
+    estatus: false
+  }
+
+  await this.clientesRepository.save(newFlag)
+
+	return{  data : newFlag , status : HttpStatus.OK}
   }
 
 

@@ -9,4 +9,5 @@ export class createAbonoGerenciaDto {
   fhcreacion: Date;
   gerenciaId: number;
   usuarioId: number;
+  estatus:boolean
 }

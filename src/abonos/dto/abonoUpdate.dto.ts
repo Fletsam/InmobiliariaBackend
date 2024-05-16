@@ -7,5 +7,5 @@ export class UpdateAbonoDto {
   usuarioId?: number;
   fhcreacion?: Date;
   contratoId:number
-
+  estatus?:boolean
 }

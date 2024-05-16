@@ -13,7 +13,7 @@ export class Vendedores {
 	@Column()
 	pass:string
 
-	@Column({default:false})
+	@Column({default:true})
 	estatus: boolean;
 
 	@Column()
@@ -54,6 +54,8 @@ export class Vendedores {
 
 	@Column()
 	pagado:number
+
+	
 
 	@CreateDateColumn({
     name: 'fechadecreacion',

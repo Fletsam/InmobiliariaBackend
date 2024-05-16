@@ -33,6 +33,8 @@ export class Proveedores {
 	@Column()
 	usuarioId: number;
 
+	@Column( {default:true})
+	estatus:boolean
 
 	@OneToOne(() => ContratosProveedores,(contrato)=> contrato.proveedores )
 	contratosProveedores: ContratosProveedores[]

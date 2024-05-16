@@ -7,6 +7,7 @@ export class CreatAbonoDto {
   saldo:number
   usuarioId?: number;
   fhcreacion: Date;
+  estatus:boolean
   contratoid?:number
   folio:string
 

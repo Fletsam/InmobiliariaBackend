@@ -6,6 +6,7 @@
     direccion: string;
     rfc: string;
     correo: string;
+    estatus:boolean
     usuarioId: number;
     contratosProveedoresId:number
 } 	

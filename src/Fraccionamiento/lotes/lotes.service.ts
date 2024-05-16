@@ -107,9 +107,16 @@ async getTotalMontoFracc (id:number) {
   } */
 
  async deleteLote(id: number ){
-	await this.lotesRepository.delete(id)
+const item = await this.lotesRepository.findOne({where:{id}})
 
-	return{  status : HttpStatus.OK}
+const newFlag = {
+  ...item,
+  estatus:false
+}
+
+  await this.lotesRepository.save(newFlag)
+
+	return{ data : newFlag,  status : HttpStatus.OK}
   }  
 
 }

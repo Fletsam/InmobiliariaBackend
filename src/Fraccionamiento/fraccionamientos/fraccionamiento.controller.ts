@@ -16,13 +16,12 @@ export class FraccionamientoCrontroller {
 
 	}
 
-	@Get(':id/usuario/:id2')
+	@Get(':id')
 	getFraccionamiento(
 		@Param('id',ParseIntPipe) id:number,
-		@Param('id2',ParseIntPipe) id2:number,
 	)
 	{
-		return this.FraccionamientoService.getFraccionamientoById(id,id2)	
+		return this.FraccionamientoService.getFraccionamientoById(id)	
 	}
 	
 	@Delete(':id')

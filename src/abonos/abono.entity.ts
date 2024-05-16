@@ -28,6 +28,9 @@ export class Abono {
   @Column()
   saldo:number
 
+  @Column({default:true})
+  estatus:boolean
+
   @CreateDateColumn({
     name: 'fechadecreacion',
     type: 'datetime',

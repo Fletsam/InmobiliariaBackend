@@ -19,9 +19,11 @@ export class ProveedorService {
 	
 	
 	async getProveedores() {
-	const items = await this.proveedorRepository.find({relations:["contratosProveedores"]})
-  
-	return {data : items, status: HttpStatus.OK }
+	const items = await this.proveedorRepository.find({ relations:["contratosProveedores"]})
+  const activeItems = items.filter(item => item.estatus)
+    
+    
+	return {data : activeItems, status: HttpStatus.OK }
 	}
 	
  
@@ -46,9 +48,14 @@ export class ProveedorService {
   }
 
 async deleteProveedor(id: number ){
-	await this.proveedorRepository.delete(id)
-
-	return{  status : HttpStatus.OK}
+const item = await this.proveedorRepository.findOne({where:{id}})
+const DeleteFlag = {
+  ...item,
+  estatus: true
+  
+} 
+const saveFlag = await this.proveedorRepository.save(DeleteFlag)
+	return{ data: saveFlag , status : HttpStatus.OK}
   }
 
 

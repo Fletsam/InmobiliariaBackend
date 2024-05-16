@@ -66,6 +66,9 @@ export class Clientes {
   @Column()
   telefonodereferencia:string
 
+  @Column({default:true})
+  estatus:boolean
+
   /* @Column()
   idcreacion: number; */
 

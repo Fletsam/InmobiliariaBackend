@@ -12,7 +12,7 @@ export class AreaService{
   ) {}
 
   async getAreas() {
-	const items = await this.areasRepository.find({relations:["Funciones"]})
+	const items = await this.areasRepository.find({relations:["Funciones","Usuarios"]})
   
 	return {data : items, status: HttpStatus.OK }
 }
@@ -20,8 +20,8 @@ export class AreaService{
 
 async getAreabyId(id:number) {
  
-const foundUsuario = await this.areasRepository.findOne({where:{id}}) 
-return {data : foundUsuario, status: HttpStatus.OK }
+const foundArea = await this.areasRepository.findOne({where:{id}, relations: ["Usuarios"], select:{Usuarios:{id: true , nombre:true , cargo:true, estatus:true}}}) 
+return foundArea
 }
 
 

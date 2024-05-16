@@ -8,4 +8,5 @@ export class createAbonoNominaDto {
   saldo: number;
   fhcreacion: Date;
   usuarioId: number;
+  estatus:boolean
 }

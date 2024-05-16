@@ -27,6 +27,10 @@ export class AbonosProv {
 
   @Column()
   folio:string
+  
+	@Column( {default:true})
+	estatus:boolean
+
 
   @CreateDateColumn({
     name: 'fechadecreacion',

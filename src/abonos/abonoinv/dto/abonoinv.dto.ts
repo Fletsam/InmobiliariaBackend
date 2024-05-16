@@ -9,4 +9,5 @@ export class CreateAbonoInvDto {
   usuarioId: number;
   fhcreacion: Date;
   contratosInversionistaId?:number
+  estatus:boolean
 }

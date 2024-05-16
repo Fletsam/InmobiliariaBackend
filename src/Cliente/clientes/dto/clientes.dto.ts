@@ -20,6 +20,7 @@ export class CreateClientesDto {
   referencia: string
   telefonodereferencia:string
   fhcreacion: Date;
+  estatus:boolean
   /* idmodificacion: number; */
   fhmodificacion?: Date;
   usuarioId: number;

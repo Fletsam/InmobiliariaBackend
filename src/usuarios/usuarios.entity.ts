@@ -59,7 +59,7 @@ export class Usuarios {
   @Column()
   pass: string;
   
-  @Column({default:false})
+  @Column({default:true})
   estatus: boolean;
   
   @Column()
