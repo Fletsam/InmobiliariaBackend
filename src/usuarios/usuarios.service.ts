@@ -27,10 +27,19 @@ export class UsuariosService {
       where: { id }, relations : ["area", "Funciones","AbonosNomina"]   
     });
     
-    	
-		const nomina = item.AbonosNomina.reduce((total,item)=> total + item.nomina,0) 
+    if (!item) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Usuario no encontrado',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }	
+
+    const abonosActivos = item.AbonosNomina.filter(item => item.estatus)
+
+		const nomina = abonosActivos.reduce((total,item)=> total + item.nomina,0) 
 			item.pagado = nomina
-		const adeudo = item.AbonosNomina.reduce((total,item)=> total + item.adeudo,0) 
+		const adeudo = abonosActivos.reduce((total,item)=> total + item.adeudo,0) 
 			item.adeudo = adeudo
 
 		const newFlag = {...item}
@@ -39,15 +48,9 @@ export class UsuariosService {
 		await this.usuarioRepository.save(Flag)
 
 
-    if (!item) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Usuario no encontrado',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
+    
     delete item.pass
-    return item;
+    return {item, abonosActivos , status: HttpStatus.OK};
   }
 
 async findByUsuario(usuario: string) {

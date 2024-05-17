@@ -200,14 +200,26 @@ export class ContratoService {
 
   async getContratoById(id: number) {
     const Found = await this.contratosRepository.findOne({
-      where: { id }, relations: ["IngresosContratos", "EgresosContratos", "Abonos"]
+      where: { id }, relations: ["Abonos"]
     });
 	
+	 if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+
+
 	const Cliente = await this.clientesRepository.findOne({where:{id:Found.clientesId}})
 	const Lote = await this.lotesRepository.findOne({where:{id:Found.loteId}})
-	const monto = Found.Abonos.reduce((monto, item) => monto + item.montoingreso,0 )
+
+	const abonosActivos = Found.Abonos?.filter(item => item.estatus)
+
+	const monto = abonosActivos.reduce((monto, item) => monto + item.montoingreso,0 )
 		Found.pagado = (monto + Found.enganche)
-	const descuento = Found.Abonos.reduce((monto,item) => monto + item.descuento,0 )	
+	const descuento = abonosActivos.reduce((monto,item) => monto + item.descuento,0 )	
 		Found.descuento = descuento
 
 	const ingresoneto = (Found.montototal - descuento - Found.comision)
@@ -216,14 +228,8 @@ export class ContratoService {
 		const newFlag = {...Found}
 		const Flag = await this.contratosRepository.create(newFlag)
 		await this.contratosRepository.save(Flag)
-    if (!Found) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Contrato not found',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
-    return {Found, Cliente, Lote};
+   
+    return {Found, abonosActivos, Cliente, Lote};
   }
 
   async getContratosLote() {
@@ -322,10 +328,21 @@ export class ContratoService {
     const Found = await this.contratosFraccRepository.findOne({
       where: { id }, relations: ["Fraccionamiento", "AbonosFracc" ]
     });
-	
-		const montoIngreso = Found.AbonosFracc.reduce((monto, item)=> monto + item.montoingreso,0)
+
+ if (!Found) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Contrato not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+
+
+	const abonosActivos = Found.AbonosFracc?.filter(item => item.estatus)
+
+		const montoIngreso = abonosActivos.reduce((monto, item)=> monto + item.montoingreso,0)
 			Found.pagado = (montoIngreso+Found.enganche)
-		const penalizaciones = Found.AbonosFracc.reduce((monto,item)=> monto + item.penalizacion , 0)
+		const penalizaciones = abonosActivos.reduce((monto,item)=> monto + item.penalizacion , 0)
 			Found.penalizaciones = penalizaciones
 
 		const costoneto = (Found.montototal + Found.comision + Found.penalizaciones )
@@ -333,14 +350,8 @@ export class ContratoService {
 		const newFlag = {...Found}
 		const Flag = await this.contratosFraccRepository.create(newFlag)
 		await this.contratosFraccRepository.save(Flag)
-    if (!Found) {
-      throw new BadRequestException({
-        data: null,
-        message: 'Contrato not found',
-        status: HttpStatus.NOT_FOUND,
-      });
-    }
-    return Found;
+   
+    return {Found, abonosActivos};
   }
 
 	async getContratosFracc() {
@@ -506,27 +517,31 @@ async createContratoInversionista(contratoinversionista: CreateContratoInversion
     const Found = await this.contratosProveRepository.findOne({
       where: { id }, relations: ["proveedores" , "AbonosProv"]
     });
-	
-		if (AbonosProv.length) {
-				const montoIngreso = Found?.AbonosProv?.reduce((monto, item)=> monto + item.montoingreso,0)
-			Found.pagado = (montoIngreso+Found.enganche)
-		const credito = Found?.AbonosProv?.reduce((monto,item)=> monto + item.credito , 0)
-			Found.credito = Found.montototal + credito 
 
-		const newFlag = {...Found}
-		const Flag = await this.contratosProveRepository.create(newFlag)
-		await this.contratosProveRepository.save(Flag)
-		}
-		
-
-    if (!Found) {
+	 if (!Found) {
       throw new BadRequestException({
         data: null,
         message: 'Contrato not found',
         status: HttpStatus.NOT_FOUND,
       });
     }
-    return {data : Found, status: HttpStatus.OK }
+	
+	
+		const abonosActivos = Found.AbonosProv?.filter(item=> item.estatus)
+		
+		const montoIngreso = abonosActivos.reduce((monto, item)=> monto + item.montoingreso,0)
+		Found.pagado = (montoIngreso+Found.enganche)
+		const credito = abonosActivos.reduce((monto,item)=> monto + item.credito , 0)
+		Found.credito = Found.montototal + credito 
+
+		const newFlag = {...Found}
+		const Flag = await this.contratosProveRepository.create(newFlag)
+		await this.contratosProveRepository.save(Flag)
+		
+		
+
+   
+    return {data : Found, abonosActivos, status: HttpStatus.OK }
   }
 
 

@@ -26,8 +26,24 @@ export class GerenciaService {
   }
   async getGerencia(){
 		const items  = await this.gerenciaRepository.find({relations: ["Dias", "AbonosGerencia"]})
-		const item = items[items.length - 1];
+	
+		
+			
 
+		const item = items[items.length - 1];
+	console.log(item);
+		const flagitem = item 
+		const ultimoElemento = flagitem.Dias.shift()
+		console.log(ultimoElemento);
+		
+		let fechaAnterior = new Date(ultimoElemento?.fhcreacion)
+		let fechaActual = new Date();
+		let diferenciaEnS = Number(fechaActual) - Number(fechaAnterior);
+		let diferencia = diferenciaEnS / (1000 * 3600 * 24);
+		let yaPasoUnDia = (diferencia >= 1);
+
+		console.log( yaPasoUnDia);
+		
 		const totalIngresos = item.Dias?.reduce((total,monto)=> total + monto.ingresototal, 0 )
 			item.ingresototal = totalIngresos
 		const totalEgresos = item.Dias?.reduce((total, monto ) => total + monto.egresototal, 0)
@@ -35,9 +51,12 @@ export class GerenciaService {
 
   		const Flag = {...item}
 		const newFlag = await this.gerenciaRepository.create(Flag)
+		console.log(Flag);
+		console.log(newFlag);
+		
 		await this.gerenciaRepository.save(newFlag)
 
-		return { data: item , status : HttpStatus.OK}
+		return { data: item , /* yaPasoUnDia, */ status : HttpStatus.OK}
 	}
 
 }

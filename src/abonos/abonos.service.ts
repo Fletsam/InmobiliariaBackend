@@ -193,17 +193,27 @@ async createAbonoContrato(abono: CreatAbonoDto , id:number){
     const abonos = await this.abonoRepository.find({ 
     where: {contratoId: found.id}
       })
-      	const monto = abonos.reduce((monto, item) => monto + item.montoingreso,0 )
+
+      const abonosActivos = abonos.filter(item => item.estatus)
+      
+      	const monto = abonosActivos.reduce((monto, item) => monto + item.montoingreso,0 )
 		    found.pagado = (monto + found.enganche)
  
     return this.contratoRepository.save(found) 
   }  
 
 async deleteAbonoContrato(id:number){
-  await this.abonoRepository.delete(id)
+  const item = await this.abonoRepository.findOne({where:{id}})
   
+  const newFlag = {
+    ...item ,
+    estatus:false
+  }
+
+  await this.abonoRepository.save(newFlag)
 /*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+
+ */ return{  data : newFlag , status : HttpStatus.OK}
 }
 // Abonos Fraccs ------------------------------------------------------------------------------------------------------------------------------
 
@@ -225,9 +235,10 @@ async getTotalMontoContratoFracc (id:number) {
     const abonos = await this.abonosFraccRepository.find({ 
     where: {contratosFraccId: found.id}
       })
-    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
+      const abonosActivos = abonos.filter(item=> item.estatus)
+    const totalMontos = abonosActivos.reduce((total,monto) => total + monto.montoingreso , 0 )
      found.pagado = (totalMontos + found.enganche)
-    found.penalizaciones = abonos.reduce((total, monto) => total + monto.penalizacion ,0)
+    found.penalizaciones = abonosActivos.reduce((total, monto) => total + monto.penalizacion ,0)
     return this.contratosFraccRepository.save(found) 
   } 
 async getTotalPenalContratoFracc (id:number) {
@@ -243,10 +254,17 @@ async getTotalPenalContratoFracc (id:number) {
   } 
 
   async deleteAbonoContratoFracc(id:number){
-  await this.abonosFraccRepository.delete(id)
+    const item = await this.abonosFraccRepository.findOne({where:{id}})
+
+    const newFlag = {
+      ...item,
+      estatus:false
+    }
+
+    await this.abonosFraccRepository.save(newFlag)
+
   
-/*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+  return{ data : newFlag , status : HttpStatus.OK}
 }
 
 async getAbonosFracc() {
@@ -297,17 +315,24 @@ async getTotalMontoContratoProv (id:number) {
     where: {contratosProveedoresId: found.id}
       })
    
-    const totalMontos = abonos.reduce((total,monto) => total + monto.montoingreso , 0 )
+      const abonosActivos = abonos.filter(item => item.estatus)
+
+    const totalMontos = abonosActivos.reduce((total,monto) => total + monto.montoingreso , 0 )
     found.pagado = (totalMontos+found.enganche) 
     const credito  = abonos.reduce((total, monto) => total + monto.credito ,0)
      found.credito =  credito + found.montototal 
     return this.contratosProvRepository.save(found) 
   } 
  async deleteAbonoContratoProv(id:number){
-  await this.abonosProvRepository.delete(id)
+  const item = await this.abonosProvRepository.findOne({where:{id}})
+
+  const newFlag = { 
+    ...item,
+    estatus: false
+  }
   
-/*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+  await this.abonosProvRepository.save(newFlag)  
+  return{ data: newFlag , status : HttpStatus.OK}
 }
 
 async getAbonosProv() {
@@ -353,10 +378,10 @@ async getAbonoProvbyId(id: number) {
     const abonos = await this.abonosVentasRepository.find({ 
     where: { vendedorId: found.id}
       })
-   
-    const totalMontos = abonos.reduce((total,monto) => total + monto.abono , 0 )
+      const abonosActivos = abonos.filter(item=> item.estatus)
+    const totalMontos = abonosActivos.reduce((total,monto) => total + monto.abono , 0 )
     found.pagado = (totalMontos) 
-    const comisiones  = abonos.reduce((total, monto) => total + monto.comision ,0)
+    const comisiones  = abonosActivos.reduce((total, monto) => total + monto.comision ,0)
      found.comisiones =  comisiones 
     return this.vendedoresRepository.save(found) 
   } 
@@ -377,10 +402,16 @@ async getAbonoProvbyId(id: number) {
   }
 
   async deleteAbonoVentas(id:number){
-  await this.abonosVentasRepository.delete(id)
+    const item = await this.abonosVentasRepository.findOne({where:{id}})
   
-/*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+    const newFlag = {
+      ...item , 
+      estatus : false 
+    }
+
+  await this.abonosVentasRepository.save(newFlag)
+  
+  return{  data : newFlag , status : HttpStatus.OK}
 }
  //Abonos Gerencia ---------------------------------------------------------------------------------------------------------------------------------v 
  async createAbonoGerencia(abono: createAbonoGerenciaDto , id:number){
@@ -400,19 +431,26 @@ async getTotalMontoIngresosDia (id:number) {
     const abonos = await this.abonosGerenciaRepository.find({ 
     where: { diaId: found.id}
       })
-   
-    const ingresos = abonos.reduce((total,monto) => total + monto.ingreso , 0 )
+    const abonosActivos = abonos.filter(item=> item.estatus)
+    const ingresos = abonosActivos.reduce((total,monto) => total + monto.ingreso , 0 )
     found.ingresototal = (ingresos) 
-    const egresos  = abonos.reduce((total, monto) => total + monto.egreso ,0)
+    const egresos  = abonosActivos.reduce((total, monto) => total + monto.egreso ,0)
      found.egresototal =  egresos 
     return this.diasRepository.save(found) 
   } 
 
   async deleteAbonoGerencia(id:number){
-  await this.abonosGerenciaRepository.delete(id)
+    const item = await this.abonosGerenciaRepository.findOne({where:{id}})
+
+    const newFlag = {
+      ...item,
+      estatus:false
+    }
+
+
+  await this.abonosGerenciaRepository.save(newFlag)
   
-/*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+  return{ data: newFlag ,status : HttpStatus.OK}
 }
  //Abono Nomina-----------------------------------------------------------------------------------------------------------------------------------------v 
 
@@ -434,10 +472,10 @@ async getTotalMontoIngresosDia (id:number) {
     const abonos = await this.abonosNominaRepository.find({ 
     where: { usuarioId: found.id}
       })
-   
-    const ingresos = abonos.reduce((total,monto) => total + monto.nomina , 0 )
+   const abonosActivos = abonos.filter(item => item.estatus )
+    const ingresos = abonosActivos.reduce((total,monto) => total + monto.nomina , 0 )
     found.pagado = (ingresos) 
-    const egresos  = abonos.reduce((total, monto) => total + monto.adeudo ,0)
+    const egresos  = abonosActivos.reduce((total, monto) => total + monto.adeudo ,0)
      found.adeudo =  egresos 
     return this.usuarioRepository.save(found) 
   
@@ -459,10 +497,17 @@ async getTotalMontoIngresosDia (id:number) {
   }
 
     async deleteAbonoNomina(id:number){
-  await this.abonosNominaRepository.delete(id)
-  
+  const item = await this.abonosNominaRepository.findOne({where:{id}})
+
+  const newFlag = {
+    ...item,
+    estatus: false
+  }
+
+  await this.abonosNominaRepository.save(newFlag)
+
 /*   await this.getTotalMontoContrato(abono.affected)
- */ return{ status : HttpStatus.OK}
+ */ return{ data: newFlag , status : HttpStatus.OK}
 }
 
  //--------------------------------------------------------------------------------------------------------------------------------------------v 

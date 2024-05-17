@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Vendedores } from "./vendedores.entity";
 import { Repository } from "typeorm";
@@ -20,9 +20,20 @@ constructor(
 	async getVendedoresbyId(id:number){
 		const item = await this.vendedoresRepository.findOne({where:{id}, relations:["AbonosVentas"]})
 		
-		const comisiones = item.AbonosVentas.reduce((total,item)=> total + item.comision,0) 
+		
+		if (!item) {
+			throw new BadRequestException({
+				data: null,
+				message: 'Usuario no encontrado',
+				status: HttpStatus.NOT_FOUND,
+			});
+    }	
+
+		const abonosActivos = item.AbonosVentas?.filter(item=> item.estatus)
+		
+		const comisiones = abonosActivos.reduce((total,item)=> total + item.comision,0) 
 			item.comisiones = comisiones
-		const pagado = item.AbonosVentas.reduce((total,item)=> total + item.abono,0) 
+		const pagado = abonosActivos.reduce((total,item)=> total + item.abono,0) 
 			item.pagado = pagado
 
 		const newFlag = {...item}
@@ -30,7 +41,7 @@ constructor(
 		await this.vendedoresRepository.save(Flag)
 	
 
-		return { vendedor:item , status : HttpStatus.OK}
+		return { vendedor:item, abonosActivos , status : HttpStatus.OK}
 	}
 
 	async createVendedor(vendedor: CreateVendedoresDto ){

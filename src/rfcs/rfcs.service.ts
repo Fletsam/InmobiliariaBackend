@@ -24,11 +24,11 @@ export class RfcsService {
 
 async getRfcsByUsuario(id:number) {
  
-  const foundUsuario = await this.usuarioService.findById(id) 
+ /*  const foundUsuario = await this.usuarioService.findById(id) 
 	const Rfcs = await this.rfcsRepository.find({ 
     where: {usuarioId: foundUsuario.id}
   })
-  
+   */
   
 	return {data : Rfcs, status: HttpStatus.OK }
 }
