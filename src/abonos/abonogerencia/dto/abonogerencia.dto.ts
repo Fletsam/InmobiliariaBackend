@@ -10,4 +10,5 @@ export class createAbonoGerenciaDto {
   gerenciaId: number;
   usuarioId: number;
   estatus:boolean
+  receptor:string
 }

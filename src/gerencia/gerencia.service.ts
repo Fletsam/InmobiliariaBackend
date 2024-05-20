@@ -9,6 +9,7 @@ import { Dias } from "./dias/dias.entity";
 export class GerenciaService {
 	constructor(
 	@InjectRepository(Gerencia) private gerenciaRepository: Repository<Gerencia>,
+	@InjectRepository(Dias) private diasRepository: Repository<Dias>,
 	@InjectRepository(AbonosGerencia) private abonosGerenciaRepository: Repository<AbonosGerencia>,
     ) {}
 
@@ -26,23 +27,19 @@ export class GerenciaService {
   }
   async getGerencia(){
 		const items  = await this.gerenciaRepository.find({relations: ["Dias", "AbonosGerencia"]})
-	
-		
-			
+		const dias = await this.diasRepository.find()
 
+		
+		
 		const item = items[items.length - 1];
-	console.log(item);
-		const flagitem = item 
-		const ultimoElemento = flagitem.Dias.shift()
-		console.log(ultimoElemento);
+		const ultimoElemento = dias[dias.length -1]
 		
 		let fechaAnterior = new Date(ultimoElemento?.fhcreacion)
 		let fechaActual = new Date();
 		let diferenciaEnS = Number(fechaActual) - Number(fechaAnterior);
 		let diferencia = diferenciaEnS / (1000 * 3600 * 24);
-		let yaPasoUnDia = (diferencia >= 1);
+		let yaPasoUnDia = (diferencia <= 1);
 
-		console.log( yaPasoUnDia);
 		
 		const totalIngresos = item.Dias?.reduce((total,monto)=> total + monto.ingresototal, 0 )
 			item.ingresototal = totalIngresos
@@ -51,12 +48,10 @@ export class GerenciaService {
 
   		const Flag = {...item}
 		const newFlag = await this.gerenciaRepository.create(Flag)
-		console.log(Flag);
-		console.log(newFlag);
-		
+	
 		await this.gerenciaRepository.save(newFlag)
 
-		return { data: item , /* yaPasoUnDia, */ status : HttpStatus.OK}
+		return { data: item , yaPasoUnDia, status : HttpStatus.OK}
 	}
 
 }

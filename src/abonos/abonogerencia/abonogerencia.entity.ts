@@ -27,7 +27,9 @@ export class AbonosGerencia {
 	@Column()
 	saldo:number
 
-	
+	@Column()
+	receptor:string
+
 	@Column( {default:true})
 	estatus:boolean
 

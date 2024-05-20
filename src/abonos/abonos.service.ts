@@ -1,7 +1,7 @@
 import { BadRequestException, Controller, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Abono } from "./abono.entity";
-import { Repository } from "typeorm";
+import { Between, Repository } from "typeorm";
 import { CreatAbonoDto } from "./dto/abono.dto";
 import { UpdateAbonoDto } from "./dto/abonoUpdate.dto";
 import { Usuarios } from "src/usuarios/usuarios.entity";
@@ -76,24 +76,24 @@ async getAbonosMes() {
   const abonosInv = await this.abonosInvRepository.find({relations:["contratosInversionista", "contratosInversionista.cliente"]})
 
 
-  const abonosLot = await abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
-  const abonosinv = await abonosInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.credito , formadepago: item.formadepago , nombre: item.contratosInversionista.cliente.nombre}))
-  const abonosprov = await abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
-  const abonosfracc = await abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
-  const abonosventas = await abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
-  const abonosgerencia = await abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: (item.dia.fhcreacion).toString()}))
-  const abonosnomina = await abonosNomina?.map((item) => ({id:item.id ,fhcreacion:item.fhcreacion , descuento:item.adeudo, formadepago:item.formadepago , nombre : item.usuario.nombre}) )
+  const abonosLot =  abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
+  const abonosinv =  abonosInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.credito , formadepago: item.formadepago , nombre: item.contratosInversionista.cliente.nombre}))
+  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
+  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
+  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
+  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: (item.dia.fhcreacion).toString()}))
+  const abonosnomina =  abonosNomina?.map((item) => ({id:item.id ,fhcreacion:item.fhcreacion , descuento:item.adeudo, formadepago:item.formadepago , nombre : item.usuario.nombre}) )
 
 
-  const ultimoAbonoFracc = await abonosfracc[abonosFracc?.length - 1] 
-  const ultimoAbonoLot = await abonosLot[abonosLot?.length - 1] 
-  const ultimoAbonoInv = await abonosinv[abonosinv?.length - 1] 
-  const ultimoAbonoProv = await abonosProv[abonosProv?.length - 1] 
-  const ultimoAbonoVenta = await abonosventas[abonosventas?.length - 1] 
-  const ultimoAbonoGerencia = await abonosgerencia[abonosgerencia?.length - 1] 
-  const ultimoAbonoNomina = await abonosnomina[abonosnomina?.length - 1]
+  const ultimoAbonoFracc =  abonosfracc[abonosFracc?.length - 1] 
+  const ultimoAbonoLot =  abonosLot[abonosLot?.length - 1] 
+  const ultimoAbonoInv =  abonosinv[abonosinv?.length - 1] 
+  const ultimoAbonoProv =  abonosProv[abonosProv?.length - 1] 
+  const ultimoAbonoVenta =  abonosventas[abonosventas?.length - 1] 
+  const ultimoAbonoGerencia =  abonosgerencia[abonosgerencia?.length - 1] 
+  const ultimoAbonoNomina =  abonosnomina[abonosnomina?.length - 1]
   
-  const allabonos = await abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina,ultimoAbonoInv)
+  const allabonos =  abonosLot?.concat(abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina,abonosinv)
   
   const fechaActual = new Date();
   const mesActual = fechaActual?.getMonth() + 1;
@@ -112,6 +112,53 @@ async getAbonosMes() {
     ultimoAbonoInv: ultimoAbonoInv?.id || 0,
     status: HttpStatus.OK }
 }
+
+async getAbonosDia(id:number) {
+  const dia = await this.abonosGerenciaRepository.findOne({where:{id}})
+  
+  const fhcreacion = dia.fhcreacion
+  const startOfDay = new Date(fhcreacion.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(fhcreacion.setHours(23, 59, 59, 999));
+  
+  const abonosLote = await this.abonoRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true, folio : true , montoingreso: true , descuento:true , estatus : true, fhcreacion:true ,formadepago:true ,}}) 
+  const abonosFracc = await this.abonosFraccRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true, folio : true , montoingreso: true , penalizacion:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  const abonosProv = await this.abonosProvRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true ,folio : true , montoingreso: true , credito:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  
+  const abonosVentas = await this.abonosVentasRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true ,folio : true , abono: true , comision:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  
+  const abonoNomina = await this.abonosNominaRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true ,folio : true , nomina: true , adeudo:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  
+  const abonoInv = await this.abonosInvRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true ,folio : true , pago: true , credito:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  
+  const abonosGerencia = await this.abonosGerenciaRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
+  select:{id: true ,folio : true , ingreso: true , egreso:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
+  
+  const abonosLot =  abonosLote?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion,ingreso:item.montoingreso, descuento : item.descuento , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus}))
+  const abonosinv =  abonoInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, ingreso:item.pago , descuento: item.credito , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus }))
+  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , ingreso : item.montoingreso, descuento: item.credito, formadepago: item.formadepago,folio: item.folio, estatus:item.estatus }))
+  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso: item.montoingreso, descuento: item.penalizacion, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
+  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso:item.abono , descuento: item.comision, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
+  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion ,ingreso:item.ingreso, descuento: item.egreso, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
+  const abonosnomina =  abonoNomina?.map((item) => ({ id:item.id ,fhcreacion:item.fhcreacion ,ingreso:item.nomina, descuento:item.adeudo, formadepago:item.formadepago , folio: item.folio, estatus:item.estatus}) )
+
+  const allabonos =  abonosLot?.concat(abonosinv,abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina)
+
+  const totalIngreso = allabonos.reduce((total, item ) => total + item.ingreso , 0 )
+  const totalEgresos = allabonos.reduce((total, item ) => total + item.descuento , 0 )
+
+
+
+  return { allabonos , totalIngreso, totalEgresos, status:HttpStatus.OK }
+}
+
+
+
 
 async getAbonosByUsuario(id:number) {
   const foundUsuario = await this.usuarioRepository.findOne( {where: {id}} ) 
@@ -418,7 +465,7 @@ async getAbonoProvbyId(id: number) {
       const dia = await this.diasRepository.findOne({where : {id}})
       const newAbonoFlag = { ...abono, fhcreacion: new Date()}
        
-        const saldo = (dia.montoinicio - newAbonoFlag.ingreso + dia.ingresototal - newAbonoFlag.egreso - dia.egresototal )
+        const saldo = (dia.montoinicio + newAbonoFlag.ingreso + dia.ingresototal - newAbonoFlag.egreso - dia.egresototal )
         const newAbono = await this.abonosGerenciaRepository.create({...newAbonoFlag , saldo:saldo, diaId:dia.id })
         const AbonoSaved = await this.abonosGerenciaRepository.save({...newAbono })
         await this.getTotalMontoIngresosDia(dia.id)
@@ -438,6 +485,21 @@ async getTotalMontoIngresosDia (id:number) {
      found.egresototal =  egresos 
     return this.diasRepository.save(found) 
   } 
+
+async getAbonoGerenciaById(id: number) {
+    const AbonoFound = await this.abonosGerenciaRepository.findOne({
+      where: { id } , relations: ["gerencia"]
+    });
+    if (!AbonoFound) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    return AbonoFound
+  }
+
 
   async deleteAbonoGerencia(id:number){
     const item = await this.abonosGerenciaRepository.findOne({where:{id}})

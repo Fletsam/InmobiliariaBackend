@@ -5,10 +5,11 @@ import { GerenciaController } from "./gerencia.controller";
 import { GerenciaService } from "./gerencia.service";
 import { Gerencia } from "./gerencia.entity";
 import { AbonosGerencia } from "src/abonos/abonogerencia/abonogerencia.entity";
+import { Dias } from "./dias/dias.entity";
 
 @Module({
 
-	imports: [ TypeOrmModule.forFeature([Gerencia,AbonosGerencia]), JwtModule],
+	imports: [ TypeOrmModule.forFeature([Gerencia,AbonosGerencia, Dias]), JwtModule],
 	controllers: [ GerenciaController],
 	providers: [ GerenciaService],
 	exports:[GerenciaService]

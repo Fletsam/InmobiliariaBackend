@@ -161,6 +161,21 @@ export class AbonosController {
 		return this.abonoService.createAbonoGerencia(abono, id)
 	}
 
+	@Get('/allDia/:id')
+	GetAllAbonosDia(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonosDia(id)
+	}
+
+	@Get('/dias/:id')
+	GetAbonoGerenciaId(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonoGerenciaById(id)
+	}
 	@Delete('/dias/:id')
 	deleteAbonoGerencia(
 		@Param('id', ParseIntPipe) id: number,
