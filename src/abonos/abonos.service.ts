@@ -27,6 +27,7 @@ import { Dias } from "src/gerencia/dias/dias.entity";
 import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
 import {createAbonoNominaDto} from "./abonosnomina/dto/abonosnomina.dto"
 import { AbonosInv } from "./abonoinv/abonoinv.entity";
+import { log } from "console";
 
 @Injectable()
 
@@ -71,18 +72,18 @@ async getAbonosMes() {
   const abonosProv = await this.abonosProvRepository.find( {relations: ["contratosProveedores.proveedores"]})
   const abonosFracc = await this.abonosFraccRepository.find(  {relations: ["contratosFracc.Fraccionamiento"]})
   const abonosVentas = await this.abonosVentasRepository.find(  {relations: ["vendedor"]})
-  const abonosGerencia = await this.abonosGerenciaRepository.find(  {relations: ["dia"]})
-  const abonosNomina = await this.abonosNominaRepository.find({relations:["usuario"]})
+  const abonosGerencia = await this.abonosGerenciaRepository.find(  {relations: ["dia", "gerencia"]})
+  const abonosNomina = await this.abonosNominaRepository.find({relations:["usuario",]})
   const abonosInv = await this.abonosInvRepository.find({relations:["contratosInversionista", "contratosInversionista.cliente"]})
 
 
-  const abonosLot =  abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre}))
-  const abonosinv =  abonosInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.credito , formadepago: item.formadepago , nombre: item.contratosInversionista.cliente.nombre}))
-  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre}))
-  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre}))
-  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre}))
-  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: (item.dia.fhcreacion).toString()}))
-  const abonosnomina =  abonosNomina?.map((item) => ({id:item.id ,fhcreacion:item.fhcreacion , descuento:item.adeudo, formadepago:item.formadepago , nombre : item.usuario.nombre}) )
+  const abonosLot =  abonos?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.descuento , formadepago: item.formadepago , nombre: item.contrato.clientes.nombre , concepto: item.concepto , ingreso: item.montoingreso , tipo: "cliente"}))
+  const abonosinv =  abonosInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, descuento : item.credito , formadepago: item.formadepago , nombre: item.contratosInversionista.cliente.nombre , concepto: item.concepto, ingreso : item.pago , tipo : "inv"}))
+  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , descuento: item.credito, formadepago: item.formadepago, nombre:item.contratosProveedores.proveedores.nombre , concepto: item.concepto , ingreso : item.montoingreso , tipo : "prov"}))
+  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.penalizacion, formadepago: item.formadepago , nombre: item.contratosFracc.Fraccionamiento.nombre , concepto: item.concepto, ingreso:item.montoingreso , tipo : "fracc"}))
+  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.comision, formadepago: item.formadepago , nombre: item.vendedor.nombre , concepto: item.concepto , ingreso: item.abono , tipo : "ventas"}))
+  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , descuento: item.egreso, formadepago: item.formadepago , nombre: item.gerencia.nombre , concepto: item.concepto, ingreso : item.ingreso , tipo: "gerencia"}))
+  const abonosnomina =  abonosNomina?.map((item) => ({id:item.id ,fhcreacion:item.fhcreacion , descuento:item.adeudo, formadepago:item.formadepago , nombre : item.usuario.nombre , concepto: item.concepto , ingreso: item.nomina , tipo: "usuario"}) )
 
 
   const ultimoAbonoFracc =  abonosfracc[abonosFracc?.length - 1] 
@@ -114,11 +115,12 @@ async getAbonosMes() {
 }
 
 async getAbonosDia(id:number) {
-  const dia = await this.abonosGerenciaRepository.findOne({where:{id}})
+  const dia = await this.diasRepository.findOne({where:{id}})
   
   const fhcreacion = dia.fhcreacion
   const startOfDay = new Date(fhcreacion.setHours(0, 0, 0, 0));
   const endOfDay = new Date(fhcreacion.setHours(23, 59, 59, 999));
+  
   
   const abonosLote = await this.abonoRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
   select:{id: true, folio : true , montoingreso: true , descuento:true , estatus : true, fhcreacion:true ,formadepago:true ,}}) 
@@ -139,23 +141,38 @@ async getAbonosDia(id:number) {
   const abonosGerencia = await this.abonosGerenciaRepository.find({where:{fhcreacion: Between(startOfDay, endOfDay) },
   select:{id: true ,folio : true , ingreso: true , egreso:true , estatus : true, fhcreacion:true ,formadepago:true, }}) 
   
-  const abonosLot =  abonosLote?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion,ingreso:item.montoingreso, descuento : item.descuento , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus}))
-  const abonosinv =  abonoInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, ingreso:item.pago , descuento: item.credito , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus }))
-  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , ingreso : item.montoingreso, descuento: item.credito, formadepago: item.formadepago,folio: item.folio, estatus:item.estatus }))
-  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso: item.montoingreso, descuento: item.penalizacion, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
-  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso:item.abono , descuento: item.comision, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
-  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion ,ingreso:item.ingreso, descuento: item.egreso, formadepago: item.formadepago , folio: item.folio, estatus:item.estatus}))
-  const abonosnomina =  abonoNomina?.map((item) => ({ id:item.id ,fhcreacion:item.fhcreacion ,ingreso:item.nomina, descuento:item.adeudo, formadepago:item.formadepago , folio: item.folio, estatus:item.estatus}) )
+  const abonosLot =  abonosLote?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion,ingreso:item.montoingreso, egresos : 0 , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus , tipo: "cliente"}))
+  const abonosinv =  abonoInv?.map( (item ) =>  ({ id:item.id, fhcreacion: item.fhcreacion, ingreso:0 , egresos: (item.credito + item.pago ) , formadepago: item.formadepago ,folio: item.folio, estatus:item.estatus, tipo: "inv"}))
+  const abonosprov =  abonosProv?.map((item) => ({ id:item.id, fhcreacion: item.fhcreacion , ingreso : 0, egresos: (item.credito + item.montoingreso), formadepago: item.formadepago,folio: item.folio, estatus:item.estatus ,tipo:"prov" }))
+  const abonosfracc =  abonosFracc?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso: 0, egresos: (item.penalizacion + item.montoingreso), formadepago: item.formadepago , folio: item.folio, estatus:item.estatus , tipo:"fracc"}))
+  const abonosventas =  abonosVentas?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion , ingreso:0 , egresos: (item.comision + item.abono), formadepago: item.formadepago , folio: item.folio, estatus:item.estatus , tipo: "ventas"}))
+  const abonosgerencia =  abonosGerencia?.map((item) => ({ id:item.id,  fhcreacion: item.fhcreacion ,ingreso:0, egresos: (item.egreso), formadepago: item.formadepago , folio: item.folio, estatus:item.estatus , tipo : "gerencia"}))
+  const abonosnomina =  abonoNomina?.map((item) => ({ id:item.id ,fhcreacion:item.fhcreacion ,ingreso:0, egresos:(item.adeudo + item.nomina), formadepago:item.formadepago , folio: item.folio, estatus:item.estatus , tipo : "usuario"}) )
 
-  const allabonos =  abonosLot?.concat(abonosinv,abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina)
+  const allAbonos =  abonosLot?.concat(abonosinv,abonosprov,abonosfracc,abonosventas,abonosgerencia,abonosnomina)
+  const allabonosActive = allAbonos.filter( item => item.estatus)
+  const totalIngreso = allabonosActive.reduce((total, item ) => total + item.ingreso , 0 )
+  const totalEgresos = allabonosActive.reduce((total, item ) => total + item.egresos , 0 )
 
-  const totalIngreso = allabonos.reduce((total, item ) => total + item.ingreso , 0 )
-  const totalEgresos = allabonos.reduce((total, item ) => total + item.descuento , 0 )
+  allabonosActive.sort((b, a) => Number(new Date(a.fhcreacion)) - Number(new Date(b.fhcreacion)));  
+  dia.ingresototal = totalIngreso
+  dia.egresototal = totalEgresos
+  
+  await this.diasRepository.save(dia)
 
-
-
-  return { allabonos , totalIngreso, totalEgresos, status:HttpStatus.OK }
+  return {  allAbonos : allabonosActive , totalIngreso, totalEgresos, status:HttpStatus.OK }
 }
+
+
+async getAbonoFhCreacion (fhcreacion) {
+  const { data} = await this.getAbonosMes()
+  const { fh} = fhcreacion 
+  
+  const abono = data.filter(item => (Number(new Date(item.fhcreacion))) === fh )
+  
+  return {data : abono ,status: HttpStatus.OK}
+}
+
 
 
 

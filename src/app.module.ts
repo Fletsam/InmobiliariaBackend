@@ -96,6 +96,8 @@ import { GerenciaModule } from './gerencia/gerencia.module';
 import { Dias } from './gerencia/dias/dias.entity';
 import { DiasModule } from './gerencia/dias/dias.module';
 import { AbonosNomina } from './abonos/abonosnomina/abonosnomina.entity';
+import { Llamadas } from './vendedores/llamadas/llamadas.entity';
+import { LlamadasModule } from './vendedores/llamadas/llamadas.module';
 
 @Module({
   imports: 
@@ -188,6 +190,7 @@ import { AbonosNomina } from './abonos/abonosnomina/abonosnomina.entity';
         Proveedores,
         ContratosProveedores,
         Vendedores,
+        Llamadas,
         AbonosVentas,
         Gerencia,
         AbonosGerencia,
@@ -216,7 +219,8 @@ import { AbonosNomina } from './abonos/abonosnomina/abonosnomina.entity';
     ProveedorModule,
     VendedoresModule,
     GerenciaModule,
-    DiasModule
+    DiasModule,
+    LlamadasModule
   ],
   controllers: [],
   providers: [],

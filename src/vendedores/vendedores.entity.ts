@@ -1,6 +1,7 @@
 import { AbonosVentas } from "src/abonos/abonoventas/abonoventas.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Llamadas } from "./llamadas/llamadas.entity";
 
 @Entity()
 export class Vendedores {
@@ -66,6 +67,9 @@ export class Vendedores {
 
 	@OneToMany(() => AbonosVentas, (abono) => abono.vendedor)
  	 AbonosVentas: AbonosVentas[];
+
+	@OneToMany(() => Llamadas, (llamadas) => llamadas.vendedor)
+ 	Llamadas: Llamadas[];
 
 	@ManyToOne(() => Usuarios, (usuario) => usuario.Vendedores)
 	usuario: Usuarios

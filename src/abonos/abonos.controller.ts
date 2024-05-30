@@ -176,6 +176,13 @@ export class AbonosController {
 		
 		return this.abonoService.getAbonoGerenciaById(id)
 	}
+
+	@Post('/fhcreacion')
+	getAbonoFhCreacion(
+		@Body() fhcreacion: number){
+		return this.abonoService.getAbonoFhCreacion(fhcreacion)
+	}
+
 	@Delete('/dias/:id')
 	deleteAbonoGerencia(
 		@Param('id', ParseIntPipe) id: number,

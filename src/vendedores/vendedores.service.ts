@@ -4,12 +4,15 @@ import { Vendedores } from "./vendedores.entity";
 import { Repository } from "typeorm";
 import { CreateVendedoresDto } from "./dto/vendedores.dto";
 import { AbonosVentas } from "src/abonos/abonoventas/abonoventas.entity";
+import { Llamadas } from "./llamadas/llamadas.entity";
+import { createLlamadasDto } from "./llamadas/dto/llamadas.dto";
 
 @Injectable()
 export class VendedoresService {
 constructor(
 	@InjectRepository(Vendedores) private vendedoresRepository: Repository<Vendedores>,
 	@InjectRepository(AbonosVentas) private abonosVentasRepository: Repository<AbonosVentas>,
+	@InjectRepository(Llamadas) private llamadasRepository: Repository<Llamadas>,
     ) {}
 
 
@@ -50,5 +53,17 @@ constructor(
 	const Saved = await this.vendedoresRepository.save({...newItem})
 
 	return{ data:Saved, status : HttpStatus.OK}
+  }
+
+  async createLlamada (llamada:createLlamadasDto){
+	const newFlag = {...llamada , fhcreacion : new Date()}
+
+	const newItem = await this.llamadasRepository.create({...newFlag})
+
+	const Saved = await this.vendedoresRepository.save({...newItem})
+
+	return { data: Saved , status : HttpStatus.OK}
+
+
   }
 }
