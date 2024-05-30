@@ -8,7 +8,7 @@ export const databaseProviders = [
         type: 'mysql',
         username: 'root',
         password: '1234',
-        host: 'localhost',
+        host: 'https://inmobiliaria-backend-dusky.vercel.app/',
         port: 3306,
         database: 'inmobiliaria',
         entities: ['/.src/**/*.entity.ts'],
