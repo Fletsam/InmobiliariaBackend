@@ -120,7 +120,8 @@ import { LlamadasModule } from './vendedores/llamadas/llamadas.module';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         host: process.env.DB_HOST,
-        port: 3306,
+        port: 3306  ,
+
         database: process.env.DB_NAME,
         autoLoadEntities: true,
       entities: [
