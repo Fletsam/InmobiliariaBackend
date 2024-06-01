@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Vendedores } from "src/vendedores/vendedores.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 
@@ -8,7 +9,7 @@ interface Clase {
 }
 
 @Entity()
-export class Casas {
+export class csacsacsa {
 
 	@PrimaryGeneratedColumn()
 	id:number
@@ -41,6 +42,9 @@ export class Casas {
 	fichaimagen:string
 
 	@Column()
-	clase: Clase
+	tipo: Clase
+
+	@ManyToOne(() => Vendedores, (vendedor) => usuario.Vendedores)
+	usuario: Usuarios
 
 }

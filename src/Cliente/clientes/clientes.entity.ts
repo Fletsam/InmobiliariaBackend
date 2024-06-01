@@ -4,6 +4,7 @@ import { Contratos } from 'src/Contrato/contratos/contratos.entity';
 import { Inversionistas } from 'src/Inversionistass/inversionistas/inversionistas.entity'; 
 import { Usuarios } from 'src/usuarios/usuarios.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Propiedades } from 'src/propiedades/propiedades.entity';
 
 interface genero {
   genero: "Masculino" | "Femenino" | "PrefieroNoComentarlo"
@@ -101,5 +102,8 @@ export class Clientes {
 
   @OneToMany(() => Inversionistas, (inversionista) => inversionista.clientes) 
   Inversionistas : Inversionistas[]
+  
+  @OneToMany(() => Propiedades, (propiedad) => propiedad.clientes) 
+  Propiedades : Propiedades[]
 
 }

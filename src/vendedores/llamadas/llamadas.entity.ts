@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Vendedores } from "../vendedores.entity";
+import { Propiedades } from "src/propiedades/propiedades.entity";
 
 @Entity()
 export class Llamadas{ 
@@ -34,5 +35,11 @@ export class Llamadas{
 
 	@Column()
 	vendedorId:number
+
+	@ManyToOne(() => Propiedades, (propiedades) => propiedades.Llamadas)
+	propiedad: Propiedades
+
+	@Column()
+	propiedadId : number
 
 }
