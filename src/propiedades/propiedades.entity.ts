@@ -1,5 +1,5 @@
-import { Clientes } from "src/Cliente/clientes/clientes.entity";
-import { Fase1 } from "src/fases/fase1/fase2/fase3/fase1.entity";
+/* import { Clientes } from "src/Cliente/clientes/clientes.entity";
+import { Fase1 } from "src/fases/fase1/fase1.entity";
 import { Llamadas } from "src/vendedores/llamadas/llamadas.entity";
 import { Vendedores } from "src/vendedores/vendedores.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
@@ -96,3 +96,4 @@ export class Propiedades {
 	fase1Id: number
 }
 
+ */

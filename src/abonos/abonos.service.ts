@@ -28,6 +28,7 @@ import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
 import {createAbonoNominaDto} from "./abonosnomina/dto/abonosnomina.dto"
 import { AbonosInv } from "./abonoinv/abonoinv.entity";
 import { log } from "console";
+import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fraccionamientos.entity";
 
 @Injectable()
 
@@ -43,6 +44,7 @@ export class AbonoService {
   //ContratosFraccs
     @InjectRepository(ContratosFracc) private contratosFraccRepository: Repository<ContratosFracc>,
     @InjectRepository(AbonosFracc) private abonosFraccRepository: Repository<AbonosFracc>,
+    @InjectRepository(Fraccionamientos) private fraccRepository: Repository<Fraccionamientos>,
   //ContratosProveedores 
     @InjectRepository(ContratosProveedores) private contratosProvRepository: Repository<ContratosProveedores>,
     @InjectRepository(AbonosProv) private abonosProvRepository: Repository<AbonosProv>,
@@ -363,7 +365,6 @@ async getAbonoFraccbyId(id: number) {
 async createAbonoProv(abono: createAbonoProvDto , id:number){
       const contratoProv = await this.contratosProvRepository.findOne({where : {id}})
       const newAbonoFlag = { ...abono, fhcreacion: new Date()}
-      
         const saldo = (contratoProv.credito - (newAbonoFlag.montoingreso +  contratoProv.pagado - newAbonoFlag.credito) )
         const newAbono = await this.abonosProvRepository.create({...newAbonoFlag , saldo:saldo, contratosProveedoresId:contratoProv.id })
         const AbonoSaved = await this.abonosProvRepository.save({...newAbono })
@@ -424,6 +425,23 @@ async getAbonoProvbyId(id: number) {
       });
     }
     return AbonoFound
+  }
+
+async getAbonoProvbyFracc(id: number) {
+    const fracc = await this.fraccRepository.findOne({
+      where: { id }})
+
+    if (!fracc) {
+      throw new BadRequestException({
+        data: null,
+        message: 'Abono not found',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
+    
+    const abonosFound = await this.abonosProvRepository.find({ where : {destino:fracc.nombre} , relations : ["contratosProveedores.proveedores"]  ,select : { contratosProveedores:  {id: true , proveedores:{nombre:true}} , montoingreso: true , credito: true}})    
+
+    return {data:abonosFound , status : HttpStatus.OK}
   }
  //Abonos Ventas ---------------------------------------------------------------------------------------------------------------------------------v 
   async createAbonoVentas(abono: CreateAbonoVentasDto , id:number){

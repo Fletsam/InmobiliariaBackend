@@ -1,4 +1,4 @@
-import { Propiedades } from "src/propiedades/propiedades.entity";
+/* import { Propiedades } from "src/propiedades/propiedades.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -50,4 +50,4 @@ export class Fase1 {
 	propiedad:Propiedades
 	@Column()
 	propiedadId: number
-}
+} */

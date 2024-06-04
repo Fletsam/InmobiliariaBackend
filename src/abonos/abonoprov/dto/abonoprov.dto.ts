@@ -9,5 +9,6 @@ export class createAbonoProvDto {
   contratosProveedoresId: number;
   usuarioId: number;
   folio:string
+  destino:string
   estatus:boolean
 }

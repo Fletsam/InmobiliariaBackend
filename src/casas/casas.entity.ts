@@ -1,3 +1,4 @@
+import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Vendedores } from "src/vendedores/vendedores.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -44,7 +45,7 @@ export class csacsacsa {
 	@Column()
 	tipo: Clase
 
-	@ManyToOne(() => Vendedores, (vendedor) => usuario.Vendedores)
+	@ManyToOne(() => Vendedores, (vendedor) => vendedor.usuario)
 	usuario: Usuarios
 
 }

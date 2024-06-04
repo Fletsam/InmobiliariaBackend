@@ -20,6 +20,7 @@ import { AbonosGerencia } from "./abonogerencia/abonogerencia.entity";
 import { Dias } from "src/gerencia/dias/dias.entity";
 import { AbonosNomina } from "./abonosnomina/abonosnomina.entity";
 import { AbonosInv } from "./abonoinv/abonoinv.entity";
+import { Fraccionamientos } from "src/Fraccionamiento/fraccionamientos/fraccionamientos.entity";
 @Module({
 
 	imports: [TypeOrmModule.forFeature([
@@ -31,6 +32,7 @@ import { AbonosInv } from "./abonoinv/abonoinv.entity";
 		EstadoCuentaContrato,
 		ContratosFracc,
 		AbonosFracc,
+		Fraccionamientos,
 		AbonosProv,
 		ContratosProveedores,
 		Vendedores,

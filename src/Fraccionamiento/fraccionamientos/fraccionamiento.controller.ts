@@ -15,6 +15,12 @@ export class FraccionamientoCrontroller {
 		return this.FraccionamientoService.getFraccionamientos()
 
 	}
+	
+	@Get('/nombres')
+	getFraccionamientosNombres(){
+		return this.FraccionamientoService.getFraccsNombres()
+
+	}
 
 	@Get(':id')
 	getFraccionamiento(

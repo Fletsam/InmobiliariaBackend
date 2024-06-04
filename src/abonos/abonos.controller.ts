@@ -72,12 +72,22 @@ export class AbonosController {
 		
 		return this.abonoService.deleteAbonoContratoFracc(id)
 	}
+
+					// PROVEDORES // 	
 	@Get('prov/:id')
 	getAbonoProv(
 		@Param('id', ParseIntPipe) id: number,
 	) {
 		
 		return this.abonoService.getAbonoProvbyId(id)
+	}
+	
+	@Get('prov/fracc/:id')
+	getAbonosProvbyFracc(
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		
+		return this.abonoService.getAbonoProvbyFracc(id)
 	}
 	@Get('prov')
 	getAbonosProv() {
@@ -99,7 +109,9 @@ export class AbonosController {
 		return this.abonoService.deleteAbonoContratoProv(id)
 	}
 
+	
 
+					// USUARIOS // 
 
 	@Post('/usuario/:id')
 	createAbonoNomina(

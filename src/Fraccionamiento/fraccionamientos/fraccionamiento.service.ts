@@ -35,6 +35,13 @@ export class FraccionamientoService {
 	return {data : items, status: HttpStatus.OK }
 	}
  
+
+  async getFraccsNombres() {
+    const items = await this.fraccionamientosRepository.find({select:{nombre:true}})
+  
+    return {data: items, status : HttpStatus.OK}
+  }
+
 	async getFraccionamientoById(id: number) {
     
     const Found = await this.fraccionamientosRepository.findOne({

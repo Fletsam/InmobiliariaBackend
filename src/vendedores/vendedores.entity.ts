@@ -2,7 +2,7 @@ import { AbonosVentas } from "src/abonos/abonoventas/abonoventas.entity";
 import { Usuarios } from "src/usuarios/usuarios.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Llamadas } from "./llamadas/llamadas.entity";
-import { Propiedades } from "src/propiedades/propiedades.entity";
+/* import { Propiedades } from "src/propiedades/propiedades.entity"; */
 
 @Entity()
 export class Vendedores {
@@ -72,8 +72,8 @@ export class Vendedores {
 	@OneToMany(() => Llamadas, (llamadas) => llamadas.vendedor)
  	Llamadas: Llamadas[];
 
-	@OneToMany(() => Propiedades, (propiedades) => propiedades.vendedor)
- 	Propiedades: Propiedades[];
+/* 	@OneToMany(() => Propiedades, (propiedades) => propiedades.vendedor)
+ 	Propiedades: Propiedades[]; */
 
 	@ManyToOne(() => Usuarios, (usuario) => usuario.Vendedores)
 	usuario: Usuarios

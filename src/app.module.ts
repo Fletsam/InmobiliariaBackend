@@ -98,7 +98,9 @@ import { DiasModule } from './gerencia/dias/dias.module';
 import { AbonosNomina } from './abonos/abonosnomina/abonosnomina.entity';
 import { Llamadas } from './vendedores/llamadas/llamadas.entity';
 import { LlamadasModule } from './vendedores/llamadas/llamadas.module';
-
+/* import { Propiedades } from './propiedades/propiedades.entity';
+import { Fase1 } from './fases/fase1/fase1.entity';
+ */
 @Module({
   imports: 
   [
@@ -196,7 +198,9 @@ import { LlamadasModule } from './vendedores/llamadas/llamadas.module';
         Gerencia,
         AbonosGerencia,
         Dias,
-        AbonosNomina
+        AbonosNomina,
+   /*      Propiedades,
+        Fase1 */
       ],
       synchronize: true,
     }),

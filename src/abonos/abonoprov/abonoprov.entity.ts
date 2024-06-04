@@ -9,7 +9,6 @@ export class AbonosProv {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @Column(  {default: 0}  )
   montoingreso: number;
 
@@ -24,6 +23,9 @@ export class AbonosProv {
 
   @Column()
   saldo:number
+
+  @Column()
+  destino:string
 
   @Column()
   folio:string
